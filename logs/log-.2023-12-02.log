@@ -1,0 +1,666 @@
+[2023-12-02T11:27:08.474] [ERROR] development - Common Helper sign function error => Error: Expected "payload" to be a plain object.
+    at validate (E:\SISU Games\Mumba-backend\node_modules\jsonwebtoken\sign.js:44:11)
+    at validatePayload (E:\SISU Games\Mumba-backend\node_modules\jsonwebtoken\sign.js:66:10)
+    at Object.module.exports [as sign] (E:\SISU Games\Mumba-backend\node_modules\jsonwebtoken\sign.js:144:7)
+    at Object.commonHelper.sign (E:\SISU Games\Mumba-backend\src\helper\commonHelper.js:11:28)
+    at Object.adminLogin (E:\SISU Games\Mumba-backend\src\controller\adminController.js:86:42)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+    at async E:\SISU Games\Mumba-backend\src\routes\admin\auth.js:40:14
+[2023-12-02T11:27:08.475] [ERROR] development - mainController.js adminLogin error=>  TypeError: Cannot set properties of null (setting 'token')
+    at Object.adminLogin (E:\SISU Games\Mumba-backend\src\controller\adminController.js:87:20)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+    at async E:\SISU Games\Mumba-backend\src\routes\admin\auth.js:40:14 { email: 'shop@sisugamz.com', password: 'admin', logintype: 'Shop' }
+[2023-12-02T11:27:08.475] [INFO] development - data =>  { status: 0, message: 'No data found' }
+[2023-12-02T11:27:35.302] [INFO] development - Server ID : => HTTPServer - Express server listening on port : 2828 date : Sat Dec 02 2023 11:27:35 GMT+0530 (India Standard Time)
+[2023-12-02T11:27:35.686] [INFO] development - Mongoose connection open
+[2023-12-02T11:27:38.744] [INFO] development - Server ID : => HTTPServer - Express server listening on port : 2828 date : Sat Dec 02 2023 11:27:38 GMT+0530 (India Standard Time)
+[2023-12-02T11:27:39.122] [INFO] development - Mongoose connection open
+[2023-12-02T11:27:40.414] [INFO] development - data =>  {
+  status: 1,
+  message: 'Login Succesfully',
+  data: {
+    _id: 656984ed5965c5b1fdbcdb51,
+    email: 'shop@sisugamz.com',
+    name: 'shop233',
+    mobileno: '8866675411',
+    createdAt: 'Date.now',
+    status: 'inactive',
+    lastLoginDate: 'Date.now',
+    location: 'India',
+    area: 'Local',
+    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTY5ODRlZDU5NjVjNWIxZmRiY2RiNTEiLCJlbWFpbCI6InNob3BAc2lzdWdhbXouY29tIiwicGFzc3dvcmQiOiJhZG1pbiIsIm5hbWUiOiJzaG9wMjMzIiwibW9iaWxlbm8iOiI4ODY2Njc1NDExIiwiY3JlYXRlZEF0IjoiRGF0ZS5ub3ciLCJzdGF0dXMiOiJpbmFjdGl2ZSIsImxhc3RMb2dpbkRhdGUiOiJEYXRlLm5vdyIsImxvY2F0aW9uIjoiSW5kaWEiLCJhcmVhIjoiTG9jYWwiLCJpYXQiOjE3MDE0OTY2NjAsImV4cCI6MTcwMjEwMTQ2MH0.unW5IxYG7C3VndhAL1erY6V-P6mVI72FxztSbpmYlVA'
+  }
+}
+[2023-12-02T11:27:40.491] [INFO] development - admin/dahboard.js post dahboard  error =>  4
+[2023-12-02T11:27:40.500] [INFO] development - admin/dahboard.js post dahboard  error =>  1700891860500
+[2023-12-02T11:27:40.534] [INFO] development - admin/dahboard.js post dahboard  error =>  [
+  {
+    _id: 65688e8b3382766c1052f797,
+    id: 1,
+    username: 'USER_1',
+    createdAt: 2023-11-30T13:30:51.581Z
+  },
+  {
+    _id: 65688ed93382766c1052f79e,
+    id: 2,
+    username: 'USER_2',
+    createdAt: 2023-11-30T13:32:09.454Z
+  },
+  {
+    _id: 65688ef63382766c1052f7a3,
+    id: 3,
+    username: 'USER_3',
+    createdAt: 2023-11-30T13:32:38.445Z
+  },
+  {
+    _id: 65688f413382766c1052f7a9,
+    id: 4,
+    username: 'USER_4',
+    createdAt: 2023-11-30T13:33:53.104Z
+  }
+]
+[2023-12-02T11:28:59.899] [INFO] development - Server ID : => HTTPServer - Express server listening on port : 2828 date : Sat Dec 02 2023 11:28:59 GMT+0530 (India Standard Time)
+[2023-12-02T11:29:00.324] [INFO] development - Mongoose connection open
+[2023-12-02T11:29:07.776] [INFO] development - Server ID : => HTTPServer - Express server listening on port : 2828 date : Sat Dec 02 2023 11:29:07 GMT+0530 (India Standard Time)
+[2023-12-02T11:29:08.134] [INFO] development - Mongoose connection open
+[2023-12-02T11:29:16.257] [INFO] development - data =>  {
+  status: 1,
+  message: 'Login Succesfully',
+  data: {
+    _id: 6549cce3ba408a2e287f2ec5,
+    name: 'Super Admin',
+    email: 'admin@sisugamz.com',
+    createdAt: 2023-11-07T05:36:35.660Z,
+    modifiedAt: 2023-11-07T05:36:35.660Z,
+    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTQ5Y2NlM2JhNDA4YTJlMjg3ZjJlYzUiLCJuYW1lIjoiU3VwZXIgQWRtaW4iLCJlbWFpbCI6ImFkbWluQHNpc3VnYW16LmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJHhZZzVMUlNRRWxiNENOZnVocjdncmUyUjNMOUQ5eDhaWmc0c0QxSW9uY1N6ZWFTSHgzMTIuIiwiY3JlYXRlZEF0IjoiMjAyMy0xMS0wN1QwNTozNjozNS42NjBaIiwibW9kaWZpZWRBdCI6IjIwMjMtMTEtMDdUMDU6MzY6MzUuNjYwWiIsImlhdCI6MTcwMTQ5Njc1NiwiZXhwIjoxNzAyMTAxNTU2fQ.2C3cGlCyXs4StwDYhoeNUbIy4TZ4IdpCmfQiPGYqGCQ'
+  },
+  logintype: 'Admin'
+}
+[2023-12-02T11:29:16.347] [INFO] development - admin/dahboard.js post dahboard  error =>  4
+[2023-12-02T11:29:16.357] [INFO] development - admin/dahboard.js post dahboard  error =>  1700891956357
+[2023-12-02T11:29:16.391] [INFO] development - admin/dahboard.js post dahboard  error =>  [
+  {
+    _id: 65688e8b3382766c1052f797,
+    id: 1,
+    username: 'USER_1',
+    createdAt: 2023-11-30T13:30:51.581Z
+  },
+  {
+    _id: 65688ed93382766c1052f79e,
+    id: 2,
+    username: 'USER_2',
+    createdAt: 2023-11-30T13:32:09.454Z
+  },
+  {
+    _id: 65688ef63382766c1052f7a3,
+    id: 3,
+    username: 'USER_3',
+    createdAt: 2023-11-30T13:32:38.445Z
+  },
+  {
+    _id: 65688f413382766c1052f7a9,
+    id: 4,
+    username: 'USER_4',
+    createdAt: 2023-11-30T13:33:53.104Z
+  }
+]
+[2023-12-02T11:29:59.816] [INFO] development - Server ID : => HTTPServer - Express server listening on port : 2828 date : Sat Dec 02 2023 11:29:59 GMT+0530 (India Standard Time)
+[2023-12-02T11:30:00.230] [INFO] development - Mongoose connection open
+[2023-12-02T11:30:07.088] [INFO] development - data =>  {
+  status: 1,
+  message: 'Login Succesfully',
+  data: {
+    _id: 6549cce3ba408a2e287f2ec5,
+    name: 'Super Admin',
+    email: 'admin@sisugamz.com',
+    createdAt: 2023-11-07T05:36:35.660Z,
+    modifiedAt: 2023-11-07T05:36:35.660Z,
+    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTQ5Y2NlM2JhNDA4YTJlMjg3ZjJlYzUiLCJuYW1lIjoiU3VwZXIgQWRtaW4iLCJlbWFpbCI6ImFkbWluQHNpc3VnYW16LmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJHhZZzVMUlNRRWxiNENOZnVocjdncmUyUjNMOUQ5eDhaWmc0c0QxSW9uY1N6ZWFTSHgzMTIuIiwiY3JlYXRlZEF0IjoiMjAyMy0xMS0wN1QwNTozNjozNS42NjBaIiwibW9kaWZpZWRBdCI6IjIwMjMtMTEtMDdUMDU6MzY6MzUuNjYwWiIsImlhdCI6MTcwMTQ5NjgwNywiZXhwIjoxNzAyMTAxNjA3fQ.KsoN5bta3widnsrBVSluH5uOpzWEKqImGUpI5rSW-V8'
+  }
+}
+[2023-12-02T11:30:07.445] [INFO] development - admin/dahboard.js post dahboard  error =>  4
+[2023-12-02T11:30:07.453] [INFO] development - admin/dahboard.js post dahboard  error =>  1700892007453
+[2023-12-02T11:30:07.491] [INFO] development - admin/dahboard.js post dahboard  error =>  [
+  {
+    _id: 65688e8b3382766c1052f797,
+    id: 1,
+    username: 'USER_1',
+    createdAt: 2023-11-30T13:30:51.581Z
+  },
+  {
+    _id: 65688ed93382766c1052f79e,
+    id: 2,
+    username: 'USER_2',
+    createdAt: 2023-11-30T13:32:09.454Z
+  },
+  {
+    _id: 65688ef63382766c1052f7a3,
+    id: 3,
+    username: 'USER_3',
+    createdAt: 2023-11-30T13:32:38.445Z
+  },
+  {
+    _id: 65688f413382766c1052f7a9,
+    id: 4,
+    username: 'USER_4',
+    createdAt: 2023-11-30T13:33:53.104Z
+  }
+]
+[2023-12-02T11:30:45.778] [INFO] development - data =>  {
+  status: 1,
+  message: 'Login Succesfully',
+  data: {
+    _id: 6549cce3ba408a2e287f2ec5,
+    name: 'Super Admin',
+    email: 'admin@sisugamz.com',
+    createdAt: 2023-11-07T05:36:35.660Z,
+    modifiedAt: 2023-11-07T05:36:35.660Z,
+    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTQ5Y2NlM2JhNDA4YTJlMjg3ZjJlYzUiLCJuYW1lIjoiU3VwZXIgQWRtaW4iLCJlbWFpbCI6ImFkbWluQHNpc3VnYW16LmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJHhZZzVMUlNRRWxiNENOZnVocjdncmUyUjNMOUQ5eDhaWmc0c0QxSW9uY1N6ZWFTSHgzMTIuIiwiY3JlYXRlZEF0IjoiMjAyMy0xMS0wN1QwNTozNjozNS42NjBaIiwibW9kaWZpZWRBdCI6IjIwMjMtMTEtMDdUMDU6MzY6MzUuNjYwWiIsImlhdCI6MTcwMTQ5Njg0NSwiZXhwIjoxNzAyMTAxNjQ1fQ.fiyzOaqWFE2iz6YldP8tnLRhGqu-qqeqOfYj0iGrs20'
+  }
+}
+[2023-12-02T11:30:45.870] [INFO] development - admin/dahboard.js post dahboard  error =>  4
+[2023-12-02T11:30:45.878] [INFO] development - admin/dahboard.js post dahboard  error =>  1700892045878
+[2023-12-02T11:30:45.912] [INFO] development - admin/dahboard.js post dahboard  error =>  [
+  {
+    _id: 65688e8b3382766c1052f797,
+    id: 1,
+    username: 'USER_1',
+    createdAt: 2023-11-30T13:30:51.581Z
+  },
+  {
+    _id: 65688ed93382766c1052f79e,
+    id: 2,
+    username: 'USER_2',
+    createdAt: 2023-11-30T13:32:09.454Z
+  },
+  {
+    _id: 65688ef63382766c1052f7a3,
+    id: 3,
+    username: 'USER_3',
+    createdAt: 2023-11-30T13:32:38.445Z
+  },
+  {
+    _id: 65688f413382766c1052f7a9,
+    id: 4,
+    username: 'USER_4',
+    createdAt: 2023-11-30T13:33:53.104Z
+  }
+]
+[2023-12-02T11:32:13.864] [INFO] development - data =>  {
+  status: 1,
+  message: 'Login Succesfully',
+  data: {
+    _id: 6549cce3ba408a2e287f2ec5,
+    name: 'Super Admin',
+    email: 'admin@sisugamz.com',
+    createdAt: 2023-11-07T05:36:35.660Z,
+    modifiedAt: 2023-11-07T05:36:35.660Z,
+    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTQ5Y2NlM2JhNDA4YTJlMjg3ZjJlYzUiLCJuYW1lIjoiU3VwZXIgQWRtaW4iLCJlbWFpbCI6ImFkbWluQHNpc3VnYW16LmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJHhZZzVMUlNRRWxiNENOZnVocjdncmUyUjNMOUQ5eDhaWmc0c0QxSW9uY1N6ZWFTSHgzMTIuIiwiY3JlYXRlZEF0IjoiMjAyMy0xMS0wN1QwNTozNjozNS42NjBaIiwibW9kaWZpZWRBdCI6IjIwMjMtMTEtMDdUMDU6MzY6MzUuNjYwWiIsImlhdCI6MTcwMTQ5NjkzMywiZXhwIjoxNzAyMTAxNzMzfQ.qcXjC7MYfIx1n4hG9Cczy74jQU5T-itjoZEGy2oDKgg'
+  }
+}
+[2023-12-02T11:32:13.943] [INFO] development - admin/dahboard.js post dahboard  error =>  4
+[2023-12-02T11:32:13.950] [INFO] development - admin/dahboard.js post dahboard  error =>  1700892133950
+[2023-12-02T11:32:13.987] [INFO] development - admin/dahboard.js post dahboard  error =>  [
+  {
+    _id: 65688e8b3382766c1052f797,
+    id: 1,
+    username: 'USER_1',
+    createdAt: 2023-11-30T13:30:51.581Z
+  },
+  {
+    _id: 65688ed93382766c1052f79e,
+    id: 2,
+    username: 'USER_2',
+    createdAt: 2023-11-30T13:32:09.454Z
+  },
+  {
+    _id: 65688ef63382766c1052f7a3,
+    id: 3,
+    username: 'USER_3',
+    createdAt: 2023-11-30T13:32:38.445Z
+  },
+  {
+    _id: 65688f413382766c1052f7a9,
+    id: 4,
+    username: 'USER_4',
+    createdAt: 2023-11-30T13:33:53.104Z
+  }
+]
+[2023-12-02T11:34:10.585] [INFO] development - Server ID : => HTTPServer - Express server listening on port : 2828 date : Sat Dec 02 2023 11:34:10 GMT+0530 (India Standard Time)
+[2023-12-02T11:34:11.011] [INFO] development - Mongoose connection open
+[2023-12-02T11:34:17.259] [INFO] development - data =>  {
+  status: 1,
+  message: 'Login Succesfully',
+  data: {
+    _id: 6549cce3ba408a2e287f2ec5,
+    name: 'Super Admin',
+    email: 'admin@sisugamz.com',
+    createdAt: 2023-11-07T05:36:35.660Z,
+    modifiedAt: 2023-11-07T05:36:35.660Z,
+    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTQ5Y2NlM2JhNDA4YTJlMjg3ZjJlYzUiLCJuYW1lIjoiU3VwZXIgQWRtaW4iLCJlbWFpbCI6ImFkbWluQHNpc3VnYW16LmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJHhZZzVMUlNRRWxiNENOZnVocjdncmUyUjNMOUQ5eDhaWmc0c0QxSW9uY1N6ZWFTSHgzMTIuIiwiY3JlYXRlZEF0IjoiMjAyMy0xMS0wN1QwNTozNjozNS42NjBaIiwibW9kaWZpZWRBdCI6IjIwMjMtMTEtMDdUMDU6MzY6MzUuNjYwWiIsImlhdCI6MTcwMTQ5NzA1NywiZXhwIjoxNzAyMTAxODU3fQ.YVXGWUcYgjJkncNy5BhymJIz8s5zBZCcozYLIGSOmds'
+  }
+}
+[2023-12-02T11:34:17.347] [INFO] development - admin/dahboard.js post dahboard  error =>  4
+[2023-12-02T11:34:17.354] [INFO] development - admin/dahboard.js post dahboard  error =>  1700892257354
+[2023-12-02T11:34:17.392] [INFO] development - admin/dahboard.js post dahboard  error =>  [
+  {
+    _id: 65688e8b3382766c1052f797,
+    id: 1,
+    username: 'USER_1',
+    createdAt: 2023-11-30T13:30:51.581Z
+  },
+  {
+    _id: 65688ed93382766c1052f79e,
+    id: 2,
+    username: 'USER_2',
+    createdAt: 2023-11-30T13:32:09.454Z
+  },
+  {
+    _id: 65688ef63382766c1052f7a3,
+    id: 3,
+    username: 'USER_3',
+    createdAt: 2023-11-30T13:32:38.445Z
+  },
+  {
+    _id: 65688f413382766c1052f7a9,
+    id: 4,
+    username: 'USER_4',
+    createdAt: 2023-11-30T13:33:53.104Z
+  }
+]
+[2023-12-02T11:34:36.907] [INFO] development - data =>  {
+  status: 1,
+  message: 'Login Succesfully',
+  data: {
+    _id: 656863f67c8ba49e99f37171,
+    email: 'agent@sisugamz.com',
+    name: 'agent233',
+    mobileno: '8866675411',
+    createdAt: 'Date.now',
+    status: 'active',
+    lastLoginDate: 'Date.now',
+    location: 'India',
+    area: 'Local',
+    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTY4NjNmNjdjOGJhNDllOTlmMzcxNzEiLCJlbWFpbCI6ImFnZW50QHNpc3VnYW16LmNvbSIsInBhc3N3b3JkIjoiYWRtaW4iLCJuYW1lIjoiYWdlbnQyMzMiLCJtb2JpbGVubyI6Ijg4NjY2NzU0MTEiLCJjcmVhdGVkQXQiOiJEYXRlLm5vdyIsInN0YXR1cyI6ImFjdGl2ZSIsImxhc3RMb2dpbkRhdGUiOiJEYXRlLm5vdyIsImxvY2F0aW9uIjoiSW5kaWEiLCJhcmVhIjoiTG9jYWwiLCJpYXQiOjE3MDE0OTcwNzYsImV4cCI6MTcwMjEwMTg3Nn0.Q2XliTDGf8zW654esnxaekTHFW6xukuuinO4GIGEsHQ'
+  },
+  name: 'Agent'
+}
+[2023-12-02T11:34:37.011] [INFO] development - admin/dahboard.js post dahboard  error =>  4
+[2023-12-02T11:34:37.019] [INFO] development - admin/dahboard.js post dahboard  error =>  1700892277019
+[2023-12-02T11:34:37.055] [INFO] development - admin/dahboard.js post dahboard  error =>  [
+  {
+    _id: 65688e8b3382766c1052f797,
+    id: 1,
+    username: 'USER_1',
+    createdAt: 2023-11-30T13:30:51.581Z
+  },
+  {
+    _id: 65688ed93382766c1052f79e,
+    id: 2,
+    username: 'USER_2',
+    createdAt: 2023-11-30T13:32:09.454Z
+  },
+  {
+    _id: 65688ef63382766c1052f7a3,
+    id: 3,
+    username: 'USER_3',
+    createdAt: 2023-11-30T13:32:38.445Z
+  },
+  {
+    _id: 65688f413382766c1052f7a9,
+    id: 4,
+    username: 'USER_4',
+    createdAt: 2023-11-30T13:33:53.104Z
+  }
+]
+[2023-12-02T11:34:49.900] [INFO] development - Server ID : => HTTPServer - Express server listening on port : 2828 date : Sat Dec 02 2023 11:34:49 GMT+0530 (India Standard Time)
+[2023-12-02T11:34:50.311] [INFO] development - Mongoose connection open
+[2023-12-02T11:35:01.931] [INFO] development - Server ID : => HTTPServer - Express server listening on port : 2828 date : Sat Dec 02 2023 11:35:01 GMT+0530 (India Standard Time)
+[2023-12-02T11:35:02.331] [INFO] development - Mongoose connection open
+[2023-12-02T11:35:08.564] [INFO] development - Server ID : => HTTPServer - Express server listening on port : 2828 date : Sat Dec 02 2023 11:35:08 GMT+0530 (India Standard Time)
+[2023-12-02T11:35:08.945] [INFO] development - Mongoose connection open
+[2023-12-02T11:35:14.897] [ERROR] development - Common Helper sign function error => Error: Expected "payload" to be a plain object.
+    at validate (E:\SISU Games\Mumba-backend\node_modules\jsonwebtoken\sign.js:44:11)
+    at validatePayload (E:\SISU Games\Mumba-backend\node_modules\jsonwebtoken\sign.js:66:10)
+    at Object.module.exports [as sign] (E:\SISU Games\Mumba-backend\node_modules\jsonwebtoken\sign.js:144:7)
+    at Object.commonHelper.sign (E:\SISU Games\Mumba-backend\src\helper\commonHelper.js:11:28)
+    at Object.AgentLogin (E:\SISU Games\Mumba-backend\src\controller\adminController.js:123:42)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+    at async E:\SISU Games\Mumba-backend\src\routes\admin\auth.js:37:14
+[2023-12-02T11:35:14.898] [ERROR] development - mainController.js adminLogin error=>  TypeError: Cannot set properties of null (setting 'token')
+    at Object.AgentLogin (E:\SISU Games\Mumba-backend\src\controller\adminController.js:124:20)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+    at async E:\SISU Games\Mumba-backend\src\routes\admin\auth.js:37:14 { email: 'admin@sisugamz.com', password: 'admin', logintype: 'Agent' }
+[2023-12-02T11:35:14.900] [INFO] development - data =>  { status: 0, message: 'No data found', name: 'Agent' }
+[2023-12-02T11:35:24.069] [INFO] development - data =>  {
+  status: 1,
+  message: 'Login Succesfully',
+  data: {
+    _id: 656863f67c8ba49e99f37171,
+    email: 'agent@sisugamz.com',
+    name: 'agent233',
+    mobileno: '8866675411',
+    createdAt: 'Date.now',
+    status: 'active',
+    lastLoginDate: 'Date.now',
+    location: 'India',
+    area: 'Local',
+    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTY4NjNmNjdjOGJhNDllOTlmMzcxNzEiLCJlbWFpbCI6ImFnZW50QHNpc3VnYW16LmNvbSIsInBhc3N3b3JkIjoiYWRtaW4iLCJuYW1lIjoiYWdlbnQyMzMiLCJtb2JpbGVubyI6Ijg4NjY2NzU0MTEiLCJjcmVhdGVkQXQiOiJEYXRlLm5vdyIsInN0YXR1cyI6ImFjdGl2ZSIsImxhc3RMb2dpbkRhdGUiOiJEYXRlLm5vdyIsImxvY2F0aW9uIjoiSW5kaWEiLCJhcmVhIjoiTG9jYWwiLCJpYXQiOjE3MDE0OTcxMjQsImV4cCI6MTcwMjEwMTkyNH0.zB5fETSqr_kf_A8qKqMQSUdOkToT6XPh3S0jTV_Nrfs'
+  },
+  name: 'Agent'
+}
+[2023-12-02T11:35:24.214] [INFO] development - admin/dahboard.js post dahboard  error =>  4
+[2023-12-02T11:35:24.237] [INFO] development - admin/dahboard.js post dahboard  error =>  1700892324237
+[2023-12-02T11:35:24.271] [INFO] development - admin/dahboard.js post dahboard  error =>  [
+  {
+    _id: 65688e8b3382766c1052f797,
+    id: 1,
+    username: 'USER_1',
+    createdAt: 2023-11-30T13:30:51.581Z
+  },
+  {
+    _id: 65688ed93382766c1052f79e,
+    id: 2,
+    username: 'USER_2',
+    createdAt: 2023-11-30T13:32:09.454Z
+  },
+  {
+    _id: 65688ef63382766c1052f7a3,
+    id: 3,
+    username: 'USER_3',
+    createdAt: 2023-11-30T13:32:38.445Z
+  },
+  {
+    _id: 65688f413382766c1052f7a9,
+    id: 4,
+    username: 'USER_4',
+    createdAt: 2023-11-30T13:33:53.104Z
+  }
+]
+[2023-12-02T11:36:12.553] [INFO] development - Server ID : => HTTPServer - Express server listening on port : 2828 date : Sat Dec 02 2023 11:36:12 GMT+0530 (India Standard Time)
+[2023-12-02T11:36:12.944] [INFO] development - Mongoose connection open
+[2023-12-02T11:36:23.796] [INFO] development - data =>  {
+  status: 1,
+  message: 'Login Succesfully',
+  data: {
+    _id: 656863f67c8ba49e99f37171,
+    email: 'agent@sisugamz.com',
+    name: 'Agent',
+    mobileno: '8866675411',
+    createdAt: 'Date.now',
+    status: 'active',
+    lastLoginDate: 'Date.now',
+    location: 'India',
+    area: 'Local',
+    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTY4NjNmNjdjOGJhNDllOTlmMzcxNzEiLCJlbWFpbCI6ImFnZW50QHNpc3VnYW16LmNvbSIsInBhc3N3b3JkIjoiYWRtaW4iLCJuYW1lIjoiYWdlbnQyMzMiLCJtb2JpbGVubyI6Ijg4NjY2NzU0MTEiLCJjcmVhdGVkQXQiOiJEYXRlLm5vdyIsInN0YXR1cyI6ImFjdGl2ZSIsImxhc3RMb2dpbkRhdGUiOiJEYXRlLm5vdyIsImxvY2F0aW9uIjoiSW5kaWEiLCJhcmVhIjoiTG9jYWwiLCJpYXQiOjE3MDE0OTcxODMsImV4cCI6MTcwMjEwMTk4M30.rPOYtwoF5zPMBhHDJQcchFt_vTdHGYa72zwkA6dc2D4'
+  }
+}
+[2023-12-02T11:36:23.916] [INFO] development - admin/dahboard.js post dahboard  error =>  4
+[2023-12-02T11:36:23.926] [INFO] development - admin/dahboard.js post dahboard  error =>  1700892383926
+[2023-12-02T11:36:23.961] [INFO] development - admin/dahboard.js post dahboard  error =>  [
+  {
+    _id: 65688e8b3382766c1052f797,
+    id: 1,
+    username: 'USER_1',
+    createdAt: 2023-11-30T13:30:51.581Z
+  },
+  {
+    _id: 65688ed93382766c1052f79e,
+    id: 2,
+    username: 'USER_2',
+    createdAt: 2023-11-30T13:32:09.454Z
+  },
+  {
+    _id: 65688ef63382766c1052f7a3,
+    id: 3,
+    username: 'USER_3',
+    createdAt: 2023-11-30T13:32:38.445Z
+  },
+  {
+    _id: 65688f413382766c1052f7a9,
+    id: 4,
+    username: 'USER_4',
+    createdAt: 2023-11-30T13:33:53.104Z
+  }
+]
+[2023-12-02T11:36:42.245] [INFO] development - data =>  {
+  status: 1,
+  message: 'Login Succesfully',
+  data: {
+    _id: 656984ed5965c5b1fdbcdb51,
+    email: 'shop@sisugamz.com',
+    name: 'Shop',
+    mobileno: '8866675411',
+    createdAt: 'Date.now',
+    status: 'inactive',
+    lastLoginDate: 'Date.now',
+    location: 'India',
+    area: 'Local',
+    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTY5ODRlZDU5NjVjNWIxZmRiY2RiNTEiLCJlbWFpbCI6InNob3BAc2lzdWdhbXouY29tIiwicGFzc3dvcmQiOiJhZG1pbiIsIm5hbWUiOiJzaG9wMjMzIiwibW9iaWxlbm8iOiI4ODY2Njc1NDExIiwiY3JlYXRlZEF0IjoiRGF0ZS5ub3ciLCJzdGF0dXMiOiJpbmFjdGl2ZSIsImxhc3RMb2dpbkRhdGUiOiJEYXRlLm5vdyIsImxvY2F0aW9uIjoiSW5kaWEiLCJhcmVhIjoiTG9jYWwiLCJpYXQiOjE3MDE0OTcyMDIsImV4cCI6MTcwMjEwMjAwMn0.rQXwkwgtIu2mW0iJF4XWOQpX2c4cJWjQrZdPtnPHn8E'
+  }
+}
+[2023-12-02T11:36:42.340] [INFO] development - admin/dahboard.js post dahboard  error =>  4
+[2023-12-02T11:36:42.351] [INFO] development - admin/dahboard.js post dahboard  error =>  1700892402351
+[2023-12-02T11:36:42.380] [INFO] development - admin/dahboard.js post dahboard  error =>  [
+  {
+    _id: 65688e8b3382766c1052f797,
+    id: 1,
+    username: 'USER_1',
+    createdAt: 2023-11-30T13:30:51.581Z
+  },
+  {
+    _id: 65688ed93382766c1052f79e,
+    id: 2,
+    username: 'USER_2',
+    createdAt: 2023-11-30T13:32:09.454Z
+  },
+  {
+    _id: 65688ef63382766c1052f7a3,
+    id: 3,
+    username: 'USER_3',
+    createdAt: 2023-11-30T13:32:38.445Z
+  },
+  {
+    _id: 65688f413382766c1052f7a9,
+    id: 4,
+    username: 'USER_4',
+    createdAt: 2023-11-30T13:33:53.104Z
+  }
+]
+[2023-12-02T11:37:04.859] [INFO] development - Server ID : => HTTPServer - Express server listening on port : 2828 date : Sat Dec 02 2023 11:37:04 GMT+0530 (India Standard Time)
+[2023-12-02T11:37:05.248] [INFO] development - Mongoose connection open
+[2023-12-02T11:37:09.932] [INFO] development - Server ID : => HTTPServer - Express server listening on port : 2828 date : Sat Dec 02 2023 11:37:09 GMT+0530 (India Standard Time)
+[2023-12-02T11:37:10.300] [INFO] development - Mongoose connection open
+[2023-12-02T11:37:16.881] [INFO] development - data =>  {
+  status: 1,
+  message: 'Login Succesfully',
+  data: {
+    _id: 656863f67c8ba49e99f37171,
+    email: 'agent@sisugamz.com',
+    name: 'Agent',
+    mobileno: '8866675411',
+    createdAt: 'Date.now',
+    status: 'active',
+    lastLoginDate: 'Date.now',
+    location: 'India',
+    area: 'Local',
+    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTY4NjNmNjdjOGJhNDllOTlmMzcxNzEiLCJlbWFpbCI6ImFnZW50QHNpc3VnYW16LmNvbSIsInBhc3N3b3JkIjoiYWRtaW4iLCJuYW1lIjoiYWdlbnQyMzMiLCJtb2JpbGVubyI6Ijg4NjY2NzU0MTEiLCJjcmVhdGVkQXQiOiJEYXRlLm5vdyIsInN0YXR1cyI6ImFjdGl2ZSIsImxhc3RMb2dpbkRhdGUiOiJEYXRlLm5vdyIsImxvY2F0aW9uIjoiSW5kaWEiLCJhcmVhIjoiTG9jYWwiLCJpYXQiOjE3MDE0OTcyMzYsImV4cCI6MTcwMjEwMjAzNn0.KjuSr6T7oE3f3a3lbQ_Z6A1mAuDWj2EG7d5eUwSeWZU'
+  }
+}
+[2023-12-02T11:37:16.988] [INFO] development - admin/dahboard.js post dahboard  error =>  4
+[2023-12-02T11:37:17.000] [INFO] development - admin/dahboard.js post dahboard  error =>  1700892437000
+[2023-12-02T11:37:17.036] [INFO] development - admin/dahboard.js post dahboard  error =>  [
+  {
+    _id: 65688e8b3382766c1052f797,
+    id: 1,
+    username: 'USER_1',
+    createdAt: 2023-11-30T13:30:51.581Z
+  },
+  {
+    _id: 65688ed93382766c1052f79e,
+    id: 2,
+    username: 'USER_2',
+    createdAt: 2023-11-30T13:32:09.454Z
+  },
+  {
+    _id: 65688ef63382766c1052f7a3,
+    id: 3,
+    username: 'USER_3',
+    createdAt: 2023-11-30T13:32:38.445Z
+  },
+  {
+    _id: 65688f413382766c1052f7a9,
+    id: 4,
+    username: 'USER_4',
+    createdAt: 2023-11-30T13:33:53.104Z
+  }
+]
+[2023-12-02T11:37:23.237] [ERROR] development - Common Helper sign function error => Error: Expected "payload" to be a plain object.
+    at validate (E:\SISU Games\Mumba-backend\node_modules\jsonwebtoken\sign.js:44:11)
+    at validatePayload (E:\SISU Games\Mumba-backend\node_modules\jsonwebtoken\sign.js:66:10)
+    at Object.module.exports [as sign] (E:\SISU Games\Mumba-backend\node_modules\jsonwebtoken\sign.js:144:7)
+    at Object.commonHelper.sign (E:\SISU Games\Mumba-backend\src\helper\commonHelper.js:11:28)
+    at Object.AgentLogin (E:\SISU Games\Mumba-backend\src\controller\adminController.js:123:42)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+    at async E:\SISU Games\Mumba-backend\src\routes\admin\auth.js:37:14
+[2023-12-02T11:37:23.237] [ERROR] development - mainController.js adminLogin error=>  TypeError: Cannot set properties of null (setting 'token')
+    at Object.AgentLogin (E:\SISU Games\Mumba-backend\src\controller\adminController.js:124:20)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+    at async E:\SISU Games\Mumba-backend\src\routes\admin\auth.js:37:14 { email: 'agent@sisugamz.com', password: 'addd', logintype: 'Agent' }
+[2023-12-02T11:37:23.238] [ERROR] development - admin/auth.js login error =>  TypeError: Cannot set properties of undefined (setting 'name')
+    at E:\SISU Games\Mumba-backend\src\routes\admin\auth.js:38:22
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+[2023-12-02T11:37:30.341] [INFO] development - data =>  {
+  status: 1,
+  message: 'Login Succesfully',
+  data: {
+    _id: 656863f67c8ba49e99f37171,
+    email: 'agent@sisugamz.com',
+    name: 'Agent',
+    mobileno: '8866675411',
+    createdAt: 'Date.now',
+    status: 'active',
+    lastLoginDate: 'Date.now',
+    location: 'India',
+    area: 'Local',
+    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTY4NjNmNjdjOGJhNDllOTlmMzcxNzEiLCJlbWFpbCI6ImFnZW50QHNpc3VnYW16LmNvbSIsInBhc3N3b3JkIjoiYWRtaW4iLCJuYW1lIjoiYWdlbnQyMzMiLCJtb2JpbGVubyI6Ijg4NjY2NzU0MTEiLCJjcmVhdGVkQXQiOiJEYXRlLm5vdyIsInN0YXR1cyI6ImFjdGl2ZSIsImxhc3RMb2dpbkRhdGUiOiJEYXRlLm5vdyIsImxvY2F0aW9uIjoiSW5kaWEiLCJhcmVhIjoiTG9jYWwiLCJpYXQiOjE3MDE0OTcyNTAsImV4cCI6MTcwMjEwMjA1MH0.THO1YgjGFDPOgaNeqsVHLI8Rw1tcoRJXcYnF2Wws_jM'
+  }
+}
+[2023-12-02T11:37:30.436] [INFO] development - admin/dahboard.js post dahboard  error =>  4
+[2023-12-02T11:37:30.445] [INFO] development - admin/dahboard.js post dahboard  error =>  1700892450445
+[2023-12-02T11:37:30.474] [INFO] development - admin/dahboard.js post dahboard  error =>  [
+  {
+    _id: 65688e8b3382766c1052f797,
+    id: 1,
+    username: 'USER_1',
+    createdAt: 2023-11-30T13:30:51.581Z
+  },
+  {
+    _id: 65688ed93382766c1052f79e,
+    id: 2,
+    username: 'USER_2',
+    createdAt: 2023-11-30T13:32:09.454Z
+  },
+  {
+    _id: 65688ef63382766c1052f7a3,
+    id: 3,
+    username: 'USER_3',
+    createdAt: 2023-11-30T13:32:38.445Z
+  },
+  {
+    _id: 65688f413382766c1052f7a9,
+    id: 4,
+    username: 'USER_4',
+    createdAt: 2023-11-30T13:33:53.104Z
+  }
+]
+[2023-12-02T11:37:37.238] [INFO] development - data =>  {
+  status: 1,
+  message: 'Login Succesfully',
+  data: {
+    _id: 656984ed5965c5b1fdbcdb51,
+    email: 'shop@sisugamz.com',
+    name: 'Shop',
+    mobileno: '8866675411',
+    createdAt: 'Date.now',
+    status: 'inactive',
+    lastLoginDate: 'Date.now',
+    location: 'India',
+    area: 'Local',
+    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTY5ODRlZDU5NjVjNWIxZmRiY2RiNTEiLCJlbWFpbCI6InNob3BAc2lzdWdhbXouY29tIiwicGFzc3dvcmQiOiJhZG1pbiIsIm5hbWUiOiJzaG9wMjMzIiwibW9iaWxlbm8iOiI4ODY2Njc1NDExIiwiY3JlYXRlZEF0IjoiRGF0ZS5ub3ciLCJzdGF0dXMiOiJpbmFjdGl2ZSIsImxhc3RMb2dpbkRhdGUiOiJEYXRlLm5vdyIsImxvY2F0aW9uIjoiSW5kaWEiLCJhcmVhIjoiTG9jYWwiLCJpYXQiOjE3MDE0OTcyNTcsImV4cCI6MTcwMjEwMjA1N30.XVj8CN5PXAGY3abr2rKT1aTSR5ppSVB3ya7lxqyjCtQ'
+  }
+}
+[2023-12-02T11:37:37.341] [INFO] development - admin/dahboard.js post dahboard  error =>  4
+[2023-12-02T11:37:37.353] [INFO] development - admin/dahboard.js post dahboard  error =>  1700892457353
+[2023-12-02T11:37:37.384] [INFO] development - admin/dahboard.js post dahboard  error =>  [
+  {
+    _id: 65688e8b3382766c1052f797,
+    id: 1,
+    username: 'USER_1',
+    createdAt: 2023-11-30T13:30:51.581Z
+  },
+  {
+    _id: 65688ed93382766c1052f79e,
+    id: 2,
+    username: 'USER_2',
+    createdAt: 2023-11-30T13:32:09.454Z
+  },
+  {
+    _id: 65688ef63382766c1052f7a3,
+    id: 3,
+    username: 'USER_3',
+    createdAt: 2023-11-30T13:32:38.445Z
+  },
+  {
+    _id: 65688f413382766c1052f7a9,
+    id: 4,
+    username: 'USER_4',
+    createdAt: 2023-11-30T13:33:53.104Z
+  }
+]
+[2023-12-02T11:37:48.669] [INFO] development - data =>  {
+  status: 1,
+  message: 'Login Succesfully',
+  data: {
+    _id: 656984ed5965c5b1fdbcdb51,
+    email: 'shop@sisugamz.com',
+    name: 'Shop',
+    mobileno: '8866675411',
+    createdAt: 'Date.now',
+    status: 'inactive',
+    lastLoginDate: 'Date.now',
+    location: 'India',
+    area: 'Local',
+    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTY5ODRlZDU5NjVjNWIxZmRiY2RiNTEiLCJlbWFpbCI6InNob3BAc2lzdWdhbXouY29tIiwicGFzc3dvcmQiOiJhZG1pbiIsIm5hbWUiOiJzaG9wMjMzIiwibW9iaWxlbm8iOiI4ODY2Njc1NDExIiwiY3JlYXRlZEF0IjoiRGF0ZS5ub3ciLCJzdGF0dXMiOiJpbmFjdGl2ZSIsImxhc3RMb2dpbkRhdGUiOiJEYXRlLm5vdyIsImxvY2F0aW9uIjoiSW5kaWEiLCJhcmVhIjoiTG9jYWwiLCJpYXQiOjE3MDE0OTcyNjgsImV4cCI6MTcwMjEwMjA2OH0.-tuJ4Jbnq5SLL--6Q0eNT95ZfMI3DiE3Fnp3ZeLe1bw'
+  }
+}
+[2023-12-02T11:37:48.737] [INFO] development - admin/dahboard.js post dahboard  error =>  4
+[2023-12-02T11:37:48.774] [INFO] development - admin/dahboard.js post dahboard  error =>  1700892468774
+[2023-12-02T11:37:48.803] [INFO] development - admin/dahboard.js post dahboard  error =>  [
+  {
+    _id: 65688e8b3382766c1052f797,
+    id: 1,
+    username: 'USER_1',
+    createdAt: 2023-11-30T13:30:51.581Z
+  },
+  {
+    _id: 65688ed93382766c1052f79e,
+    id: 2,
+    username: 'USER_2',
+    createdAt: 2023-11-30T13:32:09.454Z
+  },
+  {
+    _id: 65688ef63382766c1052f7a3,
+    id: 3,
+    username: 'USER_3',
+    createdAt: 2023-11-30T13:32:38.445Z
+  },
+  {
+    _id: 65688f413382766c1052f7a9,
+    id: 4,
+    username: 'USER_4',
+    createdAt: 2023-11-30T13:33:53.104Z
+  }
+]
+[2023-12-02T11:59:11.245] [INFO] development - Server ID : => HTTPServer - Express server listening on port : 3000 date : Sat Dec 02 2023 11:59:11 GMT+0530 (India Standard Time)
+[2023-12-02T11:59:11.862] [INFO] development - Mongoose connection open

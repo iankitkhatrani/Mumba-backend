@@ -2450,3 +2450,35 @@
     createdAt: 2023-11-30T13:33:53.104Z
   }
 ]
+[2023-12-01T16:17:52.838] [INFO] development - Server ID : => HTTPServer - Express server listening on port : 2828 date : Fri Dec 01 2023 16:17:52 GMT+0530 (India Standard Time)
+[2023-12-01T16:17:53.400] [INFO] development - Mongoose connection open
+[2023-12-01T16:22:45.644] [INFO] development - admin/dahboard.js post dahboard  error =>  4
+[2023-12-01T16:22:45.665] [INFO] development - admin/dahboard.js post dahboard  error =>  1700823165665
+[2023-12-01T16:22:45.710] [INFO] development - admin/dahboard.js post dahboard  error =>  [
+  {
+    _id: 65688e8b3382766c1052f797,
+    id: 1,
+    username: 'USER_1',
+    createdAt: 2023-11-30T13:30:51.581Z
+  },
+  {
+    _id: 65688ed93382766c1052f79e,
+    id: 2,
+    username: 'USER_2',
+    createdAt: 2023-11-30T13:32:09.454Z
+  },
+  {
+    _id: 65688ef63382766c1052f7a3,
+    id: 3,
+    username: 'USER_3',
+    createdAt: 2023-11-30T13:32:38.445Z
+  },
+  {
+    _id: 65688f413382766c1052f7a9,
+    id: 4,
+    username: 'USER_4',
+    createdAt: 2023-11-30T13:33:53.104Z
+  }
+]
+[2023-12-01T19:18:42.353] [INFO] development - Mongoose default connection disconnected
+[2023-12-01T19:18:52.705] [INFO] development - Mongoose connection open
