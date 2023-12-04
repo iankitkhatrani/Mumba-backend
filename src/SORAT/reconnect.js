@@ -89,7 +89,7 @@ module.exports.
                         currentTurnTimer: diff,
                     };
                     sendDirectEvent(client.id.toString(), CONST.RECONNECT, responseRS);
-                } else if (tabInfo.gameState === CONST.ROUND_START_TIMER) {
+                } else if (tabInfo.gameState === CONST.SORAT_ROUND_START_TIMER) {
                     let currentDateTime = new Date();
                     let time = currentDateTime.getSeconds();
                     let turnTime = new Date(tabInfo.gameTimer.GST);

@@ -8,11 +8,11 @@ const logger = (module.exports = require('../../logger'));
 const CONST = require('../../constant');
 const signupActions = require('../helper/signups/index');
 const commonHelper = require('../helper/commonHelper');
-const gamePlayActions = require('../teenpatti/');
+const gamePlayActions = require('../SORAT/gamePlay');
 const { registerUser } = require('../helper/signups/signupValidation');
 const mainCtrl = require('./mainController');
 const { sendEvent, sendDirectEvent } = require('../helper/socketFunctions');
-const { userReconnect } = require('../teenpatti/reConnectFunction');
+const { userReconnect } = require('../SORAT/reConnectFunction');
 const { getBannerList } = require('./adminController');
 
 
@@ -115,32 +115,17 @@ myIo.init = function (server) {
                         }
                         break;
                     }
-
-                    case CONST.JOIN_SIGN_UP: {
+                    // SORAT GAME Event 
+                    case CONST.SORAT_PLAYGAME: {
                         socket.uid = payload.data.playerId;
                         socket.sck = socket.id;
 
-                        await gamePlayActions.joinTable(payload.data, socket);
+                        await gamePlayActions.soratjoinTable(payload.data, socket);
                         break;
                     }
 
-                    case CONST.SHOW: {
-                        await gamePlayActions.show(payload.data, socket);
-                        break;
-                    }
-
-                    case CONST.CHAL: {
-                        await gamePlayActions.chal(payload.data, socket);
-                        break;
-                    }
-
-                    case CONST.PACK: {
-                        await gamePlayActions.cardPack(payload.data, socket);
-                        break;
-                    }
-
-                    case CONST.SEE_CARD: {
-                        await gamePlayActions.seeCard(payload.data, socket);
+                    case CONST.ACTIONSORAT: {
+                        await gamePlayActions.ACTIONSORAT(payload.data, socket);
                         break;
                     }
 
