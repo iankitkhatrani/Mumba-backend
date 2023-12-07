@@ -7,7 +7,6 @@ const IdCounter = mongoose.model("idCounter")
 const commandAcions = require("../helper/socketFunctions");
 const CONST = require("../../constant");
 const logger = require("../../logger");
-const cardDealActions = require("./cardDeal");
 const roundStartActions = require("./roundStart");
 const walletActions = require("./updateWallet");
 const SoratTables = mongoose.model('soratTables');

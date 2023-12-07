@@ -12,7 +12,7 @@ const PlayingTables = mongoose.model('playingTables');
 const MongoID = mongoose.Types.ObjectId;
 
 module.exports.
-    reconnect = async (requestData, client) => {
+userReconnectSpinner = async (requestData, client) => {
         try {
             if (requestData.playerId !== '' && requestData.playerId !== null && requestData.playerId !== undefined) {
                 let gwh = {
@@ -75,21 +75,20 @@ module.exports.
                     sceneName: CONST.GAMEPLAY,
                 };
 
-                if (tabInfo.gameState === CONST.ROUND_STARTED) {
+                if (tabInfo.gameState === "SpinnerGameStartTimer") {
                     let currentDateTime = new Date();
                     let time = currentDateTime.getSeconds();
 
-                    let turnTime = new Date(tabInfo.gameTimer.ttimer);
+                    let turnTime = new Date(tabInfo.turnStartTimer);
                     let Gtime = turnTime.getSeconds();
                     let diff = Gtime - time;
 
                     const responseRS = {
                         ...response,
-                        currentTurnUserSeatIndex: tabInfo.turnSeatIndex,
                         currentTurnTimer: diff,
                     };
                     sendDirectEvent(client.id.toString(), CONST.RECONNECT, responseRS);
-                } else if (tabInfo.gameState === CONST.SORAT_ROUND_START_TIMER) {
+                } else if (tabInfo.gameState === "SpinnerGameStartTimer") {
                     let currentDateTime = new Date();
                     let time = currentDateTime.getSeconds();
                     let turnTime = new Date(tabInfo.gameTimer.GST);
@@ -102,7 +101,7 @@ module.exports.
                     };
 
                     sendDirectEvent(client.id.toString(), CONST.RECONNECT, responseRST);
-                } else if (tabInfo.gameState === CONST.ROUND_END) {
+                } else if (tabInfo.gameState === "WinnerDecalre") {
                     // const scoreBoard = tabInfo.playersScoreBoard;
                     // let winnerViewResponse = winnerViewResponseFilter(scoreBoard);
 
@@ -119,8 +118,6 @@ module.exports.
                     };
 
                     sendDirectEvent(client.id.toString(), CONST.RECONNECT, responseRE);
-                } else if (tabInfo.gameState === CONST.CARD_DEALING) {
-                    sendDirectEvent(client.id.toString(), CONST.RECONNECT, response);
                 } else {
                     sendDirectEvent(client.id.toString(), CONST.RECONNECT, response);
                 }

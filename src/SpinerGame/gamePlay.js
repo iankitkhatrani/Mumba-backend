@@ -36,11 +36,11 @@ const walletActions = require("./updateWallet");
     }
 
 */
-module.exports.actionslot = async (requestData, client) => {
+module.exports.actionSpin = async (requestData, client) => {
     try {
         logger.info("action requestData : ", requestData);
         if (typeof client.tbid == "undefined" || typeof client.uid == "undefined" || typeof client.seatIndex == "undefined" || typeof requestData.bet == "undefined") {
-            commandAcions.sendDirectEvent(client.sck, CONST.ACTION, requestData, false, "User session not set, please restart game!");
+            commandAcions.sendDirectEvent(client.sck, CONST.ACTIONSPINNNER, requestData, false, "User session not set, please restart game!");
             return false;
         }
         if (typeof client.action != "undefined" && client.action) return false;
@@ -65,7 +65,7 @@ module.exports.actionslot = async (requestData, client) => {
         if (tabInfo.turnDone) {
             logger.info("action : client.su ::", client.seatIndex);
             delete client.action;
-            commandAcions.sendDirectEvent(client.sck, CONST.ACTION, requestData, false, "Turn is already taken!");
+            commandAcions.sendDirectEvent(client.sck, CONST.ACTIONSPINNNER, requestData, false, "Turn is already taken!");
             return false;
         }
         
@@ -96,12 +96,12 @@ module.exports.actionslot = async (requestData, client) => {
         if (Number(chalvalue) > Number(totalWallet)) {
             logger.info("action client.su ::", client.seatIndex);
             delete client.action;
-            commandAcions.sendDirectEvent(client.sck, CONST.ACTIONSORAT, requestData, false, "Please add wallet!!");
+            commandAcions.sendDirectEvent(client.sck, CONST.ACTIONSPINNNER, requestData, false, "Please add wallet!!");
             return false;
         }
         chalvalue = Number(Number(chalvalue).toFixed(2))
 
-        await walletActions.deductWallet(client.uid, -chalvalue, 2, "Solat Bet", tabInfo, client.id, client.seatIndex);
+        await walletActions.deductWallet(client.uid, -chalvalue, 2, "Spinner Bet", tabInfo, client.id, client.seatIndex);
 
         updateData.$inc["playerInfo.$.selectObj."+item] = chalvalue;
         updateData.$inc["playerInfo.$.totalbet"] = chalvalue;
@@ -125,7 +125,9 @@ module.exports.actionslot = async (requestData, client) => {
             chalValue: chalvalue,
             item:item
         }
-        commandAcions.sendEventInTable(tb._id.toString(), CONST.ACTIONSORAT, response);
+
+        sendEvent(client, CONST.ACTIONSPINNNER, response, false, "");
+
         delete client.action;
         
         // let activePlayerInRound = await roundStartActions.getPlayingUserInRound(tb.playerInfo);

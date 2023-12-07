@@ -15,6 +15,8 @@ const { registerUser } = require('../helper/signups/signupValidation');
 const mainCtrl = require('./mainController');
 const { sendEvent, sendDirectEvent } = require('../helper/socketFunctions');
 const { userReconnect } = require('../SORAT/reConnectFunction');
+const { userReconnectSpinner } = require('../SpinerGame/reconnect');
+
 const { getBannerList } = require('./adminController');
 
 
@@ -147,22 +149,22 @@ myIo.init = function (server) {
                         socket.uid = payload.data.playerId;
                         socket.sck = socket.id;
 
-                        await gamePlayActionsSpinner.soratjoinTable(payload.data, socket);
+                        await gamePlayActionsSpinner.SPINNER_JOIN_TABLE(payload.data, socket);
                         break;
                     }
 
-                    case CONST.ACTIONSORAT: {
-                        await gamePlayActionsSpinner.ACTIONSORAT(payload.data, socket);
+                    case CONST.ACTIONSPINNNER: {
+                        await gamePlayActionsSpinner.actionSpin(payload.data, socket);
                         break;
                     }
 
-                    case CONST.LEAVE_TABLE: {
+                    case CONST.LEAVETABLESPINNER: {
                         await gamePlayActionsSpinner.leaveTable(payload.data, socket);
                         break;
                     }
 
-                    case CONST.RECONNECT: {
-                        await userReconnect(payload.data, socket);
+                    case CONST.RECONNECTSPINNER: {
+                        await userReconnectSpinner(payload.data, socket);
                         break;
                     }
                     //====================================

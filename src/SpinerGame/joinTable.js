@@ -13,7 +13,7 @@ const botLogic = require("./botLogic");
 module.exports.SPINNER_JOIN_TABLE = async (requestData, client) => {
     try {
         if (typeof client.uid == "undefined") {
-            sendEvent(client, CONST.SORAT_JOIN_TABLE, requestData, false, "Please restart game!!");
+            sendEvent(client, CONST.SPINNER_GAME_JOIN_TABLE, requestData, false, "Please restart game!!");
             return false;
         }
         if (typeof client.JT != "undefined" && client.JT) return false;
@@ -28,7 +28,7 @@ module.exports.SPINNER_JOIN_TABLE = async (requestData, client) => {
 
         let totalWallet = Number(UserInfo.chips) + Number(UserInfo.winningChips)
         if (Number(totalWallet) < 1) {
-            sendEvent(client, CONST.SORAT_JOIN_TABLE, requestData, false, "Please add Wallet!!");
+            sendEvent(client, CONST.SPINNER_GAME_JOIN_TABLE, requestData, false, "Please add Wallet!!");
             delete client.JT
             return false;
         }
@@ -40,13 +40,13 @@ module.exports.SPINNER_JOIN_TABLE = async (requestData, client) => {
         logger.info("JoinTable tableInfo : ", gwh, JSON.stringify(tableInfo));
 
         if (tableInfo != null) {
-            sendEvent(client, CONST.SORAT_JOIN_TABLE, requestData, false, "Already In playing table!!");
+            sendEvent(client, CONST.SPINNER_GAME_JOIN_TABLE, requestData, false, "Already In playing table!!");
             delete client.JT
             return false;
         }
         await this.findTable( client)
     } catch (error) {
-        console.info("SORAT_JOIN_TABLE", error);
+        console.info("SPINNER_GAME_JOIN_TABLE", error);
     }
 }
 
@@ -82,7 +82,7 @@ module.exports.createTable = async () => {
             playerInfo: [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],
             gameState: "",
             history:[],
-            betamount:[10,50,100,200]
+            betamount:[5,10,50,100,500,1000]
         };
         logger.info("createTable insertobj : ", insertobj);
 
@@ -131,7 +131,7 @@ module.exports.findEmptySeatAndUserSeat = async (table, client) => {
             status: "",
             playerStatus: "",
             selectObj: [
-                0,0,0,0,0,0,0,0,0,0,0,0,0
+                0,0,0,0,0,0,0,0,0,0,0,0,0,0
             ], // Select object enter ,
             totalbet:0,
             turnMissCounter: 0,

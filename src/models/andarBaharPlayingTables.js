@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const collectionName = 'andarBaharPlayingTables';
-const BetLists = mongoose.model('betList');
+//const BetLists = mongoose.model('betList');
 
 const PlayingTablesSchema = new Schema({
     gameId: { type: String, default: "" },
@@ -10,7 +10,7 @@ const PlayingTablesSchema = new Schema({
     gameType: { type: String },
     maxSeat: { type: Number, default: 6 },
     activePlayer: { type: Number, default: 0 },
-    betId: { type: mongoose.Schema.Types.ObjectId, ref: BetLists },
+    //betId: { type: mongoose.Schema.Types.ObjectId, ref: BetLists },
     boot: { type: Number, default: 0 },
     chalLimit: { type: Number, default: 0 },
     potLimit: { type: Number, default: 0 },

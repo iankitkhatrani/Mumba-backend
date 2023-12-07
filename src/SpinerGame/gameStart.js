@@ -7,7 +7,6 @@ const IdCounter = mongoose.model("idCounter")
 const commandAcions = require("../helper/socketFunctions");
 const CONST = require("../../constant");
 const logger = require("../../logger");
-const cardDealActions = require("./cardDeal");
 const roundStartActions = require("./roundStart");
 const walletActions = require("./updateWallet");
 const SoratTables = mongoose.model('soratTables');
@@ -24,10 +23,10 @@ module.exports.gameTimerStart = async (tb) => {
         }
         let update = {
             $set: {
-                gameState: "SoratGameStartTimer",
+                gameState: "SpinnerGameStartTimer",
                 "GameTimer.GST": new Date(),
                 "totalbet":0,
-                "playerInfo.$.selectObj":[0,0,0,0,0,0,0,0,0,0,0,0,0],
+                "playerInfo.$.selectObj":[0,0,0,0,0,0,0,0,0,0,0,0,0,0],
                 "isFinalWinner":false
             }
         }
@@ -37,7 +36,7 @@ module.exports.gameTimerStart = async (tb) => {
         logger.info("gameTimerStart tabInfo :: ", tabInfo);
 
         let roundTime = 10;
-        commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.GAME_START_TIMER, { timer: roundTime });
+        commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.GAME_START_TIMER, { timer: roundTime,history:tabInfo.history });
 
         let tbId = tabInfo._id;
         let jobId = CONST.GAME_START_TIMER + ":" + tbId;
@@ -45,13 +44,13 @@ module.exports.gameTimerStart = async (tb) => {
 
         const delayRes = await commandAcions.setDelay(jobId, new Date(delay));
 
-        this.startSORAT(tbId)
+        this.StartSpinnerGame(tbId)
     } catch (error) {
         logger.error("gameTimerStart.js error ->", error)
     }
 }
 
-module.exports.SPINNER_GAME_PLAYGAME = async (tbId) => {
+module.exports.StartSpinnerGame = async (tbId) => {
 
     try {
 
@@ -59,13 +58,13 @@ module.exports.SPINNER_GAME_PLAYGAME = async (tbId) => {
             _id: MongoID(tbId.toString()),
         }, {})
 
-        logger.info("startSORAT tbId : ", tbId);
+        logger.info("StartSpinnerGame tbId : ", tbId);
         if (tb == null || tb.gameState != "SoratGameStartTimer") return false;
 
 
         //Genrate Rendom Number 
-        logger.info("startSORAT config.SORATLOGIC : ", config.SORATLOGIC);
-        logger.info("startSORAT tb.totalbet : ", tb.totalbet);
+        logger.info("StartSpinnerGame config.SORATLOGIC : ", config.SORATLOGIC);
+        logger.info("StartSpinnerGame tb.totalbet : ", tb.totalbet);
 
         // NORMAL 
         let itemObject = tb.TableObject[getRandomInt(0,tb.TableObject.length-1)]
@@ -87,12 +86,13 @@ module.exports.SPINNER_GAME_PLAYGAME = async (tbId) => {
         let update = {
             $set: {
                 gameState: "StartSpinner",
-                itemObject:itemObject
+                itemObject:itemObject,
+                turnStartTimer:new Date()
             },
             $push:{
                 "history": {
                     $each: [itemObject],
-                    $slice: -15
+                    $slice: -7
                 }
             }
         }
@@ -112,7 +112,7 @@ module.exports.SPINNER_GAME_PLAYGAME = async (tbId) => {
             //     }
             // }, { new: true });
 
-            this.winnerSorat(tabInfonew,itemObject);
+            this.winnerSpinner(tabInfonew,itemObject);
         },10000);
 
         //botLogic.PlayRobot(tabInfo,tabInfo.playerInfo,itemObject)
@@ -145,7 +145,7 @@ module.exports.winnerSpinner = async (tabInfo, itemObject) =>{
             return false;
         }
 
-        if (tabInfo.gameState != "StartSorat") return false;
+        if (tabInfo.gameState != "StartSpinner") return false;
         if (tabInfo.isFinalWinner) return false;
 
         const upWh = {
@@ -197,9 +197,28 @@ module.exports.winnerSpinner = async (tabInfo, itemObject) =>{
                 TotalWinAmount = TotalWinAmount + tbInfo.playerInfo.selectObj[12] * 2;
             }
 
+            // Old  tem
+            if(tbInfo.playerInfo.selectObj[13] != 0 && [5,0,9,1].indexOf(itemIndex) != -1){
+                winnerData.push({
+                    seatIndex:winner[i].seatIndex,
+                    winAmount:tbInfo.playerInfo.selectObj[11] * 2,
+                })
+
+                TotalWinAmount = TotalWinAmount + tbInfo.playerInfo.selectObj[11] * 2;
+            }
+
+            // Old  tem
+            if(tbInfo.playerInfo.selectObj[14] != 0 && [8,4,7,3].indexOf(itemIndex) != -1){
+                winnerData.push({
+                    seatIndex:winner[i].seatIndex,
+                    winAmount:tbInfo.playerInfo.selectObj[12] * 2,
+                })
+                TotalWinAmount = TotalWinAmount + tbInfo.playerInfo.selectObj[12] * 2;
+            }
+
             console.log("TotalWinAmount ",TotalWinAmount)
 
-            TotalWinAmount != 0 && await walletActions.addWallet(tbInfo.playerInfo._id, Number(TotalWinAmount), 4, "Sorat Win", tabInfo);
+            TotalWinAmount != 0 && await walletActions.addWallet(tbInfo.playerInfo._id, Number(TotalWinAmount), 4, "Spinnner Win", tabInfo);
 
         }
         const playerInGame = await roundStartActions.getPlayingUserInRound(tbInfo.playerInfo);
@@ -217,7 +236,7 @@ module.exports.winnerSpinner = async (tabInfo, itemObject) =>{
         // }
 
       
-        commandAcions.sendEventInTable(tbInfo._id.toString(), CONST.SORATWINNER, {
+        commandAcions.sendEventInTable(tbInfo._id.toString(), CONST.SPINNERWINNER, {
             WinnerData:winnerData,
             itemObject:itemObject
         });
