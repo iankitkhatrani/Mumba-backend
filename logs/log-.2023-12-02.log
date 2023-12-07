@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 [2023-12-02T11:27:08.474] [ERROR] development - Common Helper sign function error => Error: Expected "payload" to be a plain object.
     at validate (E:\SISU Games\Mumba-backend\node_modules\jsonwebtoken\sign.js:44:11)
     at validatePayload (E:\SISU Games\Mumba-backend\node_modules\jsonwebtoken\sign.js:66:10)
@@ -985,3 +986,8 @@
 [2023-12-02T17:35:04.377] [INFO] development - Mongoose connection open
 [2023-12-02T17:35:09.090] [INFO] development - Server ID : => HTTPServer - Express server listening on port : 3000 date : Sat Dec 02 2023 17:35:09 GMT+0530 (India Standard Time)
 [2023-12-02T17:35:09.492] [INFO] development - Mongoose connection open
+=======
+[2023-12-02T00:42:57.209] [INFO] development - Mongoose default connection disconnected
+[2023-12-02T00:43:07.330] [INFO] development - Mongoose connection open
+[2023-12-02T01:05:38.136] [INFO] development - Mongoose default connection disconnected
+>>>>>>> Stashed changes
