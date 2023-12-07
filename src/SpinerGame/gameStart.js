@@ -51,7 +51,7 @@ module.exports.gameTimerStart = async (tb) => {
     }
 }
 
-module.exports.startSORAT = async (tbId) => {
+module.exports.SPINNER_GAME_PLAYGAME = async (tbId) => {
 
     try {
 
@@ -86,7 +86,7 @@ module.exports.startSORAT = async (tbId) => {
         }
         let update = {
             $set: {
-                gameState: "StartSorat",
+                gameState: "StartSpinner",
                 itemObject:itemObject
             },
             $push:{
@@ -96,12 +96,12 @@ module.exports.startSORAT = async (tbId) => {
                 }
             }
         }
-        logger.info("startSORAT UserInfo : ", wh, update);
+        logger.info("startSpinner UserInfo : ", wh, update);
 
         const tabInfo = await SoratTables.findOneAndUpdate(wh, update, { new: true });
-        logger.info("startSORAT tabInfo :: ", tabInfo);
+        logger.info("startSpinner tabInfo :: ", tabInfo);
 
-        commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.STARTSORAT, { itemObject: itemObject,timelimit:10 });
+        commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.STARTSPINNER, { itemObject: itemObject,timelimit:10 });
 
         setTimeout(async ()=> {
             // Clear destory 
@@ -129,7 +129,7 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-module.exports.winnerSorat = async (tabInfo, itemObject) =>{
+module.exports.winnerSpinner = async (tabInfo, itemObject) =>{
 
     try {
         logger.info("winnerSorat winner ::  -->", itemObject, tabInfo);

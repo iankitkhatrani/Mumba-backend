@@ -9,6 +9,8 @@ const CONST = require('../../constant');
 const signupActions = require('../helper/signups/index');
 const commonHelper = require('../helper/commonHelper');
 const gamePlayActions = require('../SORAT/gamePlay');
+const gamePlayActionsSpinner = require('../SpinerGame/gamePlay');
+
 const { registerUser } = require('../helper/signups/signupValidation');
 const mainCtrl = require('./mainController');
 const { sendEvent, sendDirectEvent } = require('../helper/socketFunctions');
@@ -138,6 +140,34 @@ myIo.init = function (server) {
                         await userReconnect(payload.data, socket);
                         break;
                     }
+                    //====================================
+
+                    // SPinner GAME Event 
+                    case CONST.SPINNER_GAME_PLAYGAME: {
+                        socket.uid = payload.data.playerId;
+                        socket.sck = socket.id;
+
+                        await gamePlayActionsSpinner.soratjoinTable(payload.data, socket);
+                        break;
+                    }
+
+                    case CONST.ACTIONSORAT: {
+                        await gamePlayActionsSpinner.ACTIONSORAT(payload.data, socket);
+                        break;
+                    }
+
+                    case CONST.LEAVE_TABLE: {
+                        await gamePlayActionsSpinner.leaveTable(payload.data, socket);
+                        break;
+                    }
+
+                    case CONST.RECONNECT: {
+                        await userReconnect(payload.data, socket);
+                        break;
+                    }
+                    //====================================
+
+
 
                     case CONST.BANNER: {
                         const result = await getBannerList(payload.data, socket);

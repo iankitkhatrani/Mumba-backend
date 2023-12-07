@@ -48,16 +48,31 @@ const CONST = {
 
   // Socket events names
 
-  // SORAT 
+  // SORAT ============================================
   SORAT_PLAYGAME: 'SPG',
   SORAT_JOIN_TABLE: "SJT",
-  SORAT_ROUND_START_TIMER: 'GameStartTimer',
+  SORAT_ROUND_START_TIMER: 'SoratGameStartTimer',
   SORAT_GAME_TABLE_INFO: 'SGTI',
   STARTSORAT: "STARTSORAT",
   SORATLOGIC : "Client", 
   ACTIONSORAT : "ACTIONSORAT",
   GAME_START_TIMER: 'GST',
-  //
+  SORATWINNER: "SORATWINNER",
+  //===================================================
+  
+
+  // SPINNER GAME============================================
+  SPINNER_GAME_PLAYGAME: 'SGPG',
+  SPINNER_GAME_JOIN_TABLE: "SGJT",
+  SPINNER_GAME_ROUND_START_TIMER: 'SpinnerGameStartTimer',
+  SPINNER_GAME_TABLE_INFO: 'SPGTI',
+  STARTSPINNER: "STARTSPINNER",
+  SPINNERLOGIC : "Client", 
+  ACTIONSPINNNER : "ACTIONSPINNER",
+  GAME_START_TIMER: 'GST',
+  SPINNERWINNER: "SPINNERWINNER",
+  //===================================================
+  
 
  
   USER_JOIN_IN_TABLE: "UJIT",
@@ -65,7 +80,7 @@ const CONST = {
   USER_CARD: "UC",
   TABLE_CARD_DEAL: "TCD",
   PACK: "PACK",
-  WINNER: "WINNER",
+  
   SEE_CARD_INFO: "SCI",
   SEE_CARD: "SC",
   CHAL: "CHAL",
