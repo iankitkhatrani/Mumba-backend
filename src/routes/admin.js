@@ -18,7 +18,7 @@ const notification = require('./admin/notification');
 const banner = require('./admin/banner');
 const bot = require('./admin/bot');
 
-
+const usertransction = require('./admin/usertransction');
 
 
 
@@ -28,7 +28,7 @@ router.use('/dashboard', authMiddleware, dashboard);
 router.use('/user', user);
 router.use('/agent',authMiddleware, agent);
 router.use('/shop',authMiddleware, shop);
-
+router.use('/usertransction', authMiddleware, usertransction);
 router.use('/games', authMiddleware, games);
 router.use('/userhistory', authMiddleware, userhistory);
 router.use('/social', authMiddleware, social);

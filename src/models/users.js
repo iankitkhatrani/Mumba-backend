@@ -3,12 +3,15 @@ const Schema = mongoose.Schema;
 
 const collectionName = 'users';
 
+const Shop = require("./shop");
+
+
 const GameUserSchema = new Schema(
   {
     id: { type: Number },
     name: { type: String },
     username: { type: String },
-    deviceId: { type: String, required: true },
+    deviceId: { type: String,  },
     mobileNumber: { type: String, required: true },
     uniqueId: { type: String },
     email: { type: String, default: '' },
@@ -36,6 +39,7 @@ const GameUserSchema = new Schema(
     isVIP: { type: Number, default: 0 },
     Iscom: { type: Number, default: 0 },
     fcmToken: { type: String, default: '' },
+    shopId:{ type: mongoose.Schema.Types.ObjectId, ref: Shop },
   },
   { versionKey: false }
 );

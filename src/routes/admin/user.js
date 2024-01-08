@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const MongoID = mongoose.Types.ObjectId;
+
 const Users = mongoose.model('users');
 const express = require('express');
 const router = express.Router();
@@ -7,7 +9,7 @@ const commonHelper = require('../../helper/commonHelper');
 const mainCtrl = require('../../controller/adminController');
 const logger = require('../../../logger');
 const { registerUser } = require('../../helper/signups/signupValidation');
-
+const { getUserDefaultFields, saveGameUser } = require('../../helper/signups/appStart');
 
 /**
 * @api {post} /admin/lobbies
@@ -19,10 +21,15 @@ const { registerUser } = require('../../helper/signups/signupValidation');
 */
 router.get('/UserList', async (req, res) => {
     try {
-        //console.info('requet => ', req);
+        console.log('requet => ', req.query.Id);
+        let userList = []
+        if(req.query.Id == "Admin"){
 
-        const userList = await Users.find({}, { username: 1, id: 1, mobileNumber: 1, "counters.totalMatch": 1, isVIP: 1, chips: 1, referralCode: 1, createdAt: 1, lastLoginDate: 1, status: 1 })
+            userList = await Users.find({}, { username: 1, id: 1, mobileNumber: 1, "counters.totalMatch": 1,profileUrl:1,email:1,uniqueId:1, isVIP: 1, chips: 1, referralCode: 1, createdAt: 1, lastLoginDate: 1, status: 1 })
 
+       }else{
+            userList = await Users.find({shopId:MongoID(req.query.Id)}, { username: 1, id: 1, mobileNumber: 1, "counters.totalMatch": 1,profileUrl:1,email:1,uniqueId:1, isVIP: 1, chips: 1, referralCode: 1, createdAt: 1, lastLoginDate: 1, status: 1 })
+       }
         logger.info('admin/dahboard.js post dahboard  error => ', userList);
 
         res.json({ userList });
@@ -68,19 +75,43 @@ router.get('/UserData', async (req, res) => {
 router.post('/AddUser', async (req, res) => {
     try {
 
-        //currently send rendom number and generate 
-        let number = await createPhoneNumber()
+        console.log("req ",req.body)
+
         let response = {
-            mobileNumber: Number(number),
-            deviceId: `${number}`,
-            isVIP: 1
+            mobileNumber:req.body.mobileNumber,
+            username:req.body.name,
+            email:req.body.email,
+            password:req.body.password,
+            isVIP: 1,
+            country:req.body.country,
+            shopId:req.body.shopId,
+            profileUrl:"upload/avatar/1.jpg"
         }
 
-        let RecentUser = await registerUser(response)
+        console.log("response  :::::::::::: response ",response)
 
-        logger.info('admin/dahboard.js post dahboard  error => ', RecentUser);
+        logger.info('Register User Request Body =>', response);
+        const { mobileNumber } = response;
+    
+        let query = { mobileNumber: mobileNumber };
+        let result = await Users.findOne(query, {});
+        if (!result) {
+            let defaultData = await getUserDefaultFields(response);
+            logger.info('registerUser defaultData : ', defaultData);
+    
+            let userInsertInfo = await saveGameUser(defaultData);
+            logger.info('registerUser userInsertInfo : ', userInsertInfo);
+            
+            if(userInsertInfo){
+                res.json({ status: true });
+            }else{
+                res.status(config.NOT_FOUND).json(error);   
+            }
+        }else{
+            res.status(config.NOT_FOUND).json(error);
+        } 
 
-        res.json({ status: "ok" });
+
     } catch (error) {
         logger.error('admin/dahboard.js post bet-list error => ', error);
         //res.send("error");

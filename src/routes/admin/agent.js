@@ -21,7 +21,7 @@ router.get('/AgentList', async (req, res) => {
     try {
         //console.info('requet => ', req);
 
-        const agentList = await Agent.find({}, { email: 1, name: 1, mobileno: 1, location: 1, area: 1, createdAt: 1, lastLoginDate: 1, status: 1 })
+        const agentList = await Agent.find({}, { email: 1, name: 1, mobileno: 1, location: 1, area: 1, createdAt: 1, lastLoginDate: 1, status: 1,password:1 })
 
         logger.info('admin/dahboard.js post dahboard  error => ', agentList);
 
@@ -140,7 +140,7 @@ router.post('/AddAgent', async (req, res) => {
             let insertRes = await Agent.create(response);
 
             if (Object.keys(insertRes).length > 0) {
-                res.json({ status: "ok" });
+                res.json({ res:true,status: "ok" });
             } else {
                 logger.info('\nsaveGameUser Error :: ', insertRes);
                 res.json({ status: false });

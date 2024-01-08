@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+const MongoID = mongoose.Types.ObjectId;
+
+
 const Shop = mongoose.model('shop');
 const express = require('express');
 const router = express.Router();
@@ -19,11 +22,16 @@ const { registerUser } = require('../../helper/signups/signupValidation');
 */
 router.get('/ShopList', async (req, res) => {
     try {
-        //console.info('requet => ', req);
+        console.log('requet => ', req.query);
+        //agentId
+        let shopList = []
+        if(req.query.agentId == "Admin"){
+             shopList = await Shop.find({}, { email: 1, name: 1, mobileno: 1, location: 1, area: 1, createdAt: 1, lastLoginDate: 1, status: 1 ,password:1})
 
-        const shopList = await Shop.find({}, { email: 1, name: 1, mobileno: 1, location: 1, area: 1, createdAt: 1, lastLoginDate: 1, status: 1 })
-        
-        logger.info('admin/dahboard.js post dahboard  error => ', shopList);
+        }else{
+             shopList = await Shop.find({agentId: MongoID(req.query.agentId)}, { email: 1, name: 1, mobileno: 1, location: 1, area: 1, createdAt: 1, lastLoginDate: 1, status: 1 ,password:1})
+        }
+        logger.info('ShopList admin/dahboard.js post dahboard  error => ', shopList);
 
         res.json({ shopList });
     } catch (error) {
@@ -43,9 +51,9 @@ router.get('/ShopList', async (req, res) => {
 */
 router.get('/ShopData', async (req, res) => {
     try {
-        console.info('requet => ', req.query);
+        console.info('requet => ', req.query.agentId);
         //
-        const userInfo = await Shop.findOne({ _id: new mongoose.Types.ObjectId(req.query.userId) }, { email: 1, name: 1, mobileno: 1,password:1, location: 1, area: 1, createdAt: 1, lastLoginDate: 1, status: 1 })
+        const userInfo = await Shop.findOne({ _id: new mongoose.Types.ObjectId(req.query.agentId) }, { email: 1, name: 1, mobileno: 1,password:1, location: 1, area: 1, createdAt: 1, lastLoginDate: 1, status: 1 })
 
         logger.info('admin/dahboard.js post dahboard  error => ', userInfo);
 
@@ -133,7 +141,8 @@ router.post('/AddShop', async (req, res) => {
                 lastLoginDate: new Date(),
                 status:req.body.status,
                 location:req.body.location,
-                area:req.body.area
+                area:req.body.area,
+                agentId:req.body.agentId
             }
 
             console.log("response ", response)

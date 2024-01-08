@@ -59,7 +59,7 @@ module.exports.getUserDefaultFields = async (data, client) => {
   logger.info('getUserDefaultFields get User Default Fields -->', data);
   const setUserDetail = {
     id: 0,
-    deviceId: data.deviceId,
+    deviceId: "",
     username: data.username ? data.username : '',
     name: data.name ? data.name : '',
     status: data.status ? data.status : '',
@@ -83,6 +83,7 @@ module.exports.getUserDefaultFields = async (data, client) => {
     referralCode: '',
     tableId: '',
     sckId: client && client.id ? client.id : '',
+    shopId:data.shopId
   };
 
   return setUserDetail;

@@ -16,7 +16,7 @@ const logger = require('../../../logger');
 * @apiSuccess (Success 200) {Array} badges Array of badges document
 * @apiError (Error 4xx) {String} message Validation or error message.
 */
-router.get('/rouletteHistory', async (req, res) => {
+router.get('/RouletteGameHistory', async (req, res) => {
     try {
         console.info('requet => ', req.query);
 
@@ -65,7 +65,330 @@ router.get('/rouletteHistory', async (req, res) => {
 
         logger.info('admin/dahboard.js post dahboard  error => ', rouletteHistoryData);
 
-        res.json({ rouletteHistoryData });
+        res.json({ gameHistoryData:rouletteHistoryData });
+    } catch (error) {
+        logger.error('admin/dahboard.js post bet-list error => ', error);
+        res.status(config.INTERNAL_SERVER_ERROR).json(error);
+    }
+});
+
+/**
+* @api {get} /admin/BaraKaDumGameHistory
+* @apiName  add-bet-list
+* @apiGroup  Admin
+* @apiHeader {String}  x-access-token Admin's unique access-key
+* @apiSuccess (Success 200) {Array} badges Array of badges document
+* @apiError (Error 4xx) {String} message Validation or error message.
+*/
+router.get('/BaraKaDumGameHistory', async (req, res) => {
+    try {
+        console.info('requet => ', req.query);
+
+        const rouletteHistoryData =  [
+            {
+                "SrNo": 1,
+                "DateTime": "2023-10-10 08:30 AM",
+                "Name": "Alice",
+                "PhoneNumber": "123-456-7890",
+                "RoomId": "RHRoom1",
+                "Amount": 100, // Amount in this example (can be credit or debit)
+                "Type": "Credit", // "Credit" or "Debit"
+                "Club": "Club A"
+            },
+            {
+                "SrNo": 2,
+                "DateTime": "2023-10-09 10:15 AM",
+                "Name": "Bob",
+                "PhoneNumber": "987-654-3210",
+                "RoomId": "RHRoom2",
+                "Amount": 50, // Amount in this example (can be credit or debit)
+                "Type": "Debit", // "Credit" or "Debit"
+                "Club": "Club B"
+            },
+            {
+                "SrNo": 3,
+                "DateTime": "2023-10-09 10:15 AM",
+                "Name": "Bob",
+                "PhoneNumber": "987-654-3210",
+                "RoomId": "RHRoom2",
+                "Amount": 50, // Amount in this example (can be credit or debit)
+                "Type": "Debit", // "Credit" or "Debit"
+                "Club": "Club Bd"
+            }, {
+                "SrNo": 3,
+                "DateTime": "2023-10-09 10:15 AM",
+                "Name": "Bob",
+                "PhoneNumber": "987-654-3210",
+                "RoomId": "RHRoom2",
+                "Amount": 50, // Amount in this example (can be credit or debit)
+                "Type": "Debit", // "Credit" or "Debit"
+                "Club": "Club Bd"
+            },
+            // Add more game history entries here
+        ];
+
+        logger.info('admin/dahboard.js post dahboard  error => ', rouletteHistoryData);
+
+        res.json({ gameHistoryData:rouletteHistoryData });
+    } catch (error) {
+        logger.error('admin/dahboard.js post bet-list error => ', error);
+        res.status(config.INTERNAL_SERVER_ERROR).json(error);
+    }
+});
+
+/**
+* @api {get} /admin/WheelofFortuneGameHistory
+* @apiName  add-bet-list
+* @apiGroup  Admin
+* @apiHeader {String}  x-access-token Admin's unique access-key
+* @apiSuccess (Success 200) {Array} badges Array of badges document
+* @apiError (Error 4xx) {String} message Validation or error message.
+*/
+router.get('/WheelofFortuneGameHistory', async (req, res) => {
+    try {
+        console.info('requet => ', req.query);
+
+        const rouletteHistoryData =  [
+            {
+                "SrNo": 1,
+                "DateTime": "2023-10-10 08:30 AM",
+                "Name": "Alice",
+                "PhoneNumber": "123-456-7890",
+                "RoomId": "RHRoom1",
+                "Amount": 100, // Amount in this example (can be credit or debit)
+                "Type": "Credit", // "Credit" or "Debit"
+                "Club": "Club A"
+            },
+            {
+                "SrNo": 2,
+                "DateTime": "2023-10-09 10:15 AM",
+                "Name": "Bob",
+                "PhoneNumber": "987-654-3210",
+                "RoomId": "RHRoom2",
+                "Amount": 50, // Amount in this example (can be credit or debit)
+                "Type": "Debit", // "Credit" or "Debit"
+                "Club": "Club B"
+            },
+            {
+                "SrNo": 3,
+                "DateTime": "2023-10-09 10:15 AM",
+                "Name": "Bob",
+                "PhoneNumber": "987-654-3210",
+                "RoomId": "RHRoom2",
+                "Amount": 50, // Amount in this example (can be credit or debit)
+                "Type": "Debit", // "Credit" or "Debit"
+                "Club": "Club Bd"
+            }, {
+                "SrNo": 3,
+                "DateTime": "2023-10-09 10:15 AM",
+                "Name": "Bob",
+                "PhoneNumber": "987-654-3210",
+                "RoomId": "RHRoom2",
+                "Amount": 50, // Amount in this example (can be credit or debit)
+                "Type": "Debit", // "Credit" or "Debit"
+                "Club": "Club Bd"
+            },
+            // Add more game history entries here
+        ];
+
+        logger.info('admin/dahboard.js post dahboard  error => ', rouletteHistoryData);
+
+        res.json({ gameHistoryData:rouletteHistoryData });
+    } catch (error) {
+        logger.error('admin/dahboard.js post bet-list error => ', error);
+        res.status(config.INTERNAL_SERVER_ERROR).json(error);
+    }
+});
+
+
+/**
+* @api {get} /admin/AndarBaharGameHistory
+* @apiName  add-bet-list
+* @apiGroup  Admin
+* @apiHeader {String}  x-access-token Admin's unique access-key
+* @apiSuccess (Success 200) {Array} badges Array of badges document
+* @apiError (Error 4xx) {String} message Validation or error message.
+*/
+router.get('/AndarBaharGameHistory', async (req, res) => {
+    try {
+        console.info('requet => ', req.query);
+
+        const rouletteHistoryData =  [
+            {
+                "SrNo": 1,
+                "DateTime": "2023-10-10 08:30 AM",
+                "Name": "Alice",
+                "PhoneNumber": "123-456-7890",
+                "RoomId": "RHRoom1",
+                "Amount": 100, // Amount in this example (can be credit or debit)
+                "Type": "Credit", // "Credit" or "Debit"
+                "Club": "Club A"
+            },
+            {
+                "SrNo": 2,
+                "DateTime": "2023-10-09 10:15 AM",
+                "Name": "Bob",
+                "PhoneNumber": "987-654-3210",
+                "RoomId": "RHRoom2",
+                "Amount": 50, // Amount in this example (can be credit or debit)
+                "Type": "Debit", // "Credit" or "Debit"
+                "Club": "Club B"
+            },
+            {
+                "SrNo": 3,
+                "DateTime": "2023-10-09 10:15 AM",
+                "Name": "Bob",
+                "PhoneNumber": "987-654-3210",
+                "RoomId": "RHRoom2",
+                "Amount": 50, // Amount in this example (can be credit or debit)
+                "Type": "Debit", // "Credit" or "Debit"
+                "Club": "Club Bd"
+            }, {
+                "SrNo": 3,
+                "DateTime": "2023-10-09 10:15 AM",
+                "Name": "Bob",
+                "PhoneNumber": "987-654-3210",
+                "RoomId": "RHRoom2",
+                "Amount": 50, // Amount in this example (can be credit or debit)
+                "Type": "Debit", // "Credit" or "Debit"
+                "Club": "Club Bd"
+            },
+            // Add more game history entries here
+        ];
+
+        logger.info('admin/dahboard.js post dahboard  error => ', rouletteHistoryData);
+
+        res.json({ gameHistoryData:rouletteHistoryData });
+    } catch (error) {
+        logger.error('admin/dahboard.js post bet-list error => ', error);
+        res.status(config.INTERNAL_SERVER_ERROR).json(error);
+    }
+});
+
+
+/**
+* @api {get} /admin/SpinGameHistory
+* @apiName  add-bet-list
+* @apiGroup  Admin
+* @apiHeader {String}  x-access-token Admin's unique access-key
+* @apiSuccess (Success 200) {Array} badges Array of badges document
+* @apiError (Error 4xx) {String} message Validation or error message.
+*/
+router.get('/SpinGameHistory', async (req, res) => {
+    try {
+        console.info('requet => ', req.query);
+
+        const rouletteHistoryData =  [
+            {
+                "SrNo": 1,
+                "DateTime": "2023-10-10 08:30 AM",
+                "Name": "Alice",
+                "PhoneNumber": "123-456-7890",
+                "RoomId": "RHRoom1",
+                "Amount": 100, // Amount in this example (can be credit or debit)
+                "Type": "Credit", // "Credit" or "Debit"
+                "Club": "Club A"
+            },
+            {
+                "SrNo": 2,
+                "DateTime": "2023-10-09 10:15 AM",
+                "Name": "Bob",
+                "PhoneNumber": "987-654-3210",
+                "RoomId": "RHRoom2",
+                "Amount": 50, // Amount in this example (can be credit or debit)
+                "Type": "Debit", // "Credit" or "Debit"
+                "Club": "Club B"
+            },
+            {
+                "SrNo": 3,
+                "DateTime": "2023-10-09 10:15 AM",
+                "Name": "Bob",
+                "PhoneNumber": "987-654-3210",
+                "RoomId": "RHRoom2",
+                "Amount": 50, // Amount in this example (can be credit or debit)
+                "Type": "Debit", // "Credit" or "Debit"
+                "Club": "Club Bd"
+            }, {
+                "SrNo": 3,
+                "DateTime": "2023-10-09 10:15 AM",
+                "Name": "Bob",
+                "PhoneNumber": "987-654-3210",
+                "RoomId": "RHRoom2",
+                "Amount": 50, // Amount in this example (can be credit or debit)
+                "Type": "Debit", // "Credit" or "Debit"
+                "Club": "Club Bd"
+            },
+            // Add more game history entries here
+        ];
+
+        logger.info('admin/dahboard.js post dahboard  error => ', rouletteHistoryData);
+
+        res.json({ gameHistoryData:rouletteHistoryData });
+    } catch (error) {
+        logger.error('admin/dahboard.js post bet-list error => ', error);
+        res.status(config.INTERNAL_SERVER_ERROR).json(error);
+    }
+});
+
+
+/**
+* @api {get} /admin/SoratGameHistory
+* @apiName  add-bet-list
+* @apiGroup  Admin
+* @apiHeader {String}  x-access-token Admin's unique access-key
+* @apiSuccess (Success 200) {Array} badges Array of badges document
+* @apiError (Error 4xx) {String} message Validation or error message.
+*/
+router.get('/SoratGameHistory', async (req, res) => {
+    try {
+        console.info('requet => ', req.query);
+
+        const rouletteHistoryData =  [
+            {
+                "SrNo": 1,
+                "DateTime": "2023-10-10 08:30 AM",
+                "Name": "Alice",
+                "PhoneNumber": "123-456-7890",
+                "RoomId": "RHRoom1",
+                "Amount": 100, // Amount in this example (can be credit or debit)
+                "Type": "Credit", // "Credit" or "Debit"
+                "Club": "Club A"
+            },
+            {
+                "SrNo": 2,
+                "DateTime": "2023-10-09 10:15 AM",
+                "Name": "Bob",
+                "PhoneNumber": "987-654-3210",
+                "RoomId": "RHRoom2",
+                "Amount": 50, // Amount in this example (can be credit or debit)
+                "Type": "Debit", // "Credit" or "Debit"
+                "Club": "Club B"
+            },
+            {
+                "SrNo": 3,
+                "DateTime": "2023-10-09 10:15 AM",
+                "Name": "Bob",
+                "PhoneNumber": "987-654-3210",
+                "RoomId": "RHRoom2",
+                "Amount": 50, // Amount in this example (can be credit or debit)
+                "Type": "Debit", // "Credit" or "Debit"
+                "Club": "Club Bd"
+            }, {
+                "SrNo": 3,
+                "DateTime": "2023-10-09 10:15 AM",
+                "Name": "Bob",
+                "PhoneNumber": "987-654-3210",
+                "RoomId": "RHRoom2",
+                "Amount": 50, // Amount in this example (can be credit or debit)
+                "Type": "Debit", // "Credit" or "Debit"
+                "Club": "Club Bd"
+            },
+            // Add more game history entries here
+        ];
+
+        logger.info('admin/dahboard.js post dahboard  error => ', rouletteHistoryData);
+
+        res.json({ gameHistoryData:rouletteHistoryData });
     } catch (error) {
         logger.error('admin/dahboard.js post bet-list error => ', error);
         res.status(config.INTERNAL_SERVER_ERROR).json(error);
