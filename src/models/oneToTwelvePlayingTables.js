@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const collectionName = 'andarBaharPlayingTables';
+const collectionName = 'oneToTwelvePlayingTables';
 //const BetLists = mongoose.model('betList');
 
 const PlayingTablesSchema = new Schema({
@@ -12,10 +12,6 @@ const PlayingTablesSchema = new Schema({
     activePlayer: { type: Number, default: 0 },
     //betId: { type: mongoose.Schema.Types.ObjectId, ref: BetLists },
     boot: { type: Number, default: 0 },
-    chalLimit: { type: Number, default: 0 },
-    potLimit: { type: Number, default: 0 },
-    // anderCards: [{ type: String, default: [] }],
-    // baharCards: [{ type: String, default: [] }],
     ANBCards: { ander: [], bahar: [] },
     playerInfo: [],
     gameState: { type: String, default: "" },
