@@ -19,20 +19,6 @@ const walletActions = require("./updateWallet");
     object:{
         item:0, 
         bet:10,
-
-        //  {name:"Ambarella",bet:0},
-        //  {name:"Football",bet:0},
-        //  {name:"Sun",bet:0},
-        //  {name:"Lamp",bet:0},
-        //  {name:"Dog",bet:0},
-        //  {name:"Bucket",bet:0},
-        //  {name:"kites",bet:0},
-        //  {name:"Latto",bet:0},
-        //  {name:"Rose",bet:0},
-        //  {name:"Bird",bet:0},
-        //  {name:"Rabbit",bet:0},
-        //  {name:"1",bet:0},
-        //  {name:"2",bet:0}
     }
 
 */

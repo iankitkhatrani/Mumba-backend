@@ -131,7 +131,7 @@ module.exports.findEmptySeatAndUserSeat = async (table, client) => {
             status: "",
             playerStatus: "",
             selectObj: [
-                0,0,0,0,0,0,0,0,0,0,0,0,0,0
+                0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
             ], // Select object enter ,
             totalbet:0,
             turnMissCounter: 0,
@@ -233,14 +233,15 @@ module.exports.findEmptySeatAndUserSeat = async (table, client) => {
             clearJob(jobId)
 
             await gameStartActions.gameTimerStart(tableInfo);
-        }else{
-
-            if(tableInfo.activePlayer <= 2){
-                setTimeout(()=>{
-                    botLogic.JoinRobot(tableInfo)
-                },2000)
-            }
         }
+        // else{
+
+        //     if(tableInfo.activePlayer <= 2){
+        //         setTimeout(()=>{
+        //             botLogic.JoinRobot(tableInfo)
+        //         },2000)
+        //     }
+        // }
   
         //}
     } catch (error) {
