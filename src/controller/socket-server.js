@@ -38,7 +38,7 @@ myIo.init = function (server) {
             socket.on('req', async (data) => {
                 const decryptObj = commonHelper.decrypt(data.payload);
                 const payload = JSON.parse(decryptObj);
-                conosole.log("payload ::::::::::::::::",payload)
+                console.log("payload ::::::::::::::::",payload)
                 switch (payload.eventName) {
 
                     case CONST.PING: {
