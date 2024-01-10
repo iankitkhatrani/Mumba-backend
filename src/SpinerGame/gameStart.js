@@ -179,7 +179,7 @@ module.exports.winnerSpinner = async (tabInfo, itemObject) =>{
                 TotalWinAmount = tbInfo.playerInfo.selectObj[itemIndex] * 10;
             }
             // Old  tem
-            if(tbInfo.playerInfo.selectObj[11] != 0 && itemIndex%2 == 1){
+            if(tbInfo.playerInfo.selectObj[10] != 0 && itemIndex%2 == 1){
                 winnerData.push({
                     seatIndex:winner[i].seatIndex,
                     winAmount:tbInfo.playerInfo.selectObj[11] * 2,
@@ -189,7 +189,7 @@ module.exports.winnerSpinner = async (tabInfo, itemObject) =>{
             }
 
             // Old  tem
-            if(tbInfo.playerInfo.selectObj[12] != 0 && itemIndex%2 == 0){
+            if(tbInfo.playerInfo.selectObj[11] != 0 && itemIndex%2 == 0){
                 winnerData.push({
                     seatIndex:winner[i].seatIndex,
                     winAmount:tbInfo.playerInfo.selectObj[12] * 2,
@@ -198,7 +198,7 @@ module.exports.winnerSpinner = async (tabInfo, itemObject) =>{
             }
 
             // Old  tem
-            if(tbInfo.playerInfo.selectObj[13] != 0 && [5,0,9,1].indexOf(itemIndex) != -1){
+            if(tbInfo.playerInfo.selectObj[12] != 0 && [5,0,9,1].indexOf(itemIndex) != -1){
                 winnerData.push({
                     seatIndex:winner[i].seatIndex,
                     winAmount:tbInfo.playerInfo.selectObj[11] * 2,
@@ -208,7 +208,7 @@ module.exports.winnerSpinner = async (tabInfo, itemObject) =>{
             }
 
             // Old  tem
-            if(tbInfo.playerInfo.selectObj[14] != 0 && [8,4,7,3].indexOf(itemIndex) != -1){
+            if(tbInfo.playerInfo.selectObj[13] != 0 && [8,4,7,3].indexOf(itemIndex) != -1){
                 winnerData.push({
                     seatIndex:winner[i].seatIndex,
                     winAmount:tbInfo.playerInfo.selectObj[12] * 2,
