@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const collectionName = 'spinnerTables';
+const collectionName = 'SpinnerTables';
 
 const PlayingTablesSchema = new Schema({
     gameId: { type: String, default: "" },

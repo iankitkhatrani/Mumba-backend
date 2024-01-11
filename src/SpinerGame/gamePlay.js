@@ -6,7 +6,7 @@ const GameUser = mongoose.model("users");
 const CONST = require("../../constant");
 const logger = require("../../logger");
 const commandAcions = require("../helper/socketFunctions");
-const SoratTables = mongoose.model('soratTables');
+const SpinnerTables = mongoose.model('SpinnerTables');
 const roundStartActions = require("./roundStart");
 const gameFinishActions = require("./gameFinish");
 const checkWinnerActions = require("./checkWinner");
@@ -40,7 +40,7 @@ module.exports.actionSpin = async (requestData, client) => {
         const project = {
 
         }
-        const tabInfo = await SoratTables.findOne(wh, project).lean();
+        const tabInfo = await SpinnerTables.findOne(wh, project).lean();
         logger.info("action tabInfo : ", tabInfo);
 
         if (tabInfo == null) {
@@ -103,7 +103,7 @@ module.exports.actionSpin = async (requestData, client) => {
         }
         logger.info("action upWh updateData :: ", upWh, updateData);
 
-        const tb = await SoratTables.findOneAndUpdate(upWh, updateData, { new: true });
+        const tb = await SpinnerTables.findOneAndUpdate(upWh, updateData, { new: true });
         logger.info("action tb : ", tb);
 
         let response = {

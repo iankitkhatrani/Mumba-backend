@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 const MongoID = mongoose.Types.ObjectId;
 const GameUser = mongoose.model('users');
-const SoratTables = mongoose.model('soratTables');
+const SpinnerTables = mongoose.model('SpinnerTables');
 const { sendEvent, sendDirectEvent, AddTime, setDelay, clearJob } = require('../helper/socketFunctions');
 
 const gameStartActions = require("./gameStart");
@@ -36,7 +36,7 @@ module.exports.SPINNER_JOIN_TABLE = async (requestData, client) => {
         let gwh1 = {
             "playerInfo._id": MongoID(client.uid)
         }
-        let tableInfo = await SoratTables.findOne(gwh1, {}).lean();
+        let tableInfo = await SpinnerTables.findOne(gwh1, {}).lean();
         logger.info("JoinTable tableInfo : ", gwh, JSON.stringify(tableInfo));
 
         if (tableInfo != null) {
@@ -65,7 +65,7 @@ module.exports.getBetTable = async () => {
         activePlayer: { $gte: 1}
     }
     logger.info("getBetTable wh : ", JSON.stringify(wh));
-    let tableInfo = await SoratTables.find(wh, {}).sort({ activePlayer: 1 }).lean();
+    let tableInfo = await SpinnerTables.find(wh, {}).sort({ activePlayer: 1 }).lean();
 
     if (tableInfo.length > 0) {
         return tableInfo[0];
@@ -86,7 +86,7 @@ module.exports.createTable = async () => {
         };
         logger.info("createTable insertobj : ", insertobj);
 
-        let insertInfo = await SoratTables.create(insertobj);
+        let insertInfo = await SpinnerTables.create(insertobj);
         logger.info("createTable insertInfo : ", insertInfo);
 
         return insertInfo;
@@ -118,7 +118,7 @@ module.exports.findEmptySeatAndUserSeat = async (table, client) => {
         // let wh = {
         //     _id : table._id.toString()
         // };
-        // let tbInfo = await SoratTables.findOne(wh,{}).lean();
+        // let tbInfo = await SpinnerTables.findOne(wh,{}).lean();
         // logger.info("findEmptySeatAndUserSeat tbInfo : ", tbInfo)
         let totalWallet = Number(userInfo.chips) + Number(userInfo.winningChips)
         let playerDetails = {
@@ -176,7 +176,7 @@ module.exports.findEmptySeatAndUserSeat = async (table, client) => {
 
         logger.info("findEmptySeatAndUserSeat whereCond : ", whereCond, setPlayerInfo);
 
-        let tableInfo = await SoratTables.findOneAndUpdate(whereCond, setPlayerInfo, { new: true });
+        let tableInfo = await SpinnerTables.findOneAndUpdate(whereCond, setPlayerInfo, { new: true });
         logger.info("\nfindEmptySeatAndUserSeat tbInfo : ", tableInfo);
 
         let playerInfo = tableInfo.playerInfo[seatIndex];
