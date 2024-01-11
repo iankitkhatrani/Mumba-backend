@@ -8,8 +8,8 @@ const logger = (module.exports = require('../../logger'));
 const CONST = require('../../constant');
 const signupActions = require('../helper/signups/index');
 const commonHelper = require('../helper/commonHelper');
-const gamePlayActions = require('../SORAT/gamePlay');
-const gamePlayActionsSpinner = require('../SpinerGame/gamePlay');
+const gamePlayActions = require('../SORAT/');
+const gamePlayActionsSpinner = require('../SpinerGame/');
 
 const { registerUser } = require('../helper/signups/signupValidation');
 const mainCtrl = require('./mainController');
@@ -18,7 +18,7 @@ const { userReconnect } = require('../SORAT/reConnectFunction');
 const { userReconnectSpinner } = require('../SpinerGame/reconnect');
 
 const { getBannerList } = require('./adminController');
-const SORTAGAMEINDEX = require('../SORAT/')
+
 
 const myIo = {};
 
@@ -202,7 +202,7 @@ myIo.init = function (server) {
                         const result = schedule.cancelJob(jobId);
 
                         logger.info('after USER JOB CANCELLED scheduleJob: ', result);
-                        await SORTAGAMEINDEX.disconnectTableHandle(socket);
+                        await gamePlayActions.disconnectTableHandle(socket);
                     });
                 } catch (error) {
                     logger.error('socketServer.js error when user disconnect => ', error);
