@@ -11,6 +11,7 @@ const roundStartActions = require("./roundStart");
 const walletActions = require("./updateWallet");
 const SoratTables = mongoose.model('soratTables');
 // const leaveTableActions = require("./leaveTable");
+const { v4: uuidv4 } = require('uuid');
 
 module.exports.gameTimerStart = async (tb) => {
     try {
@@ -24,10 +25,11 @@ module.exports.gameTimerStart = async (tb) => {
         let update = {
             $set: {
                 gameState: "SpinnerGameStartTimer",
-                "GameTimer.GST": new Date(),
+                "gameTimer.GST": new Date(),
                 "totalbet":0,
                 "playerInfo.$.selectObj":[0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                "isFinalWinner":false
+                "isFinalWinner":false,
+                uuid: uuidv4(),
             }
         }
         logger.info("gameTimerStart UserInfo : ", wh, update);
