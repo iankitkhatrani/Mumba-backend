@@ -9,7 +9,7 @@ const CONST = require("../../constant");
 const logger = require("../../logger");
 const roundStartActions = require("./roundStart");
 const walletActions = require("./updateWallet");
-const SoratTables = mongoose.model('soratTables');
+const SpinnerTables = mongoose.model('SpinnerTables');
 // const leaveTableActions = require("./leaveTable");
 const { v4: uuidv4 } = require('uuid');
 
@@ -19,13 +19,13 @@ module.exports.gameTimerStart = async (tb) => {
         if (tb.gameState != "" && tb.gameState != "WinnerDecalre") return false;
 
         let wh = {
-            _id: tb._id,
-            "playerInfo.seatIndex": {$exists:true}
+            _id:MongoID(tb._id),
+            "playerInfo._id": {$exists:true}
         }
         let update = {
             $set: {
                 gameState: "SpinnerGameStartTimer",
-                //"gameTimer.GST": new Date(),
+                "gameTimer.GST": new Date(),
                 "totalbet":0,
                 "playerInfo.$.selectObj":[0,0,0,0,0,0,0,0,0,0,0,0,0,0],
                 "isFinalWinner":false,
@@ -34,7 +34,7 @@ module.exports.gameTimerStart = async (tb) => {
         }
         logger.info("gameTimerStart UserInfo : ", wh, update);
 
-        const tabInfo = await SoratTables.findOneAndUpdate(wh, update, { new: true });
+        const tabInfo = await SpinnerTables.findOneAndUpdate(wh, update, { new: true });
         logger.info("gameTimerStart tabInfo :: ", tabInfo);
 
         let roundTime = 10;
@@ -56,7 +56,7 @@ module.exports.StartSpinnerGame = async (tbId) => {
 
     try {
 
-        const tb = await SoratTables.findOne({
+        const tb = await SpinnerTables.findOne({
             _id: MongoID(tbId.toString()),
         }, {})
 
@@ -100,14 +100,14 @@ module.exports.StartSpinnerGame = async (tbId) => {
         }
         logger.info("startSpinner UserInfo : ", wh, update);
 
-        const tabInfo = await SoratTables.findOneAndUpdate(wh, update, { new: true });
+        const tabInfo = await SpinnerTables.findOneAndUpdate(wh, update, { new: true });
         logger.info("startSpinner tabInfo :: ", tabInfo);
 
         commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.STARTSPINNER, { itemObject: itemObject,timelimit:10 });
 
         setTimeout(async ()=> {
             // Clear destory 
-            // const tabInfonew = await SoratTables.findOneAndUpdate(wh, {
+            // const tabInfonew = await SpinnerTables.findOneAndUpdate(wh, {
             //     $set: {
             //         gameState: "",
             //         itemObject:""
@@ -120,7 +120,7 @@ module.exports.StartSpinnerGame = async (tbId) => {
         //botLogic.PlayRobot(tabInfo,tabInfo.playerInfo,itemObject)
 
     } catch (error) {
-        logger.error("SoratTables.js error ->", error)
+        logger.error("SpinnerTables.js error ->", error)
     }
 }       
 
@@ -138,7 +138,7 @@ module.exports.winnerSpinner = async (tabInfo, itemObject) =>{
         let tbid = tabInfo._id.toString()
         logger.info("winnerSorat tbid ::", tbid);
 
-        const tb = await SoratTables.findOne({
+        const tb = await SpinnerTables.findOne({
             _id: MongoID(tbId.toString()),
         }, {})
 
