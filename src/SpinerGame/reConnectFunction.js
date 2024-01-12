@@ -7,14 +7,14 @@ const { GetRandomString, socketUserRedis, } = require('../helper/socketFunctions
 const schedule = require('node-schedule');
 const mongoose = require('mongoose');
 const MongoID = mongoose.Types.ObjectId;
-const PlayingTables = mongoose.model('playingTables');
+const SpinnerTables = mongoose.model('SpinnerTables');
 
 const userReconnect = async (payload, socket) => {
   try {
     //logger.info('User Reconnect Payload ', payload, '\n<==== New Connected Socket id ===>', socket.id, '\n Table Id =>', socket.tbid, '\n Socket Id', socket);
 
     const rdClient = createClient();
-    const disconnTable = await findDisconnectTable(payload.playerId, PlayingTables);
+    const disconnTable = await findDisconnectTable(payload.playerId, SpinnerTables);
     logger.info('\n finded disconnected  -->', disconnTable);
 
     // set in redis
@@ -88,7 +88,7 @@ const updateRejoinStatus = async (payload, table) => {
         'playerInfo.$': 1,
       };
 
-      let tabInfo = await PlayingTables.findOne(wh, project);
+      let tabInfo = await SpinnerTables.findOne(wh, project);
       logger.info('updateRejoinStatus tabInfo :: ', tabInfo);
 
       let upWh = {
@@ -100,7 +100,7 @@ const updateRejoinStatus = async (payload, table) => {
         ['playerInfo.$.rejoin']: true,
       };
 
-      tabInfo = await PlayingTables.findOneAndUpdate(upWh, updateData, {
+      tabInfo = await SpinnerTables.findOneAndUpdate(upWh, updateData, {
         new: true,
       });
       logger.info('update rejoin user update table :: ', tabInfo);
@@ -127,7 +127,7 @@ const updateScoketId = async (payload, table) => {
         'playerInfo.$': 1,
       };
 
-      let tabInfo = await PlayingTables.findOne(wh, project);
+      let tabInfo = await SpinnerTables.findOne(wh, project);
       logger.info('updateRejoinStatus tabInfo :: ', tabInfo);
 
       let upWh = {
@@ -140,7 +140,7 @@ const updateScoketId = async (payload, table) => {
         ['playerInfo.$.playerSocketId']: sck,
       };
 
-      tabInfo = await PlayingTables.findOneAndUpdate(upWh, updateData, {
+      tabInfo = await SpinnerTables.findOneAndUpdate(upWh, updateData, {
         new: true,
       });
       logger.info('updateScoketId table :: ', tabInfo);

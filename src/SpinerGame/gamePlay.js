@@ -7,10 +7,6 @@ const CONST = require("../../constant");
 const logger = require("../../logger");
 const commandAcions = require("../helper/socketFunctions");
 const SpinnerTables = mongoose.model('SpinnerTables');
-const roundStartActions = require("./roundStart");
-const gameFinishActions = require("./gameFinish");
-const checkWinnerActions = require("./checkWinner");
-const checkUserCardActions = require("./checkUserCard");
 
 const walletActions = require("./updateWallet");
 

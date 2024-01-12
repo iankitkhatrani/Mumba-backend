@@ -1,7 +1,6 @@
 const mongoose = require("mongoose")
 const MongoID = mongoose.Types.ObjectId;
 const GameUser = mongoose.model('users');
-const PlayingTables = mongoose.model("playingTables");
 const IdCounter = mongoose.model("idCounter")
 
 const commandAcions = require("../helper/socketFunctions");
@@ -161,7 +160,7 @@ module.exports.winnerSpinner = async (tabInfo, itemObject) =>{
         };
         logger.info("winnerSorat upWh updateData :: ", upWh, updateData);
 
-        const tbInfo = await PlayingTables.findOneAndUpdate(upWh, updateData, { new: true });
+        const tbInfo = await SpinnerTables.findOneAndUpdate(upWh, updateData, { new: true });
         logger.info("winnerSorat tbInfo : ", tbInfo);
 
         let winnerData = [
@@ -272,7 +271,7 @@ module.exports.deduct = async (tabInfo, playerInfo) => {
                 }
                 let uWh = { _id: MongoID(tabInfo._id.toString()), "playerInfo.seatIndex": Number(playerInfo[i].seatIndex) }
                 logger.info("deduct uWh update ::", uWh, update)
-                await PlayingTables.findOneAndUpdate(uWh, update, { new: true });
+                await SpinnerTables.findOneAndUpdate(uWh, update, { new: true });
             }
         }
         return seatIndexs
@@ -300,7 +299,7 @@ module.exports.resetUserData = async (tbId, playerInfo) => {
                 playerInfo[i].status = "play";
                 let uWh = { _id: MongoID(tbId.toString()), "playerInfo.seatIndex": Number(playerInfo[i].seatIndex) }
                 logger.info("updateUserState uWh update ::", uWh, update)
-                await PlayingTables.findOneAndUpdate(uWh, update, { new: true });
+                await SpinnerTables.findOneAndUpdate(uWh, update, { new: true });
             }
 
         logger.info("updateUserState playerInfo::", playerInfo, playerInfo.length);

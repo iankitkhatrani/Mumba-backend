@@ -1,6 +1,7 @@
 const mongoose = require("mongoose")
 const MongoID = mongoose.Types.ObjectId;
-const PlayingTables = mongoose.model("playingTables");
+const SpinnerTables = mongoose.model('SpinnerTables');
+
 const UserWalletTracks = mongoose.model("userWalletTracks");
 const GameUser = mongoose.model("users");
 
@@ -165,7 +166,7 @@ module.exports.deductWallet = async (id, deductChips, tType, t, tbInfo, client, 
                             "playerInfo._id": MongoID(wh._id.toString())
                         }
 
-                        await PlayingTables.findOneAndUpdate(tbWh, { $set: { "playerInfo.$.coins": uChips } }, { new: true })
+                        await SpinnerTables.findOneAndUpdate(tbWh, { $set: { "playerInfo.$.coins": uChips } }, { new: true })
 
                         commandAcions.sendEventInTable(tbInfo._id.toString(), CONST.TABLE_USER_WALLET_UPDATE, {
                             totalWallet: uChips,
@@ -306,7 +307,7 @@ module.exports.addWallet = async (id, added_chips, tType, t, tbInfo, client, sea
                             _id: MongoID(tbInfo._id.toString()),
                             "playerInfo._id": MongoID(wh._id.toString())
                         }
-                        await PlayingTables.findOneAndUpdate(tbWh, { $set: { "playerInfo.$.coins": uChips } }, { new: true })
+                        await SpinnerTables.findOneAndUpdate(tbWh, { $set: { "playerInfo.$.coins": uChips } }, { new: true })
 
                         commandAcions.sendEventInTable(client, CONST.TABLE_USER_WALLET_UPDATE, {
                             totalWallet: uChips,
