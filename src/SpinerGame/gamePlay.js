@@ -44,12 +44,7 @@ module.exports.actionSpin = async (requestData, client) => {
             delete client.action;
             return false
         }
-        if (tabInfo.turnDone) {
-            logger.info("action : client.su ::", client.seatIndex);
-            delete client.action;
-            commandAcions.sendDirectEvent(client.sck, CONST.ACTIONSPINNNER, requestData, false, "Turn is already taken!");
-            return false;
-        }
+       
         
         let playerInfo = tabInfo.playerInfo[client.seatIndex];
         let currentBet = Number(requestData.bet);
@@ -103,8 +98,7 @@ module.exports.actionSpin = async (requestData, client) => {
         logger.info("action tb : ", tb);
 
         let response = {
-            seatIndex: client.seatIndex,
-            chalValue: chalvalue,
+            bet: chalvalue,
             item:requestData.item
         }
 
