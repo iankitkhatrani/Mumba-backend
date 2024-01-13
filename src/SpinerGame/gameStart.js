@@ -59,16 +59,16 @@ module.exports.StartSpinnerGame = async (tbId) => {
             _id: MongoID(tbId.toString()),
         }, {})
 
-        logger.info("StartSpinnerGame tbId : ", tbId);
-        if (tb == null || tb.gameState != "SoratGameStartTimer") return false;
+        logger.info("StartSpinnerGame tbId : ", tb.gameState);
+        if (tb == null || tb.gameState != "SpinnerGameStartTimer") return false;
 
 
         //Genrate Rendom Number 
-        logger.info("StartSpinnerGame config.SORATLOGIC : ", config.SORATLOGIC);
-        logger.info("StartSpinnerGame tb.totalbet : ", tb.totalbet);
+        logger.info("StartSpinnerGame GAMELOGICCONFIG.SPIN : ", GAMELOGICCONFIG.SPIN);
+        logger.info("StartSpinnerGame tb.totalbet : ", tb.TableObject);
 
         // NORMAL 
-        let itemObject = tb.TableObject[getRandomInt(0,tb.TableObject.length-1)]
+        let itemObject = tb.TableObject[this.getRandomInt(0,tb.TableObject.length-1)]
 
         // if(CONST.SORATLOGIC == "Client"){ // Client SIDE
         //     if(tb.totalbet >= 5){
@@ -113,7 +113,7 @@ module.exports.StartSpinnerGame = async (tbId) => {
             //     }
             // }, { new: true });
 
-            this.winnerSpinner(tabInfonew,itemObject);
+            this.winnerSpinner(tabInfo,itemObject);
         },10000);
 
         //botLogic.PlayRobot(tabInfo,tabInfo.playerInfo,itemObject)
@@ -124,7 +124,7 @@ module.exports.StartSpinnerGame = async (tbId) => {
 }       
 
 // Generate a random whole number between a specified range (min and max)
-function getRandomInt(min, max) {
+module.exports.getRandomInt = (min, max) =>{
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -138,11 +138,13 @@ module.exports.winnerSpinner = async (tabInfo, itemObject) =>{
         logger.info("winnerSorat tbid ::", tbid);
 
         const tb = await SpinnerTables.findOne({
-            _id: MongoID(tbId.toString()),
+            _id: MongoID(tbid.toString()),
         }, {})
 
         if (typeof itemObject == "undefined" || (typeof tb != "undefined" && tb.playerInfo.length == 0)) {
-            logger.info("winnerSorat winner ::", winner);
+            logger.info("winnerSpinner winner ::", itemObject);
+            logger.info("winnerSpinner winner tb.playerInfo.length ::", tb.playerInfo.length);
+
             return false;
         }
 
@@ -168,59 +170,61 @@ module.exports.winnerSpinner = async (tabInfo, itemObject) =>{
         ]
 
         let itemIndex = tbInfo.TableObject.indexOf(itemObject)
-
+        console.log("itemIndex ",itemIndex)
         for (let i = 0; i < tbInfo.playerInfo.length; i++) {
-            var TotalWinAmount = 0 
-            if(tbInfo.playerInfo.selectObj[itemIndex] != 0){
-                winnerData.push({
-                    seatIndex:winner[i].seatIndex,
-                    winAmount:tbInfo.playerInfo.selectObj[itemIndex] * 10,
-                })
+            if(tbInfo.playerInfo[i].seatIndex != undefined){
 
-                TotalWinAmount = tbInfo.playerInfo.selectObj[itemIndex] * 10;
+                var TotalWinAmount = 0 
+                if(tbInfo.playerInfo[i].selectObj[itemIndex] != 0){
+                    winnerData.push({
+                        seatIndex:tbInfo.playerInfo[i].seatIndex,
+                        winAmount:tbInfo.playerInfo[i].selectObj[itemIndex] * 10,
+                    })
+
+                    TotalWinAmount = tbInfo.playerInfo[i].selectObj[itemIndex] * 10;
+                }
+                // Old  tem
+                if(tbInfo.playerInfo[i].selectObj[10] != 0 && itemIndex%2 == 1){
+                    winnerData.push({
+                        seatIndex:tbInfo.playerInfo[i].seatIndex,
+                        winAmount:tbInfo.playerInfo[i].selectObj[11] * 2,
+                    })
+
+                    TotalWinAmount = TotalWinAmount + tbInfo.playerInfo[i].selectObj[11] * 2;
+                }
+
+                // Old  tem
+                if(tbInfo.playerInfo[i].selectObj[11] != 0 && itemIndex%2 == 0){
+                    winnerData.push({
+                        seatIndex:tbInfo.playerInfo[i].seatIndex,
+                        winAmount:tbInfo.playerInfo[i].selectObj[12] * 2,
+                    })
+                    TotalWinAmount = TotalWinAmount + tbInfo.playerInfo[i].selectObj[12] * 2;
+                }
+
+                // Old  tem
+                if(tbInfo.playerInfo[i].selectObj[12] != 0 && [5,0,9,1].indexOf(itemIndex) != -1){
+                    winnerData.push({
+                        seatIndex:tbInfo.playerInfo[i].seatIndex,
+                        winAmount:tbInfo.playerInfo[i].selectObj[11] * 2,
+                    })
+
+                    TotalWinAmount = TotalWinAmount + tbInfo.playerInfo[i].selectObj[11] * 2;
+                }
+
+                // Old  tem
+                if(tbInfo.playerInfo[i].selectObj[13] != 0 && [8,4,7,3].indexOf(itemIndex) != -1){
+                    winnerData.push({
+                        seatIndex:tbInfo.playerInfo[i].seatIndex,
+                        winAmount:tbInfo.playerInfo[i].selectObj[12] * 2,
+                    })
+                    TotalWinAmount = TotalWinAmount + tbInfo.playerInfo[i].selectObj[12] * 2;
+                }
+
+                console.log("TotalWinAmount ",TotalWinAmount)
+
+                TotalWinAmount != 0 && await walletActions.addWallet(tbInfo.playerInfo[i]._id, Number(TotalWinAmount), 4, "Spinnner Win", tabInfo);
             }
-            // Old  tem
-            if(tbInfo.playerInfo.selectObj[10] != 0 && itemIndex%2 == 1){
-                winnerData.push({
-                    seatIndex:winner[i].seatIndex,
-                    winAmount:tbInfo.playerInfo.selectObj[11] * 2,
-                })
-
-                TotalWinAmount = TotalWinAmount + tbInfo.playerInfo.selectObj[11] * 2;
-            }
-
-            // Old  tem
-            if(tbInfo.playerInfo.selectObj[11] != 0 && itemIndex%2 == 0){
-                winnerData.push({
-                    seatIndex:winner[i].seatIndex,
-                    winAmount:tbInfo.playerInfo.selectObj[12] * 2,
-                })
-                TotalWinAmount = TotalWinAmount + tbInfo.playerInfo.selectObj[12] * 2;
-            }
-
-            // Old  tem
-            if(tbInfo.playerInfo.selectObj[12] != 0 && [5,0,9,1].indexOf(itemIndex) != -1){
-                winnerData.push({
-                    seatIndex:winner[i].seatIndex,
-                    winAmount:tbInfo.playerInfo.selectObj[11] * 2,
-                })
-
-                TotalWinAmount = TotalWinAmount + tbInfo.playerInfo.selectObj[11] * 2;
-            }
-
-            // Old  tem
-            if(tbInfo.playerInfo.selectObj[13] != 0 && [8,4,7,3].indexOf(itemIndex) != -1){
-                winnerData.push({
-                    seatIndex:winner[i].seatIndex,
-                    winAmount:tbInfo.playerInfo.selectObj[12] * 2,
-                })
-                TotalWinAmount = TotalWinAmount + tbInfo.playerInfo.selectObj[12] * 2;
-            }
-
-            console.log("TotalWinAmount ",TotalWinAmount)
-
-            TotalWinAmount != 0 && await walletActions.addWallet(tbInfo.playerInfo._id, Number(TotalWinAmount), 4, "Spinnner Win", tabInfo);
-
         }
         const playerInGame = await roundStartActions.getPlayingUserInRound(tbInfo.playerInfo);
         logger.info("getWinner playerInGame ::", playerInGame);
@@ -242,7 +246,7 @@ module.exports.winnerSpinner = async (tabInfo, itemObject) =>{
             itemObject:itemObject
         });
 
-        await roundEndActions.gameTimerStart(tbInfo);
+        await this.gameTimerStart(tbInfo);
 
     } catch (err) {
         logger.info("Exception  WinnerDeclareCall : 1 :: ", err)
