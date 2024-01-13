@@ -31,7 +31,7 @@ module.exports.actionSpin = async (requestData, client) => {
 
         const wh = {
             _id: MongoID(client.tbid.toString()),
-            status:"openforbet"
+            //status:"SpinnerGameStartTimer"
         }
         const project = {
 
@@ -70,7 +70,7 @@ module.exports.actionSpin = async (requestData, client) => {
                 
             }
         }
-        let chalvalue = tabInfo.currentBet;
+        let chalvalue =currentBet;
         updateData.$set["playerInfo.$.playStatus"] = "action"
     
         let totalWallet = Number(UserInfo.chips) + Number(UserInfo.winningChips)
@@ -83,9 +83,9 @@ module.exports.actionSpin = async (requestData, client) => {
         }
         chalvalue = Number(Number(chalvalue).toFixed(2))
 
-        await walletActions.deductWallet(client.uid, -chalvalue, 2, "Spinner Bet", tabInfo, client.id, client.seatIndex);
+        //await walletActions.deductWallet(client.uid, -chalvalue, 2, "Spinner Bet", tabInfo, client.id, client.seatIndex);
 
-        updateData.$inc["playerInfo.$.selectObj."+item] = chalvalue;
+        updateData.$inc["playerInfo.$.selectObj."+requestData.item] = chalvalue;
         updateData.$inc["playerInfo.$.totalbet"] = chalvalue;
 
 
@@ -103,13 +103,14 @@ module.exports.actionSpin = async (requestData, client) => {
         logger.info("action tb : ", tb);
 
         let response = {
-            seatIndex: tb.turnSeatIndex,
+            seatIndex: client.seatIndex,
             chalValue: chalvalue,
-            item:item
+            item:requestData.item
         }
 
-        sendEvent(client, CONST.ACTIONSPINNNER, response, false, "");
+        commandAcions.sendEvent(client, CONST.ACTIONSPINNNER, response, false, "");
 
+      
         delete client.action;
         
         // let activePlayerInRound = await roundStartActions.getPlayingUserInRound(tb.playerInfo);
