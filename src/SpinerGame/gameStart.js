@@ -140,7 +140,7 @@ module.exports.winnerSpinner = async (tabInfo, itemObject) =>{
         const tb = await SpinnerTables.findOne({
             _id: MongoID(tbid.toString()),
         }, {})
-
+        console.log("winnerSpinner tb ",tb)
         if (typeof itemObject == "undefined" || (typeof tb != "undefined" && tb.playerInfo.length == 0)) {
             logger.info("winnerSpinner winner ::", itemObject);
             logger.info("winnerSpinner winner tb.playerInfo.length ::", tb.playerInfo.length);
@@ -177,6 +177,7 @@ module.exports.winnerSpinner = async (tabInfo, itemObject) =>{
                 var TotalWinAmount = 0 
                 if(tbInfo.playerInfo[i].selectObj[itemIndex] != 0){
                     winnerData.push({
+                        uid:tbInfo.playerInfo[i]._id,
                         seatIndex:tbInfo.playerInfo[i].seatIndex,
                         winAmount:tbInfo.playerInfo[i].selectObj[itemIndex] * 10,
                     })
@@ -186,6 +187,7 @@ module.exports.winnerSpinner = async (tabInfo, itemObject) =>{
                 // Old  tem
                 if(tbInfo.playerInfo[i].selectObj[10] != 0 && itemIndex%2 == 1){
                     winnerData.push({
+                        uid:tbInfo.playerInfo[i]._id,
                         seatIndex:tbInfo.playerInfo[i].seatIndex,
                         winAmount:tbInfo.playerInfo[i].selectObj[11] * 2,
                     })
@@ -196,6 +198,7 @@ module.exports.winnerSpinner = async (tabInfo, itemObject) =>{
                 // Old  tem
                 if(tbInfo.playerInfo[i].selectObj[11] != 0 && itemIndex%2 == 0){
                     winnerData.push({
+                        uid:tbInfo.playerInfo[i]._id,
                         seatIndex:tbInfo.playerInfo[i].seatIndex,
                         winAmount:tbInfo.playerInfo[i].selectObj[12] * 2,
                     })
@@ -205,6 +208,7 @@ module.exports.winnerSpinner = async (tabInfo, itemObject) =>{
                 // Old  tem
                 if(tbInfo.playerInfo[i].selectObj[12] != 0 && [5,0,9,1].indexOf(itemIndex) != -1){
                     winnerData.push({
+                        uid:tbInfo.playerInfo[i]._id,
                         seatIndex:tbInfo.playerInfo[i].seatIndex,
                         winAmount:tbInfo.playerInfo[i].selectObj[11] * 2,
                     })
@@ -215,6 +219,7 @@ module.exports.winnerSpinner = async (tabInfo, itemObject) =>{
                 // Old  tem
                 if(tbInfo.playerInfo[i].selectObj[13] != 0 && [8,4,7,3].indexOf(itemIndex) != -1){
                     winnerData.push({
+                        uid:tbInfo.playerInfo[i]._id,
                         seatIndex:tbInfo.playerInfo[i].seatIndex,
                         winAmount:tbInfo.playerInfo[i].selectObj[12] * 2,
                     })
@@ -245,6 +250,11 @@ module.exports.winnerSpinner = async (tabInfo, itemObject) =>{
             WinnerData:winnerData,
             itemObject:itemObject
         });
+
+        let jobId = CONST.BNW_GAME_START_TIMER + ":" + tbInfo._id.toString();
+        let delay = commandAcions.AddTime(5);
+
+        const delayRes = await commandAcions.setDelay(jobId, new Date(delay));
 
         await this.gameTimerStart(tbInfo);
 
