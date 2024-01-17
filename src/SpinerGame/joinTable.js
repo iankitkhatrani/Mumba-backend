@@ -232,8 +232,9 @@ module.exports.findEmptySeatAndUserSeat = async (table, client) => {
 
             let jobId = "LEAVE_SINGLE_USER:" + tableInfo._id;
             clearJob(jobId)
-
-            await gameStartActions.gameTimerStart(tableInfo);
+            setTimeout(async ()=>{
+                await gameStartActions.gameTimerStart(tableInfo);
+            },1000)
         }
         // else{
 

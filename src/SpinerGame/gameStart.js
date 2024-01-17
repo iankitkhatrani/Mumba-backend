@@ -45,7 +45,12 @@ module.exports.gameTimerStart = async (tb) => {
 
         const delayRes = await commandAcions.setDelay(jobId, new Date(delay));
 
-        this.StartSpinnerGame(tbId)
+        setTimeout(async ()=>{
+            this.StartSpinnerGame(tbId)
+        },2000)
+
+        
+
     } catch (error) {
         logger.error("gameTimerStart.js error ->", error)
     }
