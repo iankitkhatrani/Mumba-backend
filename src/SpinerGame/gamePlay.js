@@ -78,7 +78,7 @@ module.exports.actionSpin = async (requestData, client) => {
         }
         chalvalue = Number(Number(chalvalue).toFixed(2))
 
-        //await walletActions.deductWallet(client.uid, -chalvalue, 2, "Spinner Bet", tabInfo, client.id, client.seatIndex);
+        await walletActions.deductWallet(client.uid, -chalvalue, 2, "Spinner Bet", tabInfo, client.id, client.seatIndex);
 
         updateData.$inc["playerInfo.$.selectObj."+requestData.item] = chalvalue;
         updateData.$inc["playerInfo.$.totalbet"] = chalvalue;
