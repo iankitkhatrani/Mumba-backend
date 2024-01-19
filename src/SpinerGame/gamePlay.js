@@ -120,3 +120,80 @@ module.exports.actionSpin = async (requestData, client) => {
         logger.info("Exception action : ", e);
     }
 }
+
+
+/*
+    bet : 10,
+    object:{
+        item:0, 
+        bet:10,
+    }
+
+*/
+module.exports.ClearBet = async (requestData, client) => {
+    try {
+        logger.info("action requestData : ", requestData);
+        if (typeof client.tbid == "undefined" || typeof client.uid == "undefined" || typeof client.seatIndex == "undefined") {
+            commandAcions.sendDirectEvent(client.sck, CONST.ClearBet, requestData, false, "User session not set, please restart game!");
+            return false;
+        }
+
+        const wh = {
+            _id: MongoID(client.tbid.toString())
+        }
+        const project = {
+
+        }
+        const tabInfo = await SpinnerTables.findOne(wh, project).lean();
+        logger.info("ClearBet tabInfo : ", tabInfo);
+
+        if (tabInfo == null) {
+            logger.info("ClearBet user not turn ::", tabInfo);
+           
+            return false
+        }
+       
+        
+        let playerInfo = tabInfo.playerInfo[client.seatIndex];
+       
+        let gwh = {
+            _id: MongoID(client.uid)
+        }
+        let UserInfo = await GameUser.findOne(gwh, {}).lean();
+        logger.info("ClearBet UserInfo : ", gwh, JSON.stringify(UserInfo));
+
+        let updateData = {
+            $set: {
+                "playerInfo.$.selectObj":[0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                "playerInfo.$.totalbet":0,
+                
+            },
+            $inc:{
+                "totalbet":-Number(playerInfo.totalbet)
+            }
+        }
+        
+       
+        await walletActions.addWallet(client.uid, Number(playerInfo.totalbet), 4, "Spinnner Clear Bet", tabInfo,client.id, client.seatIndex,"Spinner");
+
+    
+        const upWh = {
+            _id: MongoID(client.tbid.toString()),
+            "playerInfo.seatIndex": Number(client.seatIndex)
+        }
+        logger.info("action upWh updateData :: ", upWh, updateData);
+
+        const tb = await SpinnerTables.findOneAndUpdate(upWh, updateData, { new: true });
+        logger.info("action tb : ", tb);
+
+        let response = {
+            flags:true
+        }
+
+        commandAcions.sendEvent(client, CONST.ClearBet, response, false, "");
+        
+        return true;
+    } catch (e) {
+        logger.info("Exception action : ", e);
+    }
+}

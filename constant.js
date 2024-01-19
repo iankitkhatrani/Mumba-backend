@@ -73,6 +73,7 @@ const CONST = {
   SPINNERWINNER: "SPINNERWINNER",
   RECONNECTSPINNER:"RECONNECTSPINNER",
   LEAVETABLESPINNER:"LEAVETABLESPINNER",
+  ClearBet:"ClearBet",
   //===================================================
   
 

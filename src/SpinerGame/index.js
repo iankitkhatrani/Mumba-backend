@@ -14,5 +14,6 @@ module.exports = {
   leaveTable: leaveTable,
   findDisconnectTable: findDisconnectTable,
   disconnectTableHandle: disconnectTableHandle,
-  actionSpin:actionSpin
+  actionSpin:actionSpin,
+  ClearBet:ClearBet
 };
