@@ -9,7 +9,7 @@ const commandAcions = require("../helper/socketFunctions");
 const CONST = require("../../constant");
 const logger = require("../../logger");
 
-module.exports.deductWallet = async (id, deductChips, tType, t, tbInfo, client, seatIndex) => {
+module.exports.deductWallet = async (id, deductChips, tType, t, tbInfo, client, seatIndex,game) => {
     try {
         logger.info('\ndedudctWallet : call.-->>>', id, deductChips, t);
         const wh = (typeof id == 'string') ? { _id: MongoID(id) } : { _id: id };
@@ -119,7 +119,7 @@ module.exports.deductWallet = async (id, deductChips, tType, t, tbInfo, client, 
                 withdrawId: (tbInfo && tbInfo.withdrawId) ? tbInfo.withdrawId : "",
                 gameId: (tbInfo && tbInfo.gameId) ? tbInfo.game_id : "",
                 isRobot: (typeof userInfo.flags != "undefined" && userInfo.flags.isRobot) ? userInfo.flags.isRobot : 0,
-                gameType: (tbInfo && tbInfo.gameType) ? tbInfo.gameType : "", //Game Type
+                gameType: (game) ? game : "", //Game Type
                 maxSeat: (tbInfo && tbInfo.maxSeat) ? tbInfo.maxSeat : 0,//Maxumum Player.
                 betValue: (tbInfo && tbInfo.betValue) ? tbInfo.betValue : 0,
                 tableId: (tbInfo && tbInfo._id) ? tbInfo._id.toString() : ""
@@ -270,7 +270,7 @@ module.exports.addWallet = async (id, added_chips, tType, t, tbInfo, client, sea
                 withdrawId: (tbInfo && tbInfo.withdrawId) ? tbInfo.withdrawId : "",
                 gameId: (tbInfo && tbInfo.game_id) ? tbInfo.game_id : "",
                 isRobot: (typeof userInfo.flags != "undefined" && userInfo.flags.isRobot) ? userInfo.flags.isRobot : 0,
-                gameType: (tbInfo && tbInfo.gameType) ? tbInfo.gameType : "", //Game Type
+                gameType: (game) ? game : "", //Game Type
                 maxSeat: (tbInfo && tbInfo.maxSeat) ? tbInfo.maxSeat : 0,//Maxumum Player.
                 betValue: (tbInfo && tbInfo.betValue) ? tbInfo.betValue : 0,
                 tableId: (tbInfo && tbInfo._id) ? tbInfo._id.toString() : ""
@@ -300,28 +300,28 @@ module.exports.addWallet = async (id, added_chips, tType, t, tbInfo, client, sea
             seatIndex: seatIndex
         });
 
-        if (typeof tbInfo != "undefined" && tbInfo != null && typeof tbInfo._id != "undefined") {
-            if (typeof tbInfo.pi != "undefined" && tbInfo.pi.length > 0) {
-                for (let i = 0; i < tbInfo.pi.length; i++) {
-                    if (typeof tbInfo.pi[i] != "undefined" && typeof tbInfo.pi[i].ui != "undefined" && tbInfo.pi[i].ui._id.toString() == wh._id.toString()) {
+        // if (typeof tbInfo != "undefined" && tbInfo != null && typeof tbInfo._id != "undefined") {
+        //     if (typeof tbInfo.pi != "undefined" && tbInfo.pi.length > 0) {
+        //         for (let i = 0; i < tbInfo.pi.length; i++) {
+        //             if (typeof tbInfo.pi[i] != "undefined" && typeof tbInfo.pi[i].ui != "undefined" && tbInfo.pi[i].ui._id.toString() == wh._id.toString()) {
 
-                        let uChips = Number(upReps.chips) + Number(upReps.winningChips)
+        //                 let uChips = Number(upReps.chips) + Number(upReps.winningChips)
 
-                        let tbWh = {
-                            _id: MongoID(tbInfo._id.toString()),
-                            "playerInfo._id": MongoID(wh._id.toString())
-                        }
-                        await SpinnerTables.findOneAndUpdate(tbWh, { $set: { "playerInfo.$.coins": uChips } }, { new: true })
+        //                 let tbWh = {
+        //                     _id: MongoID(tbInfo._id.toString()),
+        //                     "playerInfo._id": MongoID(wh._id.toString())
+        //                 }
+        //                 await SpinnerTables.findOneAndUpdate(tbWh, { $set: { "playerInfo.$.coins": uChips } }, { new: true })
 
-                        commandAcions.sendEventInTable(client, CONST.TABLE_USER_WALLET_UPDATE, {
-                            totalWallet: uChips,
-                            seatIndex: tbInfo.playerInfo[i].seatIndex
-                        });
-                        break;
-                    }
-                }
-            }
-        }
+        //                 commandAcions.sendEventInTable(client, CONST.TABLE_USER_WALLET_UPDATE, {
+        //                     totalWallet: uChips,
+        //                     seatIndex: tbInfo.playerInfo[i].seatIndex
+        //                 });
+        //                 break;
+        //             }
+        //         }
+        //     }
+        // }
         return totalRemaningAmount;
     } catch (e) {
         logger.info("deductWallet : 1 : Exception : 1", e)

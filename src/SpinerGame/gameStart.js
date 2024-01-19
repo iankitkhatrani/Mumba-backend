@@ -64,7 +64,7 @@ module.exports.StartSpinnerGame = async (tbId) => {
             _id: MongoID(tbId.toString()),
         }, {})
 
-        logger.info("StartSpinnerGame tbId : ", tb.gameState);
+        logger.info("StartSpinnerGame tbId : ", tb);
         if (tb == null || tb.gameState != "SpinnerGameStartTimer") return false;
 
 
@@ -280,7 +280,7 @@ module.exports.deduct = async (tabInfo, playerInfo) => {
             if (playerInfo[i] != {} && typeof playerInfo[i].seatIndex != "undefined" && playerInfo[i].status == "play") {
                 seatIndexs.push(playerInfo[i].seatIndex);
 
-                await walletActions.deductWallet(playerInfo[i]._id,-Number(tabInfo.boot), 1, "Sorat Bet", tabInfo, playerInfo[i].sck, playerInfo[i].seatIndex);
+                await walletActions.deductWallet(playerInfo[i]._id,-Number(tabInfo.boot), 1, "Sorat Bet", tabInfo, playerInfo[i].sck, playerInfo[i].seatIndex,"Spinner");
 
                 let update = {
                     $inc: {

@@ -28,6 +28,7 @@ const userWalletTracksSchema = new Schema(
         betValue: { type: Number },
         tableId: { type: String },
         tournamentId: { type: Number },
+        DateandTime:{ type: Date,default:new Date() }
     },
     {
         timestamps: true
