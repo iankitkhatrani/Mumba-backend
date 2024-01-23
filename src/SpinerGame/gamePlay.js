@@ -243,7 +243,7 @@ module.exports.DoubleBet = async (requestData, client) => {
             return accumulator + currentValue
         },0);
         
-        console.log("sum ",sum)
+        console.log("chalvalue ",chalvalue)
 
         let totalWallet = Number(UserInfo.chips) + Number(UserInfo.winningChips)
 
@@ -258,6 +258,14 @@ module.exports.DoubleBet = async (requestData, client) => {
 
         await walletActions.deductWallet(client.uid, -chalvalue, 2, "Spinner Bet", tabInfo, client.id, client.seatIndex,"Spinner");
 
+        let updateData = {
+            $set: {
+
+            },
+            $inc:{
+                
+            }
+        }
         
         for (let i = 0; i < playerInfo.selectObj.length; i++ ) {
             if(playerInfo.selectObj[i] != 0){
