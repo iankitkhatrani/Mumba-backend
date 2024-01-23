@@ -1,6 +1,6 @@
 const mongoose = require("mongoose")
 const MongoID = mongoose.Types.ObjectId;
-const PlayingTables = mongoose.model("playingTables");
+const SpinnerTables = mongoose.model('SpinnerTables');
 
 const commandAcions = require("../helper/socketFunctions");
 const gameStartActions = require("./gameStart");
@@ -34,7 +34,7 @@ module.exports.roundFinish = async (tb) => {
         }
         logger.info("roundFinish wh :: ", wh, update);
 
-        let tbInfo = await PlayingTables.findOneAndUpdate(wh, update, { new: true });
+        let tbInfo = await SpinnerTables.findOneAndUpdate(wh, update, { new: true });
         logger.info("roundFinish tbInfo : ", tbInfo);
         let tableId = tbInfo._id;
 
@@ -46,7 +46,7 @@ module.exports.roundFinish = async (tb) => {
         const wh1 = {
             _id: MongoID(tableId.toString())
         }
-        const tabInfo = await PlayingTables.findOne(wh1, {}).lean();
+        const tabInfo = await SpinnerTables.findOne(wh1, {}).lean();
         if (tabInfo.activePlayer >= 2)
             await gameStartActions.gameTimerStart(tabInfo);
 

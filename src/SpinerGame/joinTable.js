@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 const MongoID = mongoose.Types.ObjectId;
 const GameUser = mongoose.model('users');
-const SoratTables = mongoose.model('soratTables');
+const SpinnerTables = mongoose.model('SpinnerTables');
 const { sendEvent, sendDirectEvent, AddTime, setDelay, clearJob } = require('../helper/socketFunctions');
 
 const gameStartActions = require("./gameStart");
@@ -36,7 +36,7 @@ module.exports.SPINNER_JOIN_TABLE = async (requestData, client) => {
         let gwh1 = {
             "playerInfo._id": MongoID(client.uid)
         }
-        let tableInfo = await SoratTables.findOne(gwh1, {}).lean();
+        let tableInfo = await SpinnerTables.findOne(gwh1, {}).lean();
         logger.info("JoinTable tableInfo : ", gwh, JSON.stringify(tableInfo));
 
         if (tableInfo != null) {
@@ -65,7 +65,7 @@ module.exports.getBetTable = async () => {
         activePlayer: { $gte: 1}
     }
     logger.info("getBetTable wh : ", JSON.stringify(wh));
-    let tableInfo = await SoratTables.find(wh, {}).sort({ activePlayer: 1 }).lean();
+    let tableInfo = await SpinnerTables.find(wh, {}).sort({ activePlayer: 1 }).lean();
 
     if (tableInfo.length > 0) {
         return tableInfo[0];
@@ -82,11 +82,12 @@ module.exports.createTable = async () => {
             playerInfo: [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],
             gameState: "",
             history:[],
-            betamount:[5,10,50,100,500,1000]
+            betamount:[5,10,50,100,500,1000],
+            TableObject:[0,1,2,3,4,5,6,7,8,9]
         };
         logger.info("createTable insertobj : ", insertobj);
 
-        let insertInfo = await SoratTables.create(insertobj);
+        let insertInfo = await SpinnerTables.create(insertobj);
         logger.info("createTable insertInfo : ", insertInfo);
 
         return insertInfo;
@@ -118,7 +119,7 @@ module.exports.findEmptySeatAndUserSeat = async (table, client) => {
         // let wh = {
         //     _id : table._id.toString()
         // };
-        // let tbInfo = await SoratTables.findOne(wh,{}).lean();
+        // let tbInfo = await SpinnerTables.findOne(wh,{}).lean();
         // logger.info("findEmptySeatAndUserSeat tbInfo : ", tbInfo)
         let totalWallet = Number(userInfo.chips) + Number(userInfo.winningChips)
         let playerDetails = {
@@ -131,7 +132,7 @@ module.exports.findEmptySeatAndUserSeat = async (table, client) => {
             status: "",
             playerStatus: "",
             selectObj: [
-                0,0,0,0,0,0,0,0,0,0,0,0,0,0
+                0,0,0,0,0,0,0,0,0,0,0,0,0,0,
             ], // Select object enter ,
             totalbet:0,
             turnMissCounter: 0,
@@ -176,7 +177,7 @@ module.exports.findEmptySeatAndUserSeat = async (table, client) => {
 
         logger.info("findEmptySeatAndUserSeat whereCond : ", whereCond, setPlayerInfo);
 
-        let tableInfo = await SoratTables.findOneAndUpdate(whereCond, setPlayerInfo, { new: true });
+        let tableInfo = await SpinnerTables.findOneAndUpdate(whereCond, setPlayerInfo, { new: true });
         logger.info("\nfindEmptySeatAndUserSeat tbInfo : ", tableInfo);
 
         let playerInfo = tableInfo.playerInfo[seatIndex];
@@ -231,16 +232,18 @@ module.exports.findEmptySeatAndUserSeat = async (table, client) => {
 
             let jobId = "LEAVE_SINGLE_USER:" + tableInfo._id;
             clearJob(jobId)
-
-            await gameStartActions.gameTimerStart(tableInfo);
-        }else{
-
-            if(tableInfo.activePlayer <= 2){
-                setTimeout(()=>{
-                    botLogic.JoinRobot(tableInfo)
-                },2000)
-            }
+            setTimeout(async ()=>{
+                await gameStartActions.gameTimerStart(tableInfo);
+            },1000)
         }
+        // else{
+
+        //     if(tableInfo.activePlayer <= 2){
+        //         setTimeout(()=>{
+        //             botLogic.JoinRobot(tableInfo)
+        //         },2000)
+        //     }
+        // }
   
         //}
     } catch (error) {

@@ -8,6 +8,8 @@ const logger = (module.exports = require('../../logger'));
 const CONST = require('../../constant');
 const signupActions = require('../helper/signups/index');
 const commonHelper = require('../helper/commonHelper');
+const gamePlayActions = require('../SORAT/');
+const gamePlayActionsSpinner = require('../SpinerGame/');
 const gamePlayActions = require('../SORAT/gamePlay');
 const gamePlayActionsSpinner = require('../SpinerGame/gamePlay');
 const OnePlayActions = require('../OneToTwelve/gamePlay');
@@ -33,12 +35,14 @@ myIo.init = function (server) {
     io.on('connection', async (socket) => {
 
         try {
-            // logger.info("Socket connected ===> ", socket.id);
+            logger.info("Socket connected ===> ", socket.id);
             sendEvent(socket, CONST.DONE, {});
 
             socket.on('req', async (data) => {
                 const decryptObj = commonHelper.decrypt(data.payload);
                 const payload = JSON.parse(decryptObj);
+                console.log("payload ::::::::::::::::", payload)
+                console.log("payload ::::::::::::::::", payload.eventName)
 
                 switch (payload.eventName) {
 
@@ -168,6 +172,16 @@ myIo.init = function (server) {
                         break;
                     }
 
+                    case CONST.ClearBet: {
+                        await gamePlayActionsSpinner.ClearBet(payload.data, socket);
+                        break;
+                    }
+
+                    case CONST.DoubleBet: {
+                        await gamePlayActionsSpinner.DoubleBet(payload.data, socket);
+                        break;
+                    }
+
                     case CONST.LEAVETABLESPINNER: {
                         await gamePlayActionsSpinner.leaveTable(payload.data, socket);
                         break;
@@ -177,6 +191,8 @@ myIo.init = function (server) {
                         await userReconnectSpinner(payload.data, socket);
                         break;
                     }
+
+
                     //====================================
 
 

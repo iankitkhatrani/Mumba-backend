@@ -1,8 +1,11 @@
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 const express = require('express');
 const router = express.Router();
 const mainCtrl = require('../../controller/adminController');
 const { OK_STATUS, BAD_REQUEST } = require('../../../config');
 const logger = require('../../../logger');
+const SpinnerTables = mongoose.model('SpinnerTables');
 
 /**
  * @api {post} /admin/signup-admin
@@ -50,6 +53,27 @@ router.post('/login', async (req, res) => {
   } catch (err) {
     logger.error('admin/auth.js login error => ', err);
     res.status(BAD_REQUEST).json({ status: 0, message: 'Something went wrong' });
+  }
+});
+
+
+/**
+* @api {get} /admin/DeletePlaying
+* @apiName  add-bet-list
+* @apiGroup  Admin
+* @apiHeader {String}  x-access-token Admin's unique access-key
+* @apiSuccess (Success 200) {Array} badges Array of badges document
+* @apiError (Error 4xx) {String} message Validation or error message.
+*/
+router.get('/DeletePlayingSpinner', async (req, res) => {
+  try {
+
+    await SpinnerTables.deleteMany({})
+
+    res.json({ status: "ok" });
+  } catch (error) {
+    logger.error('admin/dahboard.js post bet-list error => ', error);
+    res.status(config.INTERNAL_SERVER_ERROR).json(error);
   }
 });
 

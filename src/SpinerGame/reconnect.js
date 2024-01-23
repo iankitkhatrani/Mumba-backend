@@ -8,7 +8,7 @@ const { sendDirectEvent, getPlayingUserInRound } = require('../helper/socketFunc
 const { filterBeforeSendSPEvent } = require('../helper/signups/appStart');
 
 const Users = mongoose.model('users');
-const PlayingTables = mongoose.model('playingTables');
+const SpinnerTables = mongoose.model('SpinnerTables');
 const MongoID = mongoose.Types.ObjectId;
 
 module.exports.
@@ -50,7 +50,7 @@ userReconnectSpinner = async (requestData, client) => {
                 };
 
                 const project = {};
-                const tabInfo = await PlayingTables.findOne(wh, project).lean();
+                const tabInfo = await SpinnerTables.findOne(wh, project).lean();
 
                 if (tabInfo === null) {
                     const response = {

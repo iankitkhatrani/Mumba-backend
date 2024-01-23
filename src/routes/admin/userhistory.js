@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const MongoID = mongoose.Types.ObjectId;
+
 const Users = mongoose.model('users');
 const express = require('express');
 const router = express.Router();
@@ -6,6 +8,9 @@ const config = require('../../../config');
 const commonHelper = require('../../helper/commonHelper');
 const mainCtrl = require('../../controller/adminController');
 const logger = require('../../../logger');
+
+
+const UserWalletTracks = mongoose.model('userWalletTracks');
 
 
 /**
@@ -20,7 +25,7 @@ router.get('/RouletteGameHistory', async (req, res) => {
     try {
         console.info('requet => ', req.query);
 
-        const rouletteHistoryData =  [
+        const rouletteHistoryData = [
             {
                 "SrNo": 1,
                 "DateTime": "2023-10-10 08:30 AM",
@@ -65,7 +70,7 @@ router.get('/RouletteGameHistory', async (req, res) => {
 
         logger.info('admin/dahboard.js post dahboard  error => ', rouletteHistoryData);
 
-        res.json({ gameHistoryData:rouletteHistoryData });
+        res.json({ gameHistoryData: rouletteHistoryData });
     } catch (error) {
         logger.error('admin/dahboard.js post bet-list error => ', error);
         res.status(config.INTERNAL_SERVER_ERROR).json(error);
@@ -84,7 +89,7 @@ router.get('/BaraKaDumGameHistory', async (req, res) => {
     try {
         console.info('requet => ', req.query);
 
-        const rouletteHistoryData =  [
+        const rouletteHistoryData = [
             {
                 "SrNo": 1,
                 "DateTime": "2023-10-10 08:30 AM",
@@ -129,7 +134,7 @@ router.get('/BaraKaDumGameHistory', async (req, res) => {
 
         logger.info('admin/dahboard.js post dahboard  error => ', rouletteHistoryData);
 
-        res.json({ gameHistoryData:rouletteHistoryData });
+        res.json({ gameHistoryData: rouletteHistoryData });
     } catch (error) {
         logger.error('admin/dahboard.js post bet-list error => ', error);
         res.status(config.INTERNAL_SERVER_ERROR).json(error);
@@ -148,7 +153,7 @@ router.get('/WheelofFortuneGameHistory', async (req, res) => {
     try {
         console.info('requet => ', req.query);
 
-        const rouletteHistoryData =  [
+        const rouletteHistoryData = [
             {
                 "SrNo": 1,
                 "DateTime": "2023-10-10 08:30 AM",
@@ -193,7 +198,7 @@ router.get('/WheelofFortuneGameHistory', async (req, res) => {
 
         logger.info('admin/dahboard.js post dahboard  error => ', rouletteHistoryData);
 
-        res.json({ gameHistoryData:rouletteHistoryData });
+        res.json({ gameHistoryData: rouletteHistoryData });
     } catch (error) {
         logger.error('admin/dahboard.js post bet-list error => ', error);
         res.status(config.INTERNAL_SERVER_ERROR).json(error);
@@ -213,7 +218,7 @@ router.get('/AndarBaharGameHistory', async (req, res) => {
     try {
         console.info('requet => ', req.query);
 
-        const rouletteHistoryData =  [
+        const rouletteHistoryData = [
             {
                 "SrNo": 1,
                 "DateTime": "2023-10-10 08:30 AM",
@@ -258,7 +263,7 @@ router.get('/AndarBaharGameHistory', async (req, res) => {
 
         logger.info('admin/dahboard.js post dahboard  error => ', rouletteHistoryData);
 
-        res.json({ gameHistoryData:rouletteHistoryData });
+        res.json({ gameHistoryData: rouletteHistoryData });
     } catch (error) {
         logger.error('admin/dahboard.js post bet-list error => ', error);
         res.status(config.INTERNAL_SERVER_ERROR).json(error);
@@ -278,7 +283,7 @@ router.get('/SpinGameHistory', async (req, res) => {
     try {
         console.info('requet => ', req.query);
 
-        const rouletteHistoryData =  [
+        const rouletteHistoryData = [
             {
                 "SrNo": 1,
                 "DateTime": "2023-10-10 08:30 AM",
@@ -323,7 +328,7 @@ router.get('/SpinGameHistory', async (req, res) => {
 
         logger.info('admin/dahboard.js post dahboard  error => ', rouletteHistoryData);
 
-        res.json({ gameHistoryData:rouletteHistoryData });
+        res.json({ gameHistoryData: rouletteHistoryData });
     } catch (error) {
         logger.error('admin/dahboard.js post bet-list error => ', error);
         res.status(config.INTERNAL_SERVER_ERROR).json(error);
@@ -343,7 +348,7 @@ router.get('/SoratGameHistory', async (req, res) => {
     try {
         console.info('requet => ', req.query);
 
-        const rouletteHistoryData =  [
+        const rouletteHistoryData = [
             {
                 "SrNo": 1,
                 "DateTime": "2023-10-10 08:30 AM",
@@ -388,7 +393,7 @@ router.get('/SoratGameHistory', async (req, res) => {
 
         logger.info('admin/dahboard.js post dahboard  error => ', rouletteHistoryData);
 
-        res.json({ gameHistoryData:rouletteHistoryData });
+        res.json({ gameHistoryData: rouletteHistoryData });
     } catch (error) {
         logger.error('admin/dahboard.js post bet-list error => ', error);
         res.status(config.INTERNAL_SERVER_ERROR).json(error);
@@ -520,7 +525,7 @@ router.get('/registerRaferralBonus', async (req, res) => {
     try {
         //console.info('requet => ', req);
 
-        const registerRaferralBonusData =  [
+        const registerRaferralBonusData = [
             {
                 "SrNo": 1,
                 "DateTime": "2023-10-10 08:30 AM",
@@ -553,7 +558,7 @@ router.get('/registerRaferralBonus', async (req, res) => {
             },
             // Add more game history entries here
         ];
-        
+
 
         logger.info('admin/dahboard.js post dahboard  error => ', registerRaferralBonusData);
 
@@ -577,7 +582,7 @@ router.get('/myRaferrals', async (req, res) => {
     try {
         //console.info('requet => ', req);
 
-        const myRaferralsData =  [
+        const myRaferralsData = [
             {
                 "SrNo": 1,
                 "DateTime": "2023-10-10 08:30 AM",
@@ -610,7 +615,7 @@ router.get('/myRaferrals', async (req, res) => {
             },
             // Add more game history entries here
         ];
-        
+
 
         logger.info('admin/dahboard.js post dahboard  error => ', myRaferralsData);
 
@@ -621,6 +626,134 @@ router.get('/myRaferrals', async (req, res) => {
     }
 });
 
+
+
+/**
+* @api {get} /admin/rouletteHistory
+* @apiName  add-bet-list
+* @apiGroup  Admin
+* @apiHeader {String}  x-access-token Admin's unique access-key
+* @apiSuccess (Success 200) {Array} badges Array of badges document
+* @apiError (Error 4xx) {String} message Validation or error message.
+*/
+router.get('/GetSpinnerHistoryData', async (req, res) => {
+    try {
+        console.info('requet => ', req.query);
+
+        console.info('completeWithdrawal  => ', req.query);
+        if (req.query.userId == undefined) {
+            res.json({ GameHistoryData: [] });
+            return false
+        }
+        const BlackandWhiteData = await UserWalletTracks.find({ userId: MongoID(req.query.userId), "gameType": "Spinner" },
+            { DateandTime: 1, userId: 1, oppChips: 1, oppWinningChips: 1, chips: 1, winningChips: 1, trnxAmount: 1, gameType: 1, trnxTypeTxt: 1 }).sort({ DateTime: -1 })
+
+
+        console.log("GetSpinnerHistoryData ", BlackandWhiteData)
+
+
+        res.json({ GameHistoryData: BlackandWhiteData });
+
+    } catch (error) {
+        logger.error('admin/dahboard.js post bet-list error => ', error);
+        res.status(config.INTERNAL_SERVER_ERROR).json(error);
+    }
+});
+
+
+/**
+* @api {get} /admin/GetSoratHistoryData
+* @apiName  add-bet-list
+* @apiGroup  Admin
+* @apiHeader {String}  x-access-token Admin's unique access-key
+* @apiSuccess (Success 200) {Array} badges Array of badges document
+* @apiError (Error 4xx) {String} message Validation or error message.
+*/
+router.get('/GetSoratHistoryData', async (req, res) => {
+    try {
+
+
+        console.info('GetSoratHistoryData  => ', req.query);
+        if (req.query.userId == undefined) {
+            res.json({ GameHistoryData: [] });
+            return false
+        }
+        const aviatorHistoryData = await UserWalletTracks.find({ userId: MongoID(req.query.userId), "gameType": "Sorat" },
+            { DateandTime: 1, userId: 1, oppChips: 1, oppWinningChips: 1, chips: 1, winningChips: 1, trnxAmount: 1, gameType: 1, trnxTypeTxt: 1 }).sort({ DateTime: -1 })
+
+        console.log("GetSoratHistoryData ", aviatorHistoryData)
+
+        logger.info('admin/dahboard.js post dahboard  error => ', aviatorHistoryData);
+
+        res.json({ GameHistoryData: aviatorHistoryData });
+    } catch (error) {
+        logger.error('admin/dahboard.js post bet-list error => ', error);
+        res.status(config.INTERNAL_SERVER_ERROR).json(error);
+    }
+});
+
+/**
+* @api {get} /admin/GetSoratHistoryData
+* @apiName  add-bet-list
+* @apiGroup  Admin
+* @apiHeader {String}  x-access-token Admin's unique access-key
+* @apiSuccess (Success 200) {Array} badges Array of badges document
+* @apiError (Error 4xx) {String} message Validation or error message.
+*/
+router.get('/GetandarbaharHistoryData', async (req, res) => {
+    try {
+
+
+        console.info('GetSoratHistoryData  => ', req.query);
+        if (req.query.userId == undefined) {
+            res.json({ GameHistoryData: [] });
+            return false
+        }
+        const aviatorHistoryData = await UserWalletTracks.find({ userId: MongoID(req.query.userId), "gameType": "andarbahar" },
+            { DateandTime: 1, userId: 1, oppChips: 1, oppWinningChips: 1, chips: 1, winningChips: 1, trnxAmount: 1, gameType: 1, trnxTypeTxt: 1 }).sort({ DateTime: -1 })
+
+        console.log("GetandarbaharHistoryData ", aviatorHistoryData)
+
+        logger.info('admin/dahboard.js post dahboard  error => ', aviatorHistoryData);
+
+        res.json({ GameHistoryData: aviatorHistoryData });
+    } catch (error) {
+        logger.error('admin/dahboard.js post bet-list error => ', error);
+        res.status(config.INTERNAL_SERVER_ERROR).json(error);
+    }
+});
+
+
+/**
+* @api {get} /admin/GetOneToTwelveHistoryData
+* @apiName  add-bet-list
+* @apiGroup  Admin
+* @apiHeader {String}  x-access-token Admin's unique access-key
+* @apiSuccess (Success 200) {Array} badges Array of badges document
+* @apiError (Error 4xx) {String} message Validation or error message.
+*/
+router.get('/GetOneToTwelveHistoryData', async (req, res) => {
+    try {
+
+
+        console.info('GetOneToTwelveHistoryData  => ', req.query);
+        if (req.query.userId == undefined) {
+            res.json({ GameHistoryData: [] });
+            return false
+        }
+        const aviatorHistoryData = await UserWalletTracks.find({ userId: MongoID(req.query.userId), "gameType": "OneToTwelve" },
+            { DateandTime: 1, userId: 1, oppChips: 1, oppWinningChips: 1, chips: 1, winningChips: 1, trnxAmount: 1, gameType: 1, trnxTypeTxt: 1 }).sort({ DateTime: -1 })
+
+        console.log("GetOneToTwelveHistoryData ", aviatorHistoryData)
+
+        logger.info('admin/dahboard.js post dahboard  error => ', aviatorHistoryData);
+
+        res.json({ GameHistoryData: aviatorHistoryData });
+    } catch (error) {
+        logger.error('admin/dahboard.js post bet-list error => ', error);
+        res.status(config.INTERNAL_SERVER_ERROR).json(error);
+    }
+});
 
 
 module.exports = router;

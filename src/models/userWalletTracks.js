@@ -15,6 +15,7 @@ const userWalletTracksSchema = new Schema(
         trnxAmount: { type: Number },
         oppChips: { type: Number },
         oppWinningChips: { type: Number },
+        winningChips: { type: Number },
         chips: { type: Number },
         gameWinning: { type: Number },
         totalBucket: { type: Number },
@@ -27,6 +28,7 @@ const userWalletTracksSchema = new Schema(
         betValue: { type: Number },
         tableId: { type: String },
         tournamentId: { type: Number },
+        DateandTime:{ type: Date,default:new Date() }
     },
     {
         timestamps: true

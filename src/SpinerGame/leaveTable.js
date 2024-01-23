@@ -1,7 +1,8 @@
 const mongoose = require("mongoose")
 const MongoID = mongoose.Types.ObjectId;
 
-const PlayingTables = mongoose.model("playingTables");
+const SpinnerTables = mongoose.model('SpinnerTables');
+
 const GameUser = mongoose.model("users");
 
 const CONST = require("../../constant");
@@ -28,7 +29,7 @@ module.exports.leaveTable = async (requestData, client) => {
         _id: MongoID(client.tbid.toString()),
         "playerInfo._id": MongoID(client.uid.toString())
     };
-    let tb = await PlayingTables.findOne(wh, {});
+    let tb = await SpinnerTables.findOne(wh, {});
     logger.info("leaveTable tb : ", tb);
 
     if (tb == null) return false;
@@ -48,7 +49,7 @@ module.exports.leaveTable = async (requestData, client) => {
             activePlayer: -1
         }
     }
-    if (tb.activePlayer == 2 && tb.gameState == "SoratGameStartTimer") {
+    if (tb.activePlayer == 2 && tb.gameState == "SpinnerGameStartTimer") {
         let jobId = CONST.GAME_START_TIMER + ":" + tb._id.toString();
         commandAcions.clearJob(jobId)
         updateData["$set"]["gameState"] = "";
@@ -88,7 +89,7 @@ module.exports.leaveTable = async (requestData, client) => {
         seatIndex: client.seatIndex
     }
 
-    let tbInfo = await PlayingTables.findOneAndUpdate(wh, updateData, { new: true });
+    let tbInfo = await SpinnerTables.findOneAndUpdate(wh, updateData, { new: true });
     logger.info("leaveTable tbInfo : ", tbInfo);
 
     commandAcions.sendDirectEvent(client.sck.toString(), CONST.LEAVE_TABLE, response);
@@ -110,12 +111,12 @@ module.exports.manageOnUserLeave = async (tb, client) => {
         } else if (playerInGame.length == 1) {
             await gameFinishActions.lastUserWinnerDeclareCall(tb);
         }
-    } else if (["", "SoratGameStartTimer"].indexOf(tb.gameState) != -1) {
+    } else if (["", "SpinnerGameStartTimer"].indexOf(tb.gameState) != -1) {
         if (playerInGame.length == 0 && tb.activePlayer == 0) {
             let wh = {
                 _id: MongoID(tb._id.toString())
             }
-            await PlayingTables.deleteOne(wh);
+            await SpinnerTables.deleteOne(wh);
         } else if (tb.activePlayer == 0) {
             this.leaveSingleUser(tb._id)
         }
@@ -134,7 +135,7 @@ module.exports.leaveSingleUser = async (tbid) => {
     const wh1 = {
         _id: MongoID(tbId.toString())
     }
-    const tabInfo = await PlayingTables.findOne(wh1, {}).lean();
+    const tabInfo = await SpinnerTables.findOne(wh1, {}).lean();
     console.log("leaveSingleUser tabInfo : ", tabInfo);
     if (tabInfo.activePlayer == 1) {
         let playerInfos = tabInfo.playerInfo

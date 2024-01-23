@@ -12,7 +12,7 @@ const gameFinishActions = require("./gameFinish");
 const checkWinnerActions = require("./checkWinner");
 const checkUserCardActions = require("./checkUserCard");
 
-const walletActions = require("./updateWallet");
+const walletActions = require("../SpinerGame/updateWallet");
 
 /*
     bet : 10,
@@ -101,7 +101,8 @@ module.exports.actionslot = async (requestData, client) => {
         }
         chalvalue = Number(Number(chalvalue).toFixed(2))
 
-        await walletActions.deductWallet(client.uid, -chalvalue, 2, "Solat Bet", tabInfo, client.id, client.seatIndex);
+        await walletActions.deductWallet(client.uid, -chalvalue, 2, "Solat Bet", tabInfo, client.id, client.seatIndex,"SORAT");
+
 
         updateData.$inc["playerInfo.$.selectObj."+item] = chalvalue;
         updateData.$inc["playerInfo.$.totalbet"] = chalvalue;

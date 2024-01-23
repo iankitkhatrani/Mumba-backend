@@ -6,11 +6,7 @@ const GameUser = mongoose.model("users");
 const CONST = require("../../constant");
 const logger = require("../../logger");
 const commandAcions = require("../helper/socketFunctions");
-const SoratTables = mongoose.model('soratTables');
-const roundStartActions = require("./roundStart");
-const gameFinishActions = require("./gameFinish");
-const checkWinnerActions = require("./checkWinner");
-const checkUserCardActions = require("./checkUserCard");
+const SpinnerTables = mongoose.model('SpinnerTables');
 
 const walletActions = require("./updateWallet");
 
@@ -19,20 +15,6 @@ const walletActions = require("./updateWallet");
     object:{
         item:0, 
         bet:10,
-
-        //  {name:"Ambarella",bet:0},
-        //  {name:"Football",bet:0},
-        //  {name:"Sun",bet:0},
-        //  {name:"Lamp",bet:0},
-        //  {name:"Dog",bet:0},
-        //  {name:"Bucket",bet:0},
-        //  {name:"kites",bet:0},
-        //  {name:"Latto",bet:0},
-        //  {name:"Rose",bet:0},
-        //  {name:"Bird",bet:0},
-        //  {name:"Rabbit",bet:0},
-        //  {name:"1",bet:0},
-        //  {name:"2",bet:0}
     }
 
 */
@@ -49,12 +31,12 @@ module.exports.actionSpin = async (requestData, client) => {
 
         const wh = {
             _id: MongoID(client.tbid.toString()),
-            status:"openforbet"
+            //status:"SpinnerGameStartTimer"
         }
         const project = {
 
         }
-        const tabInfo = await SoratTables.findOne(wh, project).lean();
+        const tabInfo = await SpinnerTables.findOne(wh, project).lean();
         logger.info("action tabInfo : ", tabInfo);
 
         if (tabInfo == null) {
@@ -62,12 +44,7 @@ module.exports.actionSpin = async (requestData, client) => {
             delete client.action;
             return false
         }
-        if (tabInfo.turnDone) {
-            logger.info("action : client.su ::", client.seatIndex);
-            delete client.action;
-            commandAcions.sendDirectEvent(client.sck, CONST.ACTIONSPINNNER, requestData, false, "Turn is already taken!");
-            return false;
-        }
+       
         
         let playerInfo = tabInfo.playerInfo[client.seatIndex];
         let currentBet = Number(requestData.bet);
@@ -88,7 +65,7 @@ module.exports.actionSpin = async (requestData, client) => {
                 
             }
         }
-        let chalvalue = tabInfo.currentBet;
+        let chalvalue =currentBet;
         updateData.$set["playerInfo.$.playStatus"] = "action"
     
         let totalWallet = Number(UserInfo.chips) + Number(UserInfo.winningChips)
@@ -101,9 +78,9 @@ module.exports.actionSpin = async (requestData, client) => {
         }
         chalvalue = Number(Number(chalvalue).toFixed(2))
 
-        await walletActions.deductWallet(client.uid, -chalvalue, 2, "Spinner Bet", tabInfo, client.id, client.seatIndex);
+        await walletActions.deductWallet(client.uid, -chalvalue, 2, "Spinner Bet", tabInfo, client.id, client.seatIndex,"Spinner");
 
-        updateData.$inc["playerInfo.$.selectObj."+item] = chalvalue;
+        updateData.$inc["playerInfo.$.selectObj."+requestData.item] = chalvalue;
         updateData.$inc["playerInfo.$.totalbet"] = chalvalue;
 
 
@@ -117,17 +94,17 @@ module.exports.actionSpin = async (requestData, client) => {
         }
         logger.info("action upWh updateData :: ", upWh, updateData);
 
-        const tb = await SoratTables.findOneAndUpdate(upWh, updateData, { new: true });
+        const tb = await SpinnerTables.findOneAndUpdate(upWh, updateData, { new: true });
         logger.info("action tb : ", tb);
 
         let response = {
-            seatIndex: tb.turnSeatIndex,
-            chalValue: chalvalue,
-            item:item
+            bet: chalvalue,
+            item:requestData.item
         }
 
-        sendEvent(client, CONST.ACTIONSPINNNER, response, false, "");
+        commandAcions.sendEvent(client, CONST.ACTIONSPINNNER, response, false, "");
 
+      
         delete client.action;
         
         // let activePlayerInRound = await roundStartActions.getPlayingUserInRound(tb.playerInfo);
@@ -143,3 +120,189 @@ module.exports.actionSpin = async (requestData, client) => {
         logger.info("Exception action : ", e);
     }
 }
+
+
+/*
+    bet : 10,
+    object:{
+        item:0, 
+        bet:10,
+    }
+
+*/
+module.exports.ClearBet = async (requestData, client) => {
+    try {
+        logger.info("action requestData : ", requestData);
+        if (typeof client.tbid == "undefined" || typeof client.uid == "undefined" || typeof client.seatIndex == "undefined") {
+            commandAcions.sendDirectEvent(client.sck, CONST.ClearBet, requestData, false, "User session not set, please restart game!");
+            return false;
+        }
+
+        const wh = {
+            _id: MongoID(client.tbid.toString())
+        }
+        const project = {
+
+        }
+        const tabInfo = await SpinnerTables.findOne(wh, project).lean();
+        logger.info("ClearBet tabInfo : ", tabInfo);
+
+        if (tabInfo == null) {
+            logger.info("ClearBet user not turn ::", tabInfo);
+           
+            return false
+        }
+       
+        
+        let playerInfo = tabInfo.playerInfo[client.seatIndex];
+       
+        let gwh = {
+            _id: MongoID(client.uid)
+        }
+        let UserInfo = await GameUser.findOne(gwh, {}).lean();
+        logger.info("ClearBet UserInfo : ", gwh, JSON.stringify(UserInfo));
+
+        let updateData = {
+            $set: {
+                "playerInfo.$.selectObj":[0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                "playerInfo.$.totalbet":0,
+                
+            },
+            $inc:{
+                "totalbet":-Number(playerInfo.totalbet)
+            }
+        }
+        
+       
+        await walletActions.addWallet(client.uid, Number(playerInfo.totalbet), 4, "Spinnner Clear Bet", tabInfo,client.id, client.seatIndex,"Spinner");
+
+    
+        const upWh = {
+            _id: MongoID(client.tbid.toString()),
+            "playerInfo.seatIndex": Number(client.seatIndex)
+        }
+        logger.info("action upWh updateData :: ", upWh, updateData);
+
+        const tb = await SpinnerTables.findOneAndUpdate(upWh, updateData, { new: true });
+        logger.info("action tb : ", tb);
+
+        let response = {
+            flags:true
+        }
+
+        commandAcions.sendEvent(client, CONST.ClearBet, response, false, "");
+        
+        return true;
+    } catch (e) {
+        logger.info("Exception action : ", e);
+    }
+}
+
+
+/*
+    bet : 10,
+    object:{
+        item:0, 
+        bet:10,
+    }
+
+*/
+module.exports.DoubleBet = async (requestData, client) => {
+    try {
+        logger.info("action requestData : ", requestData);
+        if (typeof client.tbid == "undefined" || typeof client.uid == "undefined" || typeof client.seatIndex == "undefined") {
+            commandAcions.sendDirectEvent(client.sck, CONST.DoubleBet, requestData, false, "User session not set, please restart game!");
+            return false;
+        }
+
+        const wh = {
+            _id: MongoID(client.tbid.toString())
+        }
+        const project = {
+
+        }
+        const tabInfo = await SpinnerTables.findOne(wh, project).lean();
+        logger.info("DoubleBet tabInfo : ", tabInfo);
+
+        if (tabInfo == null) {
+            logger.info("DoubleBet user not turn ::", tabInfo);
+           
+            return false
+        }
+       
+        
+        let playerInfo = tabInfo.playerInfo[client.seatIndex];
+       
+        let gwh = {
+            _id: MongoID(client.uid)
+        }
+        let UserInfo = await GameUser.findOne(gwh, {}).lean();
+        logger.info("DoubleBet UserInfo : ", gwh, JSON.stringify(UserInfo));
+
+        var chalvalue = playerInfo.selectObj.reduce((accumulator, currentValue) => {
+            return accumulator + currentValue
+        },0);
+        
+        console.log("chalvalue ",chalvalue)
+
+        let totalWallet = Number(UserInfo.chips) + Number(UserInfo.winningChips)
+
+        if (Number(chalvalue) > Number(totalWallet)) {
+            logger.info("DoubleBet client.su ::", client.seatIndex);
+            commandAcions.sendDirectEvent(client.sck, CONST.DoubleBet, requestData, false, "Please add wallet!!");
+            return false;
+        }
+
+
+        chalvalue = Number(Number(chalvalue).toFixed(2))
+
+        await walletActions.deductWallet(client.uid, -chalvalue, 2, "Spinner Bet", tabInfo, client.id, client.seatIndex,"Spinner");
+
+        let updateData = {
+            $set: {
+
+            },
+            $inc:{
+                
+            }
+        }
+        
+        for (let i = 0; i < playerInfo.selectObj.length; i++ ) {
+            if(playerInfo.selectObj[i] != 0){
+                updateData.$inc["playerInfo.$.selectObj."+i] = playerInfo.selectObj[i];
+            }
+          }
+
+        
+
+
+        updateData.$inc["playerInfo.$.totalbet"] = chalvalue;
+
+
+        updateData.$inc["totalbet"] = chalvalue;
+        updateData.$set["turnDone"] = true;
+        commandAcions.clearJob(tabInfo.job_id);
+
+        const upWh = {
+            _id: MongoID(client.tbid.toString()),
+            "playerInfo.seatIndex": Number(client.seatIndex)
+        }
+        logger.info("action upWh updateData :: ", upWh, updateData);
+
+        const tb = await SpinnerTables.findOneAndUpdate(upWh, updateData, { new: true });
+        logger.info("action tb : ", tb);
+
+        let response = {
+            selectObj:tb.playerInfo[client.seatIndex].selectObj,
+            totalbet:tb.playerInfo[client.seatIndex].totalbet
+
+        }
+
+        commandAcions.sendEvent(client, CONST.DoubleBet, response, false, "");
+
+        return true;
+    } catch (e) {
+        logger.info("Exception action : ", e);
+    }
+}
+
