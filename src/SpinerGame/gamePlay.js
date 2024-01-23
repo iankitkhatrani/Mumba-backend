@@ -197,3 +197,104 @@ module.exports.ClearBet = async (requestData, client) => {
         logger.info("Exception action : ", e);
     }
 }
+
+
+/*
+    bet : 10,
+    object:{
+        item:0, 
+        bet:10,
+    }
+
+*/
+module.exports.DoubleBet = async (requestData, client) => {
+    try {
+        logger.info("action requestData : ", requestData);
+        if (typeof client.tbid == "undefined" || typeof client.uid == "undefined" || typeof client.seatIndex == "undefined") {
+            commandAcions.sendDirectEvent(client.sck, CONST.DoubleBet, requestData, false, "User session not set, please restart game!");
+            return false;
+        }
+
+        const wh = {
+            _id: MongoID(client.tbid.toString())
+        }
+        const project = {
+
+        }
+        const tabInfo = await SpinnerTables.findOne(wh, project).lean();
+        logger.info("DoubleBet tabInfo : ", tabInfo);
+
+        if (tabInfo == null) {
+            logger.info("DoubleBet user not turn ::", tabInfo);
+           
+            return false
+        }
+       
+        
+        let playerInfo = tabInfo.playerInfo[client.seatIndex];
+       
+        let gwh = {
+            _id: MongoID(client.uid)
+        }
+        let UserInfo = await GameUser.findOne(gwh, {}).lean();
+        logger.info("DoubleBet UserInfo : ", gwh, JSON.stringify(UserInfo));
+
+        var chalvalue = playerInfo.selectObj.reduce((accumulator, currentValue) => {
+            return accumulator + currentValue
+        },0);
+        
+        console.log("sum ",sum)
+
+        let totalWallet = Number(UserInfo.chips) + Number(UserInfo.winningChips)
+
+        if (Number(chalvalue) > Number(totalWallet)) {
+            logger.info("DoubleBet client.su ::", client.seatIndex);
+            commandAcions.sendDirectEvent(client.sck, CONST.DoubleBet, requestData, false, "Please add wallet!!");
+            return false;
+        }
+
+
+        chalvalue = Number(Number(chalvalue).toFixed(2))
+
+        await walletActions.deductWallet(client.uid, -chalvalue, 2, "Spinner Bet", tabInfo, client.id, client.seatIndex,"Spinner");
+
+        
+        for (let i = 0; i < playerInfo.selectObj.length; i++ ) {
+            if(playerInfo.selectObj[i] != 0){
+                updateData.$inc["playerInfo.$.selectObj."+i] = playerInfo.selectObj[i];
+            }
+          }
+
+        
+
+
+        updateData.$inc["playerInfo.$.totalbet"] = chalvalue;
+
+
+        updateData.$inc["totalbet"] = chalvalue;
+        updateData.$set["turnDone"] = true;
+        commandAcions.clearJob(tabInfo.job_id);
+
+        const upWh = {
+            _id: MongoID(client.tbid.toString()),
+            "playerInfo.seatIndex": Number(client.seatIndex)
+        }
+        logger.info("action upWh updateData :: ", upWh, updateData);
+
+        const tb = await SpinnerTables.findOneAndUpdate(upWh, updateData, { new: true });
+        logger.info("action tb : ", tb);
+
+        let response = {
+            selectObj:tb.playerInfo[client.seatIndex].selectObj,
+            totalbet:tb.playerInfo[client.seatIndex].totalbet
+
+        }
+
+        commandAcions.sendEvent(client, CONST.DoubleBet, response, false, "");
+
+        return true;
+    } catch (e) {
+        logger.info("Exception action : ", e);
+    }
+}
+

@@ -165,6 +165,11 @@ myIo.init = function (server) {
                         break;
                     }
 
+                    case CONST.DoubleBet:{
+                        await gamePlayActionsSpinner.DoubleBet(payload.data, socket);
+                        break;
+                    }
+
                     case CONST.LEAVETABLESPINNER: {
                         await gamePlayActionsSpinner.leaveTable(payload.data, socket);
                         break;

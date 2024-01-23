@@ -233,7 +233,7 @@ module.exports.winnerSpinner = async (tabInfo, itemObject) =>{
 
                 console.log("TotalWinAmount ",TotalWinAmount)
 
-                TotalWinAmount != 0 && await walletActions.addWallet(tbInfo.playerInfo[i]._id, Number(TotalWinAmount), 4, "Spinnner Win", tabInfo);
+                TotalWinAmount != 0 && await walletActions.addWallet(tbInfo.playerInfo[i]._id, Number(TotalWinAmount), 4, "Spinnner Win", tabInfo,"","","Spinner");
             }
         }
         const playerInGame = await roundStartActions.getPlayingUserInRound(tbInfo.playerInfo);
