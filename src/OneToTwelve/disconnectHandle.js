@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const MongoID = mongoose.Types.ObjectId;
-const PlayingTables = mongoose.model("blackNwhiteTables");
+const PlayingTables = mongoose.model("playingTables");
+
+
+
 const logger = require('../../logger');
 const CONST = require('../../constant');
 const leaveTableActions = require('./leaveTable');
@@ -71,7 +74,6 @@ module.exports.disconnectTableHandle = async (client) => {
 };
 
 module.exports.findDisconnectTable = async (userId, Table) => {
-  logger.info("userId , Table -->", Table, userId)
   try {
     if (userId) {
       const wh = {
@@ -83,7 +85,6 @@ module.exports.findDisconnectTable = async (userId, Table) => {
       };
 
       const tbInfo = await Table.findOne(wh, project);
-      logger.info('find Disconnect Table userId not found : ', tbInfo);
 
       return tbInfo;
     } else {

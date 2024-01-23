@@ -6,7 +6,7 @@ const checkUserCardActions = require("./checkUserCard");
 const gameFinishActions = require("./gameFinish");
 const logger = require("../../logger");
 
-const PlayingTables = require("../models/blackNwhiteTables");
+const PlayingTables = require("../models/playingTables");
 
 module.exports.autoShow = async (tb) => {
 
@@ -56,7 +56,7 @@ module.exports.winnercall = async (tb, isShow, showUserSeatIndex) => {
 
     if (tabInfo.callFinalWinner) return false;
 
-    // if (tabInfo.gameState != "RoundStated") return false;
+    if (tabInfo.gameState != "RoundStated") return false;
 
     const upWh = {
         _id: MongoID(tb._id.toString())
@@ -71,21 +71,21 @@ module.exports.winnercall = async (tb, isShow, showUserSeatIndex) => {
     const tbInfo = await PlayingTables.findOneAndUpdate(upWh, updateData, { new: true });
     logger.info("winnercall tbInfo : ", tbInfo);
 
-    let winners = await this.getWinner(tbInfo, isShow, showUserSeatIndex, tbInfo.BNWCards);
+    let winners = await this.getWinner(tbInfo, isShow, showUserSeatIndex);
     logger.info("winners ==> : ", winners);
 
     await gameFinishActions.winnerDeclareCall(winners, tbInfo);
 
 }
 
-module.exports.getWinner = async (tb, isShow, showUserSeatIndex, BNWCards) => {
+module.exports.getWinner = async (tb, isShow, showUserSeatIndex) => {
 
     logger.info("getWinner tb : ", tb);
 
     const playerInGame = await roundStartActions.getPlayingUserInRound(tb.playerInfo);
     logger.info("getWinner playerInGame ::", playerInGame);
 
-    let winners = checkUserCardActions.getWinnerUser(playerInGame, tb.hukum, isShow, showUserSeatIndex, BNWCards);
+    let winners = checkUserCardActions.getWinnerUser(playerInGame, tb.hukum, isShow, showUserSeatIndex);
     logger.info("getWinner winners ::", winners);
 
     return winners;

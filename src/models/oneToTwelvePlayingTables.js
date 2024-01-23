@@ -2,17 +2,14 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const collectionName = 'oneToTwelvePlayingTables';
-//const BetLists = mongoose.model('betList');
 
 const PlayingTablesSchema = new Schema({
     gameId: { type: String, default: "" },
     entryFee: { type: Number },
     gameType: { type: String },
-    maxSeat: { type: Number, default: 6 },
+    maxSeat: { type: Number },
     activePlayer: { type: Number, default: 0 },
-    //betId: { type: mongoose.Schema.Types.ObjectId, ref: BetLists },
     boot: { type: Number, default: 0 },
-    ANBCards: { ander: [], bahar: [] },
     playerInfo: [],
     gameState: { type: String, default: "" },
     turnStartTimer: { type: Date },
@@ -22,6 +19,9 @@ const PlayingTablesSchema = new Schema({
     turnDone: { type: Boolean, default: false },
     gameTimer: {},
     gameTracks: [],
+    history: [],
+    betamount: [],
+    tableObjects: { type: Number, data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] },
     callFinalWinner: { type: Boolean, default: false },
     isLastUserFinish: { type: Boolean, default: false },
     isFinalWinner: { type: Boolean, default: false },

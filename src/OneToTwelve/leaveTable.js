@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 const MongoID = mongoose.Types.ObjectId;
 
-const PlayingTables = mongoose.model("blackNwhiteTables");
+const PlayingTables = mongoose.model("playingTables");
 const GameUser = mongoose.model("users");
 
 const CONST = require("../../constant");
@@ -9,7 +9,6 @@ const commandAcions = require("../helper/socketFunctions");
 const roundStartActions = require("./roundStart")
 const gameFinishActions = require("./gameFinish");
 const logger = require("../../logger");
-const { filterBeforeSendSPEvent } = require("../helper/signups/appStart");
 
 
 module.exports.leaveTable = async (requestData, client) => {
@@ -49,46 +48,54 @@ module.exports.leaveTable = async (requestData, client) => {
             activePlayer: -1
         }
     }
-    // if (tb.activePlayer == 2 && tb.gameState == "GameStartTimer") {
-    //     let jobId = CONST.GAME_START_TIMER + ":" + tb._id.toString();
-    //     commandAcions.clearJob(jobId)
-    //     updateData["$set"]["gameState"] = "";
-    // }
-    // if (tb.activePlayer == 1) {
-    //     let jobId = "LEAVE_SINGLE_USER:" + tb._id;
-    //     commandAcions.clearJob(jobId)
-    // }
+    if (tb.activePlayer == 2 && tb.gameState == "SoratGameStartTimer") {
+        let jobId = CONST.GAME_START_TIMER + ":" + tb._id.toString();
+        commandAcions.clearJob(jobId)
+        updateData["$set"]["gameState"] = "";
+    }
+    if (tb.activePlayer == 1) {
+        let jobId = "LEAVE_SINGLE_USER:" + tb._id;
+        commandAcions.clearJob(jobId)
+    }
 
-    // if (tb.gameState == "RoundStated") {
-    //     if (client.seatIndex == tb.turnSeatIndex) {
-    //         commandAcions.clearJob(tb.jobId)
-    //     }
-    // }
+    if (tb.gameState == "RoundStated") {
+        if (client.seatIndex == tb.turnSeatIndex) {
+            commandAcions.clearJob(tb.jobId)
+        }
+        if (playerInfo.cards.length == 3) {
+            if (["chal", "blind"].indexOf(playerInfo.playStatus) != -1) {
+
+                let userTrack = {
+                    _id: playerInfo._id,
+                    username: playerInfo.username,
+                    cards: playerInfo.cards,
+                    seatIndex: playerInfo.seatIndex,
+                    totalBet: playerInfo.totalBet,
+                    playStatus: "leaveTable"
+                }
+                updateData["$push"] = {
+                    "gameTracks": userTrack
+                }
+            }
+        }
+    }
 
     logger.info("leaveTable updateData : ", wh, updateData);
 
     let response = {
         reason: reason,
         tbid: tb._id,
-        seatIndex: client.seatIndex,
-        userId: client.uid,
+        seatIndex: client.seatIndex
     }
 
     let tbInfo = await PlayingTables.findOneAndUpdate(wh, updateData, { new: true });
     logger.info("leaveTable tbInfo : ", tbInfo);
 
-    commandAcions.sendDirectEvent(client.sck.toString(), CONST.BNW_LEAVE_TABLE, response);
-    commandAcions.sendEventInTable(tb._id.toString(), CONST.BNW_LEAVE_TABLE, response);
+    commandAcions.sendDirectEvent(client.sck.toString(), CONST.LEAVE_TABLE, response);
+    commandAcions.sendEventInTable(tb._id.toString(), CONST.LEAVE_TABLE, response);
 
-    let userDetails = await GameUser.findOne({
-        _id: MongoID(playerInfo._id.toString()),
-    }).lean();
 
-    let finaldata = await filterBeforeSendSPEvent(userDetails);
-
-    commandAcions.sendDirectEvent(client.sck.toString(), CONST.DASHBOARD, finaldata);
-
-    //await this.manageOnUserLeave(tbInfo);
+    await this.manageOnUserLeave(tbInfo);
 }
 
 module.exports.manageOnUserLeave = async (tb, client) => {
@@ -103,7 +110,7 @@ module.exports.manageOnUserLeave = async (tb, client) => {
         } else if (playerInGame.length == 1) {
             await gameFinishActions.lastUserWinnerDeclareCall(tb);
         }
-    } else if (["", "GameStartTimer"].indexOf(tb.gameState) != -1) {
+    } else if (["", "SoratGameStartTimer"].indexOf(tb.gameState) != -1) {
         if (playerInGame.length == 0 && tb.activePlayer == 0) {
             let wh = {
                 _id: MongoID(tb._id.toString())

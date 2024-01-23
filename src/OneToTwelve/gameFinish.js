@@ -2,195 +2,161 @@
 const mongoose = require("mongoose")
 const MongoID = mongoose.Types.ObjectId;
 
-const PlayingTables = mongoose.model("blackNwhiteTables");
+const PlayingTables = mongoose.model("playingTables");
 
 const gameTrackActions = require("./gameTrack");
 const commandAcions = require("../helper/socketFunctions");
 
 
 const CONST = require("../../constant");
+const checkUserCardActions = require("./checkUserCard");
 const roundEndActions = require("./roundEnd");
 const roundStartActions = require("./roundStart");
 const walletActions = require("./updateWallet");
 const logger = require("../../logger");
+const { Logger } = require("mongodb");
 
-module.exports.winnerDeclareCall = async (winner, tabInfo) => {
-  try {
-    logger.info("winnerDeclareCall winner ::  -->", winner);
-
-    let winnerObj = this.filterWinnerResponse(winner)
-    logger.info("winnerObj::  -->", winnerObj);
-
-    const winnerCardIndex = winner.filter(player => player.winResult === "Win");
-    const winnerCard = winnerCardIndex[0].index
-    logger.log("winnercard 1=>", winnerCardIndex[0].index)
-    logger.log("winnercard 2=>", winnerCard)
-
-    let tbid = tabInfo._id.toString()
-    logger.info("winnerDeclareCall tbid ::", tbid);
-
-    const addLastWinCard = tabInfo.lastGameResult.push(winnerCard)
-    logger.info("addLastWinCard", addLastWinCard);
-
+module.exports.lastUserWinnerDeclareCall = async (tb) => {
+    if (tb.isLastUserFinish) return false;
     const upWh = {
-      _id: tbid
+        _id: tb._id,
     }
     const updateData = {
-      $set: {
-        "isFinalWinner": true,
-        gameState: "RoundEndState",
-        "lastGameResult": tabInfo.lastGameResult,
-      }
+        $set: {
+            "isLastUserFinish": true
+        }
     };
-    logger.info("winnerDeclareCall upWh updateData :: ", upWh, updateData);
+    logger.info("lastUserWinnerDeclareCall upWh updateData :: ", upWh, updateData);
 
-    const tbInfo = await PlayingTables.findOneAndUpdate(upWh, updateData, { new: true });
-    logger.info("winnerDeclareCall tbInfo : ", JSON.stringify(tbInfo));
+    const tabInfo = await PlayingTables.findOneAndUpdate(upWh, updateData, { new: true });
+    logger.info("lastUserWinnerDeclareCall tabInfo : ", tabInfo);
+    let winner = {};
+    for (var i = 0; i < tabInfo.playerInfo.length; i++) {
+        if (typeof tabInfo.playerInfo[i].seatIndex != "undefined" && tabInfo.playerInfo[i].status == "play") {
+            winner = tabInfo.playerInfo[i];
+        }
+    }
+    if (winner == {}) return false;
 
-    const typeAmounts = {};
-    let userInfo = [];
+    logger.info("lastUserWinnerDeclareCall winner ::", winner);
 
 
-    // Iterate through betLists of each player
-    tbInfo.playerInfo.forEach(player => {
-      if (player && player.betLists) {
-        player.betLists.forEach(bet => {
-          const type = bet.type;
-          const amount = bet.betAmount;
 
-          // Initialize if type not seen before
-          if (!typeAmounts[type]) {
-            typeAmounts[type] = 0;
-          }
+    let dcUWh = {
+        _id: MongoID(tb._id.toString()),
+        "playerInfo.seatIndex": Number(winner.seatIndex)
+    }
+    let up = {
+        $set: {
+            "playerInfo.$.playStatus": "winner",
+        }
+    }
+    const tbInfo = await PlayingTables.findOneAndUpdate(dcUWh, up, { new: true });
+    logger.info("lastUserWinnerDeclareCall tbInfo : ", tbInfo);
 
-          // Accumulate the amount for the type
-          typeAmounts[type] += amount;
-        });
+    await this.winnerDeclareCall([winner], tabInfo);
+    return true;
 
-        let doublebet;
-        let amount;
-        let finalAmount;
+}
 
-        if (typeAmounts[winnerCard] == 'Tie') {
-          doublebet = (typeAmounts[winnerCard] * 6)
-          amount = (doublebet * 1) / 100
-          finalAmount = doublebet - amount
-        } else {
-          doublebet = (typeAmounts[winnerCard] * 2)
-          amount = (doublebet * 1) / 100
-          finalAmount = doublebet - amount
+module.exports.winnerDeclareCall = async (winner, tabInfo) => {
+    try {
+        logger.info("winnerDeclareCall winner ::  -->", winner, tabInfo);
+        let tbid = tabInfo._id.toString()
+        logger.info("winnerDeclareCall tbid ::", tbid);
+
+        if (typeof winner == "undefined" || (typeof winner != "undefined" && winner.length == 0)) {
+            logger.info("winnerDeclareCall winner ::", winner);
+            return false;
         }
 
-        userInfo.push({
-          _id: player._id,
-          seatIndex: player.seatIndex,
-          totalBet: finalAmount,
-          sckId: player.sck,
-        })
+        if (tabInfo.gameState == "RoundEndState") return false;
+        if (tabInfo.isFinalWinner) return false;
 
-      }
-    });
-
-    logger.info("Total Amounts Grouped by Type:", typeAmounts);
-    logger.info("Total Amounts Grouped by Type: UserInfo", userInfo);
-
-    const playerInGame = await roundStartActions.getPlayingUserInRound(tbInfo.playerInfo);
-    logger.info("getWinner playerInGame ::", playerInGame);
-
-    const updateWallet = await this.manageUserScore(userInfo, tabInfo);
-    logger.info("getWinner updateWallet ::", updateWallet);
-
-    for (let i = 0; i < playerInGame.length; i++) {
-      tbInfo.gameTracks.push(
-        {
-          _id: playerInGame[i]._id,
-          username: playerInGame[i].username,
-          seatIndex: playerInGame[i].seatIndex,
+        const upWh = {
+            _id: tbid
         }
-      )
+        const updateData = {
+            $set: {
+                "isFinalWinner": true,
+                gameState: "RoundEndState",
+            }
+        };
+        logger.info("winnerDeclareCall upWh updateData :: ", upWh, updateData);
+
+        const tbInfo = await PlayingTables.findOneAndUpdate(upWh, updateData, { new: true });
+        logger.info("winnerDeclareCall tbInfo : ", tbInfo);
+
+        let winnerIndexs = [];
+        let winnerIds = [];
+        for (let i = 0; i < winner.length; i++) {
+            winnerIndexs.push(winner[i].seatIndex);
+            winnerIds.push(winner[i]._id)
+        }
+        const playerInGame = await roundStartActions.getPlayingUserInRound(tbInfo.playerInfo);
+        logger.info("getWinner playerInGame ::", playerInGame);
+
+        for (let i = 0; i < playerInGame.length; i++) {
+            let winnerState = checkUserCardActions.getWinState(playerInGame[i].cards, tbInfo.hukum);
+            logger.info("winnerState FETCH::", winnerState);
+
+            tbInfo.gameTracks.push(
+                {
+                    _id: playerInGame[i]._id,
+                    username: playerInGame[i].username,
+                    seatIndex: playerInGame[i].seatIndex,
+                    cards: playerInGame[i].cards,
+                    totalBet: playerInGame[i].totalBet,
+                    playStatus: (winnerIndexs.indexOf(playerInGame[i].seatIndex) != -1) ? "win" : "loss",
+                    winningCardStatus: winnerState.status
+                }
+            )
+        }
+
+        logger.info("winnerDeclareCall tbInfo.gameTracks :: ", tbInfo.gameTracks, winnerIds);
+
+        const winnerTrack = await gameTrackActions.gamePlayTracks(winnerIndexs, tbInfo.gameTracks, tbInfo);
+        logger.info("winnerDeclareCall winnerTrack:: ", winnerTrack);
+
+        for (let i = 0; i < tbInfo.gameTracks.length; i++) {
+            if (tbInfo.gameTracks[i].playStatus == "win") {
+                await walletActions.addWallet(tbInfo.gameTracks[i]._id, Number(winnerTrack.winningAmount), 4, "Sorat Win", tabInfo);
+            }
+        }
+
+        let winnerViewResponse = await this.winnerViewResponseFilter(tbInfo.gameTracks, winnerTrack, winnerIndexs);
+        winnerViewResponse.gameId = tbInfo.gameId;
+        winnerViewResponse.winnerIds = tbInfo.winnerIds;
+
+        commandAcions.sendEventInTable(tbInfo._id.toString(), CONST.WINNER, winnerViewResponse);
+
+        await roundEndActions.roundFinish(tbInfo);
+
+    } catch (err) {
+        logger.info("Exception  WinnerDeclareCall : 1 :: ", err)
     }
-
-    logger.info("winnerDeclareCall tbInfo.gameTracks :: ", tbInfo.gameTracks);
-
-
-    let jobId = commandAcions.GetRandomString(10);
-    let delay = commandAcions.AddTime(4);
-    await commandAcions.setDelay(jobId, new Date(delay));
-
-    let winnerViewResponse = {
-      cardDetails: winnerObj,
-      userInfo
-    }
-
-    commandAcions.sendEventInTable(tbInfo._id.toString(), CONST.WINNER, winnerViewResponse);
-
-    await roundEndActions.roundFinish(tbInfo);
-
-  } catch (err) {
-    logger.info("Exception  WinnerDeclareCall : 1 :: ", err)
-  }
 }
 
 module.exports.winnerViewResponseFilter = (playerInfos, winnerTrack, winnerIndexs) => {
-  logger.info("winnerViewResponseFilter playerInfo : ", playerInfos);
+    logger.info("winnerViewResponseFilter playerInfo : ", playerInfos);
+    let userInfo = [];
+    let playerInfo = playerInfos;
 
-
-  let userInfo = [];
-  let playerInfo = playerInfos;
-
-  for (let i = 0; i < playerInfo.length; i++) {
-    if (typeof playerInfo[i].seatIndex != "undefined") {
-      logger.info("winnerViewResponseFilter playerInfo[i] : ", playerInfo[i]);
-      userInfo.push({
-        _id: playerInfo[i]._id,
-        seatIndex: playerInfo[i].seatIndex,
-        cards: playerInfo[i].cards,
-        playStatus: playerInfo[i].playStatus,
-        cardStatus: playerInfo[i].winningCardStatus
-      })
+    for (let i = 0; i < playerInfo.length; i++) {
+        if (typeof playerInfo[i].seatIndex != "undefined") {
+            logger.info("winnerViewResponseFilter playerInfo[i] : ", playerInfo[i]);
+            userInfo.push({
+                _id: playerInfo[i]._id,
+                seatIndex: playerInfo[i].seatIndex,
+                cards: playerInfo[i].cards,
+                playStatus: playerInfo[i].playStatus,
+                cardStatus: playerInfo[i].winningCardStatus
+            })
+        }
     }
-  }
-  return {
-    winnerSeatIndex: winnerIndexs,
-    winningAmount: winnerTrack.winningAmount,
-    userInfo: userInfo
-  }
-}
-
-module.exports.filterWinnerResponse = (winnerList) => {
-  let winner = winnerList
-
-  winner[0].index = 'Black';
-  winner[1].index = 'White';
-
-  // Find the maximum cardCount object
-  const maxCardCountObject = winner.reduce((maxObj, currentObj) => {
-    return currentObj.cardCount > maxObj.cardCount ? currentObj : maxObj;
-  }, winner[0]); // Start with the first object as the initial max
-
-  // Check if there's a tie
-  const isTie = winner.every(obj => obj.cardCount === maxCardCountObject.cardCount);
-
-  // Set the winResult accordingly
-  winner.forEach(obj => {
-    if (isTie) {
-      obj.winResult = 'Tie';
-    } else if (obj === maxCardCountObject) {
-      obj.winResult = 'Win';
-    } else {
-      obj.winResult = 'Loss';
+    return {
+        winnerSeatIndex: winnerIndexs,
+        winningAmount: winnerTrack.winningAmount,
+        userInfo: userInfo
     }
-  });
-
-  return winner
-
 }
-
-module.exports.manageUserScore = async (playerInfo, tabInfo) => {
-  let tableInfo;
-  for (let i = 0; i < playerInfo.length; i++) {
-    logger.info('\n Manage User Score Player Info ==>', playerInfo[i]);
-    await walletActions.addWallet(playerInfo[i]._id, playerInfo[i].totalBet, 'Credit', tabInfo, playerInfo[i].sck, playerInfo[i].seatIndex)
-  }
-  return tableInfo;
-};

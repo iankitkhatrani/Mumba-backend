@@ -10,6 +10,7 @@ const signupActions = require('../helper/signups/index');
 const commonHelper = require('../helper/commonHelper');
 const gamePlayActions = require('../SORAT/gamePlay');
 const gamePlayActionsSpinner = require('../SpinerGame/gamePlay');
+const OnePlayActions = require('../OneToTwelve/gamePlay');
 
 const { registerUser } = require('../helper/signups/signupValidation');
 const mainCtrl = require('./mainController');
@@ -110,6 +111,15 @@ myIo.init = function (server) {
                         }
                         break;
                     }
+
+                    case CONST.ONE_JOIN_TABLE: {
+                        socket.uid = payload.data.playerId;
+                        socket.sck = socket.id;
+
+                        await OnePlayActions.joinTable(payload.data, socket);
+                        break;
+                    }
+
 
                     case CONST.GET_TEEN_PATTI_ROOM_LIST: {
                         try {

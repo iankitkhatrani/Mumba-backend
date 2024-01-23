@@ -2,17 +2,18 @@ const { findDisconnectTable } = require('./disconnectHandle');
 const CONST = require('../../constant');
 const logger = require('../../logger');
 const { reconnect } = require('./reconnect');
-
+const { createClient } = require('redis');
 const { GetRandomString, socketUserRedis, } = require('../helper/socketFunctions');
 const schedule = require('node-schedule');
 const mongoose = require('mongoose');
 const MongoID = mongoose.Types.ObjectId;
-const PlayingTables = mongoose.model('blackNwhiteTables');
+const PlayingTables = mongoose.model('playingTables');
 
 const userReconnect = async (payload, socket) => {
   try {
-    logger.info('User Reconnect Payload ', payload, '\n<==== New Connected Socket id ===>', socket.id, '\n Table Id =>', socket.tbid);
+    //logger.info('User Reconnect Payload ', payload, '\n<==== New Connected Socket id ===>', socket.id, '\n Table Id =>', socket.tbid, '\n Socket Id', socket);
 
+    const rdClient = createClient();
     const disconnTable = await findDisconnectTable(payload.playerId, PlayingTables);
     logger.info('\n finded disconnected  -->', disconnTable);
 
@@ -26,14 +27,14 @@ const userReconnect = async (payload, socket) => {
         logger.info('\n plInfo  -->', plInfo, '\n disconnTable._id  -->', disconnTable._id + '\n plInfo._id  -->', plInfo._id);
 
         const jobId = GetRandomString(6);
-        await rclient.hmset(jobId.toString(), 'tableId', disconnTable._id.toString(), 'playerId', plInfo._id.toString(), 'plseat', plInfo.seatIndex);
+        await rdClient.hmset(jobId.toString(), 'tableId', disconnTable._id.toString(), 'playerId', plInfo._id.toString(), 'plseat', plInfo.seatIndex);
 
         socketUserRedis({
           userId: plInfo._id,
           sckId: socket.id,
         });
 
-        await rclient.hmset(`socket-${plInfo._id.toString()}`, 'socketId', socket.id.toString(), 'userId', plInfo._id.toString());
+        await rdClient.hmset(`socket-${plInfo._id.toString()}`, 'socketId', socket.id.toString(), 'userId', plInfo._id.toString());
 
         let jobsId = CONST.DISCONNECT + plInfo._id;
 
@@ -43,7 +44,7 @@ const userReconnect = async (payload, socket) => {
         const cancelJobStatus = schedule.cancelJob(jobsId);
         logger.info('schedule USER Cancel JOB :--> ', cancelJobStatus, jobsId);
 
-        await rclient.hmget(jobId.toString(), ['tableId', 'playerId', 'plseat'], async (err, res) => {
+        await rdClient.hmget(jobId.toString(), ['tableId', 'playerId', 'plseat'], async (err, res) => {
           if (err) {
             logger.error('hmget err  -->', err);
           }
@@ -60,7 +61,7 @@ const userReconnect = async (payload, socket) => {
             logger.info('player id not matched');
           }
         });
-        await rclient.hdel(jobId.toString(), ['tableId', 'playerId', 'plseat']);
+        await rdClient.hdel(jobId.toString(), ['tableId', 'playerId', 'plseat']);
         return;
       } catch (err) {
         logger.info('disconnTable Error ', err);
@@ -73,6 +74,7 @@ const userReconnect = async (payload, socket) => {
     logger.error('socketServer.js SEND_MESSAGE_TO_TABLE => ', error);
   }
 };
+
 
 const updateRejoinStatus = async (payload, table) => {
   try {

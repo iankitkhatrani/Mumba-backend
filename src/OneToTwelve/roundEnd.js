@@ -1,6 +1,6 @@
 const mongoose = require("mongoose")
 const MongoID = mongoose.Types.ObjectId;
-const PlayingTables = mongoose.model("blackNwhiteTables");
+const PlayingTables = mongoose.model("playingTables");
 
 const commandAcions = require("../helper/socketFunctions");
 const gameStartActions = require("./gameStart");
@@ -15,18 +15,13 @@ module.exports.roundFinish = async (tb) => {
         }
         let update = {
             $set: {
-                BNWCards: { black: [], white: [] },
-                counters: {
-                    totalBlackChips: 0,
-                    totalWhiteChips: 0,
-                    totalHitChips: 0,
-                },
                 gameTracks: [],
                 gameId: "",
                 gameState: "",
                 isLastUserFinish: false,
                 isFinalWinner: false,
                 callFinalWinner: false,
+                turnSeatIndex: -1,
                 hukum: "",
                 chalValue: 0,
                 potValue: 0,
@@ -43,7 +38,7 @@ module.exports.roundFinish = async (tb) => {
         logger.info("roundFinish tbInfo : ", tbInfo);
         let tableId = tbInfo._id;
 
-        let jobId = commandAcions.GetRandomString(5);
+        let jobId = commandAcions.GetRandomString(10);
         let delay = commandAcions.AddTime(5);
         const delayRes = await commandAcions.setDelay(jobId, new Date(delay));
         logger.info("roundFinish delayRes : ", delayRes);
@@ -52,7 +47,7 @@ module.exports.roundFinish = async (tb) => {
             _id: MongoID(tableId.toString())
         }
         const tabInfo = await PlayingTables.findOne(wh1, {}).lean();
-        if (tabInfo.activePlayer >= 1)
+        if (tabInfo.activePlayer >= 2)
             await gameStartActions.gameTimerStart(tabInfo);
 
         return true;

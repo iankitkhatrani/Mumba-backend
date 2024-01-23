@@ -1,8 +1,9 @@
 const mongoose = require("mongoose")
 const MongoID = mongoose.Types.ObjectId;
-const PlayingTables = mongoose.model("blackNwhiteTables");
+const PlayingTables = mongoose.model("playingTables");
 const UserWalletTracks = mongoose.model("userWalletTracks");
 const GameUser = mongoose.model("users");
+
 const commandAcions = require("../helper/socketFunctions");
 const CONST = require("../../constant");
 const logger = require("../../logger");
@@ -79,9 +80,8 @@ module.exports.deductWallet = async (id, deductChips, tType, t, tbInfo, client, 
         }
 
         logger.info("\ndedudctWallet setInfo :: --->", setInfo);
-        let tranferAmount = Number(totalDeductChips);
+        let tranferAmount = totalDeductChips;
         logger.info("dedudctWallet userInfo :: ==>", userInfo);
-        logger.info("dedudctWallet tranferAmount :: ==>", tranferAmount);
 
         if (Object.keys(setInfo["$inc"]).length > 0) {
             for (let key in setInfo["$inc"]) {
@@ -104,11 +104,11 @@ module.exports.deductWallet = async (id, deductChips, tType, t, tbInfo, client, 
 
             let walletTrack = {
                 id: userInfo.id,
-                uniqueId: userInfo.uniqueId,
+                uniqueId: userInfo.unique_id,
                 userId: wh._id.toString(),
                 trnxType: tType,
                 trnxTypeTxt: t,
-                trnxAmount: Number(tranferAmount),
+                trnxAmount: tranferAmount,
                 oppChips: opChips,
                 oppWinningChips: opGameWinning,
                 chips: upReps.chips,
@@ -145,7 +145,7 @@ module.exports.deductWallet = async (id, deductChips, tType, t, tbInfo, client, 
         logger.info(" upReps userInfo.sckId => ", upReps.sckId)
         logger.info(" client userInfo.sckId => ", client)
 
-        commandAcions.sendEventInTable(tbInfo._id.toString(), CONST.BNW_WALLET_UPDATE, {
+        commandAcions.sendEventInTable(tbInfo._id.toString(), CONST.WALLET_UPDATE, {
             winningChips: upReps.winningChips,
             chips: upReps.chips,
             totalWallet: totalRemaningAmount,
@@ -193,11 +193,11 @@ module.exports.addWallet = async (id, added_chips, tType, t, tbInfo, client, sea
         added_chips = Number(added_chips.toFixed(2));
         let projection = {
             id: 1,
-            username: 1,
-            uniqueId: 1,
+            user_name: 1,
+            unique_id: 1,
             chips: 1,
             winningChips: 1,
-            sckId: 1,
+            sck_id: 1,
             flags: 1
         }
 
@@ -251,11 +251,11 @@ module.exports.addWallet = async (id, added_chips, tType, t, tbInfo, client, sea
 
             let walletTrack = {
                 id: userInfo.id,
-                uniqueId: userInfo.uniqueId,
+                unique_id: userInfo.unique_id,
                 user_id: wh._id.toString(),
                 trnx_type: tType,
                 trnx_type_txt: t,
-                trnx_amount: Number(tranferAmount),
+                trnx_amount: tranferAmount,
                 opChips: opChips,
                 opGameWinning: opGameWinning,
                 chips: upReps.chips,
@@ -287,7 +287,7 @@ module.exports.addWallet = async (id, added_chips, tType, t, tbInfo, client, sea
                 logger.info("\ndedudctWallet upRepss  :: ", upRepss);
             }
         }
-        commandAcions.sendDirectEvent(client, CONST.BNW_WALLET_UPDATE, {
+        commandAcions.sendDirectEvent(client, CONST.WALLET_UPDATE, {
             winningChips: upReps.winningChips,
             chips: upReps.chips,
             totalWallet: totalRemaningAmount,

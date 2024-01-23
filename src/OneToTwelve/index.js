@@ -1,19 +1,18 @@
 
-// const { getBetList } = require('./betList');
-const { joinTable } = require("./joinTable");
+const { getBetList } = require('./betList');
+const { otJoinTable } = require("./joinTable");
 const { leaveTable } = require("./leaveTable");
 const { disconnectTableHandle, findDisconnectTable } = require("./disconnectHandle");
-const { action, CHECKOUT, lastGameScoreBoard } = require("./gamePlay");
-const { userReconnect } = require("./reConnectFunction");
+const { cardPack, seeCard, chal, show } = require("./gamePlay");
 
 module.exports = {
-  // getBetList: getBetList,
-  joinTable: joinTable,
-  action: action,
-  CHECKOUT: CHECKOUT,
+  getBetList: getBetList,
+  otJoinTable: otJoinTable,
+  cardPack: cardPack,
+  seeCard: seeCard,
+  chal: chal,
+  show: show,
   leaveTable: leaveTable,
   findDisconnectTable: findDisconnectTable,
   disconnectTableHandle: disconnectTableHandle,
-  lastGameScoreBoard: lastGameScoreBoard,
-  reconnect: userReconnect
 };
