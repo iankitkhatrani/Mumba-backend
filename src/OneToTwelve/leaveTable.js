@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 const MongoID = mongoose.Types.ObjectId;
 
-const PlayingTables = mongoose.model("playingTables");
+const PlayingTables = mongoose.model("oneToTwelvePlayingTables");
 const GameUser = mongoose.model("users");
 
 const CONST = require("../../constant");
@@ -48,7 +48,7 @@ module.exports.leaveTable = async (requestData, client) => {
             activePlayer: -1
         }
     }
-    if (tb.activePlayer == 2 && tb.gameState == "SoratGameStartTimer") {
+    if (tb.activePlayer == 2 && tb.gameState == "OneGameStartTimer") {
         let jobId = CONST.GAME_START_TIMER + ":" + tb._id.toString();
         commandAcions.clearJob(jobId)
         updateData["$set"]["gameState"] = "";
@@ -110,7 +110,7 @@ module.exports.manageOnUserLeave = async (tb, client) => {
         } else if (playerInGame.length == 1) {
             await gameFinishActions.lastUserWinnerDeclareCall(tb);
         }
-    } else if (["", "SoratGameStartTimer"].indexOf(tb.gameState) != -1) {
+    } else if (["", "OneGameStartTimer"].indexOf(tb.gameState) != -1) {
         if (playerInGame.length == 0 && tb.activePlayer == 0) {
             let wh = {
                 _id: MongoID(tb._id.toString())

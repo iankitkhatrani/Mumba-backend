@@ -10,7 +10,7 @@ const signupActions = require('../helper/signups/index');
 const commonHelper = require('../helper/commonHelper');
 const gamePlayActions = require('../SORAT/gamePlay');
 const gamePlayActionsSpinner = require('../SpinerGame/gamePlay');
-const OnePlayActions = require('../OneToTwelve/joinTable');
+const OnePlayActions = require('../OneToTwelve/');
 
 const { registerUser } = require('../helper/signups/signupValidation');
 const mainCtrl = require('./mainController');
@@ -114,6 +114,17 @@ myIo.init = function (server) {
                         break;
                     }
 
+
+                    case CONST.GET_TEEN_PATTI_ROOM_LIST: {
+                        try {
+                            await gamePlayActions.getBetList(payload.data, socket);
+                        } catch (error) {
+                            logger.error('socketServer.js GET_TEEN_PATTI_ROOM_LIST error => ', error);
+                        }
+                        break;
+                    }
+
+                    //OneTotwelve
                     case CONST.ONE_JOIN_TABLE: {
                         socket.uid = payload.data.playerId;
                         socket.sck = socket.id;
@@ -122,13 +133,8 @@ myIo.init = function (server) {
                         break;
                     }
 
-
-                    case CONST.GET_TEEN_PATTI_ROOM_LIST: {
-                        try {
-                            await gamePlayActions.getBetList(payload.data, socket);
-                        } catch (error) {
-                            logger.error('socketServer.js GET_TEEN_PATTI_ROOM_LIST error => ', error);
-                        }
+                    case CONST.ONE_LEAVE_TABLE: {
+                        await OnePlayActions.leaveTable(payload.data, socket);
                         break;
                     }
                     // SORAT GAME Event 
@@ -192,9 +198,6 @@ myIo.init = function (server) {
 
 
                     //====================================
-
-
-
                     case CONST.BANNER: {
                         const result = await getBannerList(payload.data, socket);
                         sendEvent(socket, CONST.BANNER, result);
