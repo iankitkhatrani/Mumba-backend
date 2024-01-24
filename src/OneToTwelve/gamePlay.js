@@ -36,11 +36,11 @@ const walletActions = require("./updateWallet");
     }
 
 */
-module.exports.actionSpin = async (requestData, client) => {
+module.exports.action = async (requestData, client) => {
     try {
         logger.info("action requestData : ", requestData);
         if (typeof client.tbid == "undefined" || typeof client.uid == "undefined" || typeof client.seatIndex == "undefined" || typeof requestData.bet == "undefined") {
-            commandAcions.sendDirectEvent(client.sck, CONST.ACTIONSPINNNER, requestData, false, "User session not set, please restart game!");
+            commandAcions.sendDirectEvent(client.sck, CONST.ONE_ACTION, requestData, false, "User session not set, please restart game!");
             return false;
         }
         if (typeof client.action != "undefined" && client.action) return false;
@@ -49,7 +49,7 @@ module.exports.actionSpin = async (requestData, client) => {
 
         const wh = {
             _id: MongoID(client.tbid.toString()),
-            status:"openforbet"
+            status: "openforbet"
         }
         const project = {
 
@@ -62,16 +62,10 @@ module.exports.actionSpin = async (requestData, client) => {
             delete client.action;
             return false
         }
-        if (tabInfo.turnDone) {
-            logger.info("action : client.su ::", client.seatIndex);
-            delete client.action;
-            commandAcions.sendDirectEvent(client.sck, CONST.ACTIONSPINNNER, requestData, false, "Turn is already taken!");
-            return false;
-        }
-        
+
         let playerInfo = tabInfo.playerInfo[client.seatIndex];
         let currentBet = Number(requestData.bet);
-       
+
         logger.info("action currentBet ::", currentBet);
 
         let gwh = {
@@ -84,31 +78,31 @@ module.exports.actionSpin = async (requestData, client) => {
             $set: {
 
             },
-            $inc:{
-                
+            $inc: {
+
             }
         }
         let chalvalue = tabInfo.currentBet;
         updateData.$set["playerInfo.$.playStatus"] = "action"
-    
+
         let totalWallet = Number(UserInfo.chips) + Number(UserInfo.winningChips)
 
         if (Number(chalvalue) > Number(totalWallet)) {
             logger.info("action client.su ::", client.seatIndex);
             delete client.action;
-            commandAcions.sendDirectEvent(client.sck, CONST.ACTIONSPINNNER, requestData, false, "Please add wallet!!");
+            commandAcions.sendDirectEvent(client.sck, CONST.ONE_ACTION, requestData, false, "Please add wallet!!");
             return false;
         }
         chalvalue = Number(Number(chalvalue).toFixed(2))
 
-        await walletActions.deductWallet(client.uid, -chalvalue, 2, "Spinner Bet", tabInfo, client.id, client.seatIndex);
+        await walletActions.deductWallet(client.uid, -chalvalue, 2, "OnetoTwelve Bet", tabInfo, client.id, client.seatIndex);
 
-        updateData.$inc["playerInfo.$.selectObj."+item] = chalvalue;
+        updateData.$inc["playerInfo.$.selectObj." + item] = chalvalue;
         updateData.$inc["playerInfo.$.totalbet"] = chalvalue;
-
 
         updateData.$inc["totalbet"] = chalvalue;
         updateData.$set["turnDone"] = true;
+
         commandAcions.clearJob(tabInfo.job_id);
 
         const upWh = {
@@ -123,21 +117,12 @@ module.exports.actionSpin = async (requestData, client) => {
         let response = {
             seatIndex: tb.turnSeatIndex,
             chalValue: chalvalue,
-            item:item
+            item: item
         }
 
-        sendEvent(client, CONST.ACTIONSPINNNER, response, false, "");
+        sendEvent(client, CONST.ONE_ACTION, response, false, "");
 
         delete client.action;
-        
-        // let activePlayerInRound = await roundStartActions.getPlayingUserInRound(tb.playerInfo);
-        // logger.info("action activePlayerInRound :", activePlayerInRound, activePlayerInRound.length);
-        // if (activePlayerInRound.length == 1) {
-        //     await gameFinishActions.lastUserWinnerDeclareCall(tb);
-        // } else {
-        //     await roundStartActions.nextUserTurnstart(tb);
-        // }
-        
         return true;
     } catch (e) {
         logger.info("Exception action : ", e);

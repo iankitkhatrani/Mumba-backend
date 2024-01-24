@@ -200,6 +200,7 @@ const CONST = {
   ONE_START_BATTING: 'OSB',
   ONE_WINNER: 'OWIN',
   ONE_LEAVE_TABLE: 'OLT',
+  ONE_ACTION: 'OACTION',
 
 
   // Player Status

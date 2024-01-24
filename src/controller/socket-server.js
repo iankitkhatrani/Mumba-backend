@@ -137,6 +137,12 @@ myIo.init = function (server) {
                         await OnePlayActions.leaveTable(payload.data, socket);
                         break;
                     }
+
+                    case CONST.ONE_ACTION: {
+                        await OnePlayActions.action(payload.data, socket);
+                        break;
+                    }
+
                     // SORAT GAME Event 
                     case CONST.SORAT_PLAYGAME: {
                         socket.uid = payload.data.playerId;
