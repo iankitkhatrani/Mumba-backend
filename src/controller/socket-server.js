@@ -8,8 +8,6 @@ const logger = (module.exports = require('../../logger'));
 const CONST = require('../../constant');
 const signupActions = require('../helper/signups/index');
 const commonHelper = require('../helper/commonHelper');
-const gamePlayActions = require('../SORAT/');
-const gamePlayActionsSpinner = require('../SpinerGame/');
 const gamePlayActions = require('../SORAT/gamePlay');
 const gamePlayActionsSpinner = require('../SpinerGame/gamePlay');
 const OnePlayActions = require('../OneToTwelve/joinTable');
