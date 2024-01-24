@@ -12,7 +12,7 @@ const gamePlayActions = require('../SORAT/');
 const gamePlayActionsSpinner = require('../SpinerGame/');
 const gamePlayActions = require('../SORAT/gamePlay');
 const gamePlayActionsSpinner = require('../SpinerGame/gamePlay');
-const OnePlayActions = require('../OneToTwelve/gamePlay');
+const OnePlayActions = require('../OneToTwelve/joinTable');
 
 const { registerUser } = require('../helper/signups/signupValidation');
 const mainCtrl = require('./mainController');

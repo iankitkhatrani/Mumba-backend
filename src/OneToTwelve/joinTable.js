@@ -10,7 +10,7 @@ const logger = require("../../logger");
 const botLogic = require("./botLogic");
 
 
-module.exports.otJoinTable = async (requestData, client) => {
+module.exports.joinTable = async (requestData, client) => {
     try {
         if (typeof client.uid == "undefined") {
             sendEvent(client, CONST.ONE_GAME_JOIN_TABLE, requestData, false, "Please restart game!!");
