@@ -3,7 +3,7 @@
 const { SPINNER_JOIN_TABLE } = require("./joinTable");
 const { leaveTable } = require("./leaveTable");
 const { disconnectTableHandle, findDisconnectTable } = require("./disconnectHandle");
-const { actionSpin,cardPack, seeCard, chal, show,ClearBet,DoubleBet } = require("./gamePlay");
+const { actionSpin,cardPack, seeCard, chal, show,ClearBet,DoubleBet,printMytranscation } = require("./gamePlay");
 
 module.exports = {
   SPINNER_JOIN_TABLE: SPINNER_JOIN_TABLE,
@@ -16,5 +16,6 @@ module.exports = {
   disconnectTableHandle: disconnectTableHandle,
   actionSpin:actionSpin,
   ClearBet:ClearBet,
-  DoubleBet:DoubleBet
+  DoubleBet:DoubleBet,
+  printMytranscation:printMytranscation
 };

@@ -109,10 +109,10 @@ router.post('/AddUser', async (req, res) => {
             if(userInsertInfo){
                 res.json({ status: true });
             }else{
-                res.status(config.NOT_FOUND).json(error);   
+                res.status(config.NOT_FOUND).json({status: false});   
             }
         }else{
-            res.status(config.NOT_FOUND).json(error);
+            res.status(config.NOT_FOUND).json({status: false});
         } 
 
 

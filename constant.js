@@ -75,6 +75,8 @@ const CONST = {
   LEAVETABLESPINNER:"LEAVETABLESPINNER",
   ClearBet:"ClearBet",
   DoubleBet:"DoubleBet",
+  Spinner_GAME_START_TIMER:"SGAT",
+  PSPINER:"PSPINER",
   //===================================================
   
 

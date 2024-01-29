@@ -306,3 +306,25 @@ module.exports.DoubleBet = async (requestData, client) => {
     }
 }
 
+module.exports.printMytranscation = async (requestData, client) => {
+
+
+    if ( typeof client.uid == "undefined") {
+        commandAcions.sendDirectEvent(client.sck, CONST.PSPINER, requestData, false, "User session not set, please restart game!");
+        return false;
+    }
+
+    const TotalBetCount = await UserWalletTracks.find({userId:new mongoose.Types.ObjectId(client.uid),trnxType:"2",game:"Spinner"}).count()
+    const TotalWinCount = await UserWalletTracks.find({userId:new mongoose.Types.ObjectId(client.uid),trnxType:"4",game:"Spinner"}).count()
+
+     let response = { 
+        agentName:"AgentInfo.name",
+        date:new Date(),
+        TotalBetCount:TotalBetCount,
+        TotalWinCount:TotalWinCount
+     }
+
+    commandAcions.sendEvent(client, CONST.DoubleBet, response, false, "");
+
+}
+

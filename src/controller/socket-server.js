@@ -170,6 +170,11 @@ myIo.init = function (server) {
                         break;
                     }
 
+                    case CONST.PSPINER:{
+                        await gamePlayActionsSpinner.printMytranscation(payload.data, socket);
+                        break;
+                    }
+
                     case CONST.LEAVETABLESPINNER: {
                         await gamePlayActionsSpinner.leaveTable(payload.data, socket);
                         break;
