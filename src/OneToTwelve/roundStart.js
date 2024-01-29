@@ -7,7 +7,7 @@ const gamePlayActions = require("./gamePlay");
 const logger = require("../../logger");
 const botLogic = require("./botLogic");
 
-const AviatorTables = mongoose.model("aviatorTables");
+const PlayingTables = mongoose.model("playingTables");
 
 
 module.exports.roundStarted = async (tbid) => {
@@ -21,7 +21,7 @@ module.exports.roundStarted = async (tbid) => {
             playerInfo: 1,
             activePlayer: 1
         }
-        let tabInfo = await AviatorTables.findOne(wh, project).lean();
+        let tabInfo = await PlayingTables.findOne(wh, project).lean();
         logger.info("roundStarted tabInfo : ", tabInfo);
 
         if (tabInfo == null) {
@@ -41,7 +41,7 @@ module.exports.roundStarted = async (tbid) => {
         }
         logger.info("roundStarted update : ", wh, update);
 
-        const tb = await AviatorTables.findOneAndUpdate(wh, update, { new: true });
+        const tb = await PlayingTables.findOneAndUpdate(wh, update, { new: true });
         logger.info("roundStarted tb : ", tb);
 
         await this.setFirstTurn(tb);
@@ -82,7 +82,7 @@ module.exports.startUserTurn = async (seatIndex, objData, firstTurnStart) => {
         let project = {
             jobId: 1,
         }
-        let tabInfo = await AviatorTables.findOne(wh, project).lean();
+        let tabInfo = await PlayingTables.findOne(wh, project).lean();
         logger.info("initGameState tabInfo : ", tabInfo);
 
         if (typeof tabInfo.jobId != "undefined" && tabInfo.jobId != "") {
@@ -101,7 +101,7 @@ module.exports.startUserTurn = async (seatIndex, objData, firstTurnStart) => {
         }
         logger.info("startUserTurn wh update ::", wh, update);
 
-        const tb = await AviatorTables.findOneAndUpdate(wh, update, { new: true });
+        const tb = await PlayingTables.findOneAndUpdate(wh, update, { new: true });
         logger.info("startUserTurn tb : ", tb);
 
         const playerInGame = await this.getPlayingUserInRound(tb.playerInfo);
@@ -167,7 +167,7 @@ module.exports.userTurnExpaire = async (tbid) => {
             turnSeatIndex: 1,
             turnDone: 1
         }
-        let tabInfo = await AviatorTables.findOne(wh, project).lean();
+        let tabInfo = await PlayingTables.findOne(wh, project).lean();
         logger.info("userTurnExpaire tabInfo : ", tabInfo);
 
         if (tabInfo == null || tabInfo.gameState != "RoundStated") return false;
@@ -193,7 +193,7 @@ module.exports.userTurnExpaire = async (tbid) => {
         }
         logger.info("userTurnExpaire whPlayer update :: ", whPlayer, update);
 
-        const upRes = await AviatorTables.findOneAndUpdate(whPlayer, update, { new: true });
+        const upRes = await PlayingTables.findOneAndUpdate(whPlayer, update, { new: true });
         logger.info("userTurnExpaire upRes : ", upRes);
 
         const userDrop = await this.handleTimeOut(tabInfo.turnSeatIndex, tabInfo);
@@ -206,7 +206,7 @@ module.exports.userTurnExpaire = async (tbid) => {
                 gameState: 1,
                 playerInfo: 1
             }
-            let taabInfo = await AviatorTables.findOne(wh1, project1).lean();
+            let taabInfo = await PlayingTables.findOne(wh1, project1).lean();
             logger.info("userTurnExpaire taabInfo : ", taabInfo);
 
             const playerInGame = await this.getPlayingUserInRound(taabInfo.playerInfo);
@@ -258,7 +258,7 @@ module.exports.getPlayingUserInRound = async (p) => {
             return pl;
 
         for (let x = 0; x < p.length; x++) {
-            if (typeof p[x] == 'object' && p[x] != null && typeof p[x].seatIndex != 'undefined' /*&& p[x].status == "play"*/)
+            if (typeof p[x] == 'object' && p[x] != null && typeof p[x].seatIndex != 'undefined' && p[x].status == "play")
                 pl.push(p[x]);
         }
         return pl;
@@ -294,9 +294,6 @@ module.exports.getUserTurnSeatIndex = async (tbInfo, prevTurn, cnt) => {
     }
 }
 
-module.exports.checkShileShow = (tb) => {
-
-}
 
 module.exports.checkShileShowSeatIndex = (seatIndex, p) => {
     let pl = [];
@@ -307,7 +304,7 @@ module.exports.checkShileShowSeatIndex = (seatIndex, p) => {
 
 module.exports.checShowButton = async (p, playerIndex) => {
     try {
-        //&&  (p[i].playerStatus == "action" || (p[i].playerStatus == "blind" &&
+        //&&  (p[i].playerStatus == "chal" || (p[i].playerStatus == "blind" &&
         let counter = 0;
         logger.info("checShowButton  :playerIndex  ", playerIndex);
 

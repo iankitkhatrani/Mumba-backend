@@ -8,8 +8,9 @@ const logger = (module.exports = require('../../logger'));
 const CONST = require('../../constant');
 const signupActions = require('../helper/signups/index');
 const commonHelper = require('../helper/commonHelper');
-const gamePlayActions = require('../SORAT/');
-const gamePlayActionsSpinner = require('../SpinerGame/');
+const gamePlayActions = require('../SORAT/gamePlay');
+const gamePlayActionsSpinner = require('../SpinerGame/gamePlay');
+const OnePlayActions = require('../OneToTwelve/');
 
 const { registerUser } = require('../helper/signups/signupValidation');
 const mainCtrl = require('./mainController');
@@ -32,14 +33,14 @@ myIo.init = function (server) {
     io.on('connection', async (socket) => {
 
         try {
-             logger.info("Socket connected ===> ", socket.id);
+            logger.info("Socket connected ===> ", socket.id);
             sendEvent(socket, CONST.DONE, {});
 
             socket.on('req', async (data) => {
                 const decryptObj = commonHelper.decrypt(data.payload);
                 const payload = JSON.parse(decryptObj);
-                console.log("payload ::::::::::::::::",payload)
-                console.log("payload ::::::::::::::::",payload.eventName)
+                console.log("payload ::::::::::::::::", payload)
+                console.log("payload ::::::::::::::::", payload.eventName)
 
                 switch (payload.eventName) {
 
@@ -113,6 +114,7 @@ myIo.init = function (server) {
                         break;
                     }
 
+
                     case CONST.GET_TEEN_PATTI_ROOM_LIST: {
                         try {
                             await gamePlayActions.getBetList(payload.data, socket);
@@ -121,6 +123,26 @@ myIo.init = function (server) {
                         }
                         break;
                     }
+
+                    //OneTotwelve
+                    case CONST.ONE_JOIN_TABLE: {
+                        socket.uid = payload.data.playerId;
+                        socket.sck = socket.id;
+
+                        await OnePlayActions.joinTable(payload.data, socket);
+                        break;
+                    }
+
+                    case CONST.ONE_LEAVE_TABLE: {
+                        await OnePlayActions.leaveTable(payload.data, socket);
+                        break;
+                    }
+
+                    case CONST.ONE_ACTION: {
+                        await OnePlayActions.action(payload.data, socket);
+                        break;
+                    }
+
                     // SORAT GAME Event 
                     case CONST.SORAT_PLAYGAME: {
                         socket.uid = payload.data.playerId;
@@ -160,12 +182,12 @@ myIo.init = function (server) {
                         break;
                     }
 
-                    case CONST.ClearBet:{
+                    case CONST.ClearBet: {
                         await gamePlayActionsSpinner.ClearBet(payload.data, socket);
                         break;
                     }
 
-                    case CONST.DoubleBet:{
+                    case CONST.DoubleBet: {
                         await gamePlayActionsSpinner.DoubleBet(payload.data, socket);
                         break;
                     }
@@ -184,12 +206,9 @@ myIo.init = function (server) {
                         await userReconnectSpinner(payload.data, socket);
                         break;
                     }
-                    
+
 
                     //====================================
-
-
-
                     case CONST.BANNER: {
                         const result = await getBannerList(payload.data, socket);
                         sendEvent(socket, CONST.BANNER, result);

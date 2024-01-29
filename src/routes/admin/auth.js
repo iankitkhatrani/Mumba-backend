@@ -6,6 +6,7 @@ const mainCtrl = require('../../controller/adminController');
 const { OK_STATUS, BAD_REQUEST } = require('../../../config');
 const logger = require('../../../logger');
 const SpinnerTables = mongoose.model('SpinnerTables');
+const OnePlayingTable = mongoose.model('oneToTwelvePlayingTables');
 
 /**
  * @api {post} /admin/signup-admin
@@ -33,23 +34,23 @@ router.post('/login', async (req, res) => {
     // res.json(await mainCtrl.adminLogin(req.body));
     let data = {}
     console.log('req.body => ', req.body);
-    if(req.body.logintype == "Admin"){
+    if (req.body.logintype == "Admin") {
       data = await mainCtrl.adminLogin(req.body);
       res.status(OK_STATUS).json(data);
-    }else if(req.body.logintype == "Agent"){
+    } else if (req.body.logintype == "Agent") {
       data = await mainCtrl.AgentLogin(req.body);
       data.data.name = "Agent"
       res.status(OK_STATUS).json(data);
-    }else if(req.body.logintype == "Shop"){
+    } else if (req.body.logintype == "Shop") {
       data = await mainCtrl.ShopLogin(req.body);
       data.data.name = "Shop"
       res.status(OK_STATUS).json(data);
-    }else{
+    } else {
       res.status(BAD_REQUEST).json({ status: 0, message: 'Something went wrong' });
-       
+
     }
-     logger.info('data => ', data);
-    
+    logger.info('data => ', data);
+
   } catch (err) {
     logger.error('admin/auth.js login error => ', err);
     res.status(BAD_REQUEST).json({ status: 0, message: 'Something went wrong' });
@@ -77,4 +78,22 @@ router.get('/DeletePlayingSpinner', async (req, res) => {
   }
 });
 
+
+/**
+* @api {get} /admin/DeletePlaying
+* @apiName  add-bet-list
+* @apiGroup  Admin
+* @apiHeader {String}  x-access-token Admin's unique access-key
+* @apiSuccess (Success 200) {Array} badges Array of badges document
+* @apiError (Error 4xx) {String} message Validation or error message.
+*/
+router.get('/OneDeletePlaying', async (req, res) => {
+  try {
+    await OnePlayingTable.deleteMany({})
+    res.json({ status: "ok" });
+  } catch (error) {
+    logger.error('admin/dahboard.js post bet-list error => ', error);
+    res.status(config.INTERNAL_SERVER_ERROR).json(error);
+  }
+});
 module.exports = router;
