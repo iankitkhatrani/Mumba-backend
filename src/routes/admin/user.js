@@ -27,13 +27,13 @@ router.get('/UserList', async (req, res) => {
     try {
         console.log('requet => ', req.query.Id);
         let userList = []
-        if(req.query.Id == "Admin"){
+        if (req.query.Id == "Admin") {
 
-            userList = await Users.find({}, { username: 1, id: 1, mobileNumber: 1, "counters.totalMatch": 1,profileUrl:1,email:1,uniqueId:1, isVIP: 1, chips: 1, referralCode: 1, createdAt: 1, lastLoginDate: 1, status: 1 })
+            userList = await Users.find({}, { username: 1, id: 1, mobileNumber: 1, "counters.totalMatch": 1, profileUrl: 1, email: 1, uniqueId: 1, isVIP: 1, chips: 1, referralCode: 1, createdAt: 1, lastLoginDate: 1, status: 1 })
 
-       }else{
-            userList = await Users.find({shopId:MongoID(req.query.Id)}, { username: 1, id: 1, mobileNumber: 1, "counters.totalMatch": 1,profileUrl:1,email:1,uniqueId:1, isVIP: 1, chips: 1, referralCode: 1, createdAt: 1, lastLoginDate: 1, status: 1 })
-       }
+        } else {
+            userList = await Users.find({ shopId: MongoID(req.query.Id) }, { username: 1, id: 1, mobileNumber: 1, "counters.totalMatch": 1, profileUrl: 1, email: 1, uniqueId: 1, isVIP: 1, chips: 1, referralCode: 1, createdAt: 1, lastLoginDate: 1, status: 1 })
+        }
         logger.info('admin/dahboard.js post dahboard  error => ', userList);
 
         res.json({ userList });
@@ -79,41 +79,50 @@ router.get('/UserData', async (req, res) => {
 router.post('/AddUser', async (req, res) => {
     try {
 
-        console.log("req ",req.body)
+        console.log("req ", req.body)
 
         let response = {
-            mobileNumber:req.body.mobileNumber,
-            username:req.body.name,
-            email:req.body.email,
-            password:req.body.password,
+            mobileNumber: req.body.mobileNumber,
+            username: req.body.name,
+            email: req.body.email,
+            password: req.body.password,
             isVIP: 1,
-            country:req.body.country,
-            shopId:req.body.shopId,
-            profileUrl:"upload/avatar/1.jpg"
+            country: req.body.country,
+            shopId: req.body.shopId,
+            profileUrl: "upload/avatar/1.jpg"
         }
 
-        console.log("response  :::::::::::: response ",response)
+        console.log("response  :::::::::::: response ", response)
 
         logger.info('Register User Request Body =>', response);
         const { mobileNumber } = response;
-    
+
         let query = { mobileNumber: mobileNumber };
         let result = await Users.findOne(query, {});
         if (!result) {
             let defaultData = await getUserDefaultFields(response);
             logger.info('registerUser defaultData : ', defaultData);
-    
+
             let userInsertInfo = await saveGameUser(defaultData);
             logger.info('registerUser userInsertInfo : ', userInsertInfo);
-            
-            if(userInsertInfo){
+
+            if (userInsertInfo) {
                 res.json({ status: true });
+<<<<<<< HEAD
             }else{
                 res.status(config.NOT_FOUND).json({status: false});   
             }
         }else{
             res.status(config.NOT_FOUND).json({status: false});
         } 
+=======
+            } else {
+                res.status(config.NOT_FOUND).json(error);
+            }
+        } else {
+            res.status(config.NOT_FOUND).json(error);
+        }
+>>>>>>> 5f56c9ba7ba0d005a4e88aee2fd70fe47d0e961e
 
 
     } catch (error) {
@@ -244,17 +253,17 @@ router.get('/UserInfoPrint', async (req, res) => {
         //logger.info('admin/dahboard.js post dahboard  error => ', userInfo);
         //const AgentInfo = await Agent.findOne({ _id: new mongoose.Types.ObjectId(userInfo.agentId) }, { name: 1 })
 
-        const TotalBetCount = await UserWalletTracks.find({userId:new mongoose.Types.ObjectId(req.query.userId),trnxType:"2"}).count()
-        const TotalWinCount = await UserWalletTracks.find({userId:new mongoose.Types.ObjectId(req.query.userId),trnxType:"4"}).count()
+        const TotalBetCount = await UserWalletTracks.find({ userId: new mongoose.Types.ObjectId(req.query.userId), trnxType: "2" }).count()
+        const TotalWinCount = await UserWalletTracks.find({ userId: new mongoose.Types.ObjectId(req.query.userId), trnxType: "4" }).count()
 
 
 
-        res.json({ 
-            agentName:"AgentInfo.name",
-            date:new Date(),
-            TotalBetCount:TotalBetCount,
-            TotalWinCount:TotalWinCount
-         });
+        res.json({
+            agentName: "AgentInfo.name",
+            date: new Date(),
+            TotalBetCount: TotalBetCount,
+            TotalWinCount: TotalWinCount
+        });
     } catch (error) {
         logger.error('admin/dahboard.js post bet-list error => ', error);
         res.status(config.INTERNAL_SERVER_ERROR).json(error);
