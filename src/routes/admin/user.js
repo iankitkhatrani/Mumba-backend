@@ -108,21 +108,12 @@ router.post('/AddUser', async (req, res) => {
 
             if (userInsertInfo) {
                 res.json({ status: true });
-<<<<<<< HEAD
-            }else{
-                res.status(config.NOT_FOUND).json({status: false});   
-            }
-        }else{
-            res.status(config.NOT_FOUND).json({status: false});
-        } 
-=======
             } else {
                 res.status(config.NOT_FOUND).json(error);
             }
         } else {
             res.status(config.NOT_FOUND).json(error);
         }
->>>>>>> 5f56c9ba7ba0d005a4e88aee2fd70fe47d0e961e
 
 
     } catch (error) {
