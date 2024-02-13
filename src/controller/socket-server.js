@@ -8,7 +8,7 @@ const logger = (module.exports = require('../../logger'));
 const CONST = require('../../constant');
 const signupActions = require('../helper/signups/index');
 const commonHelper = require('../helper/commonHelper');
-const gamePlayActions = require('../SORAT/gamePlay');
+const gamePlayActionsSORAT = require('../SORAT');
 const gamePlayActionsSpinner = require('../SpinerGame/gamePlay');
 const OnePlayActions = require('../OneToTwelve/');
 
@@ -20,6 +20,7 @@ const { userReconnectSpinner } = require('../SpinerGame/reconnect');
 
 const { getBannerList } = require('./adminController');
 
+console.log("gamePlayActionsSORAT ",gamePlayActionsSORAT)
 
 const myIo = {};
 
@@ -148,17 +149,17 @@ myIo.init = function (server) {
                         socket.uid = payload.data.playerId;
                         socket.sck = socket.id;
 
-                        await gamePlayActions.soratjoinTable(payload.data, socket);
+                        await gamePlayActionsSORAT.sortjointable(payload.data, socket);
                         break;
                     }
 
                     case CONST.ACTIONSORAT: {
-                        await gamePlayActions.ACTIONSORAT(payload.data, socket);
+                        await gamePlayActionsSORAT.actionslot(payload.data, socket);
                         break;
                     }
 
                     case CONST.LEAVE_TABLE: {
-                        await gamePlayActions.leaveTable(payload.data, socket);
+                        await gamePlayActionsSORAT.leaveTable(payload.data, socket);
                         break;
                     }
 

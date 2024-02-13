@@ -1,16 +1,14 @@
 
-const { joinTable } = require("./joinTable");
+const { SORAT_JOIN_TABLE } = require("./joinTable");
 const { leaveTable } = require("./leaveTable");
 const { disconnectTableHandle, findDisconnectTable } = require("./disconnectHandle");
-const { cardPack, seeCard, chal, show } = require("./gamePlay");
+const { actionslot } = require("./gamePlay");
+
 
 module.exports = {
-  joinTable: joinTable,
-  cardPack: cardPack,
-  seeCard: seeCard,
-  chal: chal,
-  show: show,
+  sortjointable: SORAT_JOIN_TABLE,
   leaveTable: leaveTable,
   findDisconnectTable: findDisconnectTable,
   disconnectTableHandle: disconnectTableHandle,
+  actionslot:actionslot
 };

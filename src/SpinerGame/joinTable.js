@@ -202,7 +202,7 @@ module.exports.findEmptySeatAndUserSeat = async (table, client) => {
             diff += CONST.gameStartTime;
         }
 
-        sendEvent(client, CONST.SORAT_JOIN_TABLE , {}); //JOIN_SIGN_UP
+        sendEvent(client, CONST.SPINNER_GAME_JOIN_TABLE , {}); //JOIN_SIGN_UP
 
         //GTI event
         sendEvent(client, CONST.SORAT_GAME_TABLE_INFO, {

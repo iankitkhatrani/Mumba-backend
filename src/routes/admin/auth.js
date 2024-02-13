@@ -7,6 +7,7 @@ const { OK_STATUS, BAD_REQUEST } = require('../../../config');
 const logger = require('../../../logger');
 const SpinnerTables = mongoose.model('SpinnerTables');
 const OnePlayingTable = mongoose.model('oneToTwelvePlayingTables');
+const SoratTabe = mongoose.model('soratTables');
 
 /**
  * @api {post} /admin/signup-admin
@@ -86,6 +87,17 @@ router.get('/DeletePlayingSpinner', async (req, res) => {
   }
 });
 
+router.get('/DeleteSoratPlaying', async (req, res) => {
+  try {
+
+    await SoratTabe.deleteMany({})
+
+    res.json({ status: "ok" });
+  } catch (error) {
+    logger.error('admin/dahboard.js post bet-list error => ', error);
+    res.status(config.INTERNAL_SERVER_ERROR).json(error);
+  }
+});
 
 /**
 * @api {get} /admin/DeletePlaying
