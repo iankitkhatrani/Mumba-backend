@@ -192,7 +192,7 @@ module.exports.findEmptySeatAndUserSeat = async (table, client) => {
         logger.info('\n Assign table id and seat index socket event ->', client.seatIndex, client.tbid);
         let diff = -1;
 
-        if (tableInfo.activePlayer >= 2 && tableInfo.gameState === CONST.SORAT_ROUND_START_TIMER) {
+        if (tableInfo.activePlayer >= 2 && tableInfo.gameState === CONST.SPINNER_GAME_ROUND_START_TIMER) {
             let currentDateTime = new Date();
             let time = currentDateTime.getSeconds();
             let turnTime = new Date(tableInfo.gameTimer.GST);
@@ -205,7 +205,7 @@ module.exports.findEmptySeatAndUserSeat = async (table, client) => {
         sendEvent(client, CONST.SPINNER_GAME_JOIN_TABLE , {}); //JOIN_SIGN_UP
 
         //GTI event
-        sendEvent(client, CONST.SORAT_GAME_TABLE_INFO, {
+        sendEvent(client, CONST.SPINNER_GAME_TABLE_INFO, {
             ssi: tableInfo.playerInfo[seatIndex].seatIndex,
             gst: diff,
             pi: tableInfo.playerInfo,
