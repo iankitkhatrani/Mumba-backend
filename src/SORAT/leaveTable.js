@@ -9,12 +9,100 @@ const commandAcions = require("../helper/socketFunctions");
 const roundStartActions = require("./roundStart")
 const gameFinishActions = require("./gameFinish");
 const logger = require("../../logger");
+const SoratTables = mongoose.model('soratTables');
+
+// module.exports.leaveTable = async (requestData, client) => {
+//     var requestData = (requestData != null) ? requestData : {}
+//     if (typeof client.tbid == "undefined" || typeof client.uid == "undefined" || typeof client.seatIndex == "undefined") {
+//         commandAcions.sendDirectEvent(client.sck, CONST.LEAVETABLESORAT, requestData, false, "User session not set, please restart game!");
+//         return false;
+//     }
+
+//     let userWh = {
+//         _id: MongoID(client.uid.toString()),
+//     }
+//     let userInfo = await GameUser.findOne(userWh, {});
+//     logger.info("leaveTable userInfo : ", userInfo)
+
+//     let wh = {
+//         _id: MongoID(client.tbid.toString()),
+//         "playerInfo._id": MongoID(client.uid.toString())
+//     };
+//     let tb = await PlayingTables.findOne(wh, {});
+//     logger.info("leaveTable tb : ", tb);
+
+//     if (tb == null) return false;
+
+//     if (typeof client.id != "undefined")
+//         client.leave(tb._id.toString());
+
+//     let reason = (requestData != null && typeof requestData.reason != "undefined" && requestData.reason) ? requestData.reason : "ManuallyLeave"
+//     let playerInfo = tb.playerInfo[client.seatIndex];
+//     logger.info("leaveTable playerInfo : =>", playerInfo)
+
+//     let updateData = {
+//         $set: {
+//             "playerInfo.$": {}
+//         },
+//         $inc: {
+//             activePlayer: -1
+//         }
+//     }
+//     if (tb.activePlayer == 2 && tb.gameState == "SoratGameStartTimer") {
+//         let jobId = CONST.GAME_START_TIMER + ":" + tb._id.toString();
+//         commandAcions.clearJob(jobId)
+//         updateData["$set"]["gameState"] = "";
+//     }
+//     if (tb.activePlayer == 1) {
+//         let jobId = "LEAVE_SINGLE_USER:" + tb._id;
+//         commandAcions.clearJob(jobId)
+//     }
+
+//     if (tb.gameState == "RoundStated") {
+//         if (client.seatIndex == tb.turnSeatIndex) {
+//             commandAcions.clearJob(tb.jobId)
+//         }
+//         if (playerInfo.cards.length == 3) {
+//             if (["chal", "blind"].indexOf(playerInfo.playStatus) != -1) {
+
+//                 let userTrack = {
+//                     _id: playerInfo._id,
+//                     username: playerInfo.username,
+//                     cards: playerInfo.cards,
+//                     seatIndex: playerInfo.seatIndex,
+//                     totalBet: playerInfo.totalBet,
+//                     playStatus: "leaveTable"
+//                 }
+//                 updateData["$push"] = {
+//                     "gameTracks": userTrack
+//                 }
+//             }
+//         }
+//     }
+
+//     logger.info("leaveTable updateData : ", wh, updateData);
+
+//     let response = {
+//         reason: reason,
+//         tbid: tb._id,
+//         seatIndex: client.seatIndex
+//     }
+
+//     let tbInfo = await PlayingTables.findOneAndUpdate(wh, updateData, { new: true });
+//     logger.info("leaveTable tbInfo : ", tbInfo);
+
+//     commandAcions.sendDirectEvent(client.sck.toString(), CONST.LEAVETABLESORAT, response);
+//     commandAcions.sendEventInTable(tb._id.toString(), CONST.LEAVETABLESORAT, response);
+
+
+//     await this.manageOnUserLeave(tbInfo);
+// }
 
 
 module.exports.leaveTable = async (requestData, client) => {
     var requestData = (requestData != null) ? requestData : {}
     if (typeof client.tbid == "undefined" || typeof client.uid == "undefined" || typeof client.seatIndex == "undefined") {
-        commandAcions.sendDirectEvent(client.sck, CONST.LEAVE_TABLE, requestData, false, "User session not set, please restart game!");
+        commandAcions.sendDirectEvent(client.sck, CONST.LEAVETABLESORAT, requestData, false, "User session not set, please restart game!");
         return false;
     }
 
@@ -28,7 +116,7 @@ module.exports.leaveTable = async (requestData, client) => {
         _id: MongoID(client.tbid.toString()),
         "playerInfo._id": MongoID(client.uid.toString())
     };
-    let tb = await PlayingTables.findOne(wh, {});
+    let tb = await SoratTables.findOne(wh, {});
     logger.info("leaveTable tb : ", tb);
 
     if (tb == null) return false;
@@ -48,7 +136,7 @@ module.exports.leaveTable = async (requestData, client) => {
             activePlayer: -1
         }
     }
-    if (tb.activePlayer == 2 && tb.gameState == "SoratGameStartTimer") {
+    if (tb.activePlayer == 2 && tb.gameState == "SpinnerGameStartTimer") {
         let jobId = CONST.GAME_START_TIMER + ":" + tb._id.toString();
         commandAcions.clearJob(jobId)
         updateData["$set"]["gameState"] = "";
@@ -88,11 +176,11 @@ module.exports.leaveTable = async (requestData, client) => {
         seatIndex: client.seatIndex
     }
 
-    let tbInfo = await PlayingTables.findOneAndUpdate(wh, updateData, { new: true });
+    let tbInfo = await SoratTables.findOneAndUpdate(wh, updateData, { new: true });
     logger.info("leaveTable tbInfo : ", tbInfo);
 
-    commandAcions.sendDirectEvent(client.sck.toString(), CONST.LEAVE_TABLE, response);
-    commandAcions.sendEventInTable(tb._id.toString(), CONST.LEAVE_TABLE, response);
+    commandAcions.sendDirectEvent(client.sck.toString(), CONST.LEAVETABLESORAT, response);
+    commandAcions.sendEventInTable(tb._id.toString(), CONST.LEAVETABLESORAT, response);
 
 
     await this.manageOnUserLeave(tbInfo);

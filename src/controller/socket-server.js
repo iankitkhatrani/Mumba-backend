@@ -158,7 +158,7 @@ myIo.init = function (server) {
                         break;
                     }
 
-                    case CONST.LEAVE_TABLE: {
+                    case CONST.LEAVETABLESORAT: {
                         await gamePlayActionsSORAT.leaveTable(payload.data, socket);
                         break;
                     }

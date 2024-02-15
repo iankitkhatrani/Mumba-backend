@@ -58,6 +58,7 @@ const CONST = {
   ACTIONSORAT: "ACTIONSORAT",
   GAME_START_TIMER: 'GST',
   SORATWINNER: "SORATWINNER",
+  LEAVETABLESORAT: "LEAVETABLESORAT",
   //===================================================
 
 
