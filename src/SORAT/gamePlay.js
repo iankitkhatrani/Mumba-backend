@@ -48,12 +48,17 @@ module.exports.actionslot = async (requestData, client) => {
         client.action = true;
 
         const wh = {
-            _id: MongoID(client.tbid.toString()),
-            status:"openforbet"
+            _id: MongoID(requestData.tableId.toString()),
+            status:{$ne:"StartSorat"}
         }
         const project = {
 
         }
+        console.log("wh ",wh)
+        const demotabledata = await SoratTables.findOne({_id: MongoID(requestData.tableId.toString())}, project).lean();
+
+        console.log("demotabledata ",demotabledata)
+
         const tabInfo = await SoratTables.findOne(wh, project).lean();
         logger.info("action tabInfo : ", tabInfo);
 
@@ -88,7 +93,7 @@ module.exports.actionslot = async (requestData, client) => {
                 
             }
         }
-        let chalvalue = tabInfo.currentBet;
+        let chalvalue = currentBet;
         updateData.$set["playerInfo.$.playStatus"] = "action"
     
         let totalWallet = Number(UserInfo.chips) + Number(UserInfo.winningChips)
@@ -104,7 +109,7 @@ module.exports.actionslot = async (requestData, client) => {
         await walletActions.deductWallet(client.uid, -chalvalue, 2, "Solat Bet", tabInfo, client.id, client.seatIndex,"SORAT");
 
 
-        updateData.$inc["playerInfo.$.selectObj."+item] = chalvalue;
+        updateData.$inc["playerInfo.$.selectObj."+requestData.item] = chalvalue;
         updateData.$inc["playerInfo.$.totalbet"] = chalvalue;
 
 
@@ -124,7 +129,7 @@ module.exports.actionslot = async (requestData, client) => {
         let response = {
             seatIndex: tb.turnSeatIndex,
             chalValue: chalvalue,
-            item:item
+            item:requestData.item
         }
         commandAcions.sendEventInTable(tb._id.toString(), CONST.ACTIONSORAT, response);
         delete client.action;

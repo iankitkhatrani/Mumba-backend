@@ -82,7 +82,8 @@ module.exports.createTable = async () => {
             playerInfo: [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],
             gameState: "",
             history:[],
-            betamount:[10,50,100,200]
+            betamount:[10,50,100,200],
+            TableObject:[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,13,14]
         };
         logger.info("createTable insertobj : ", insertobj);
 

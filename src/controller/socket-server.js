@@ -241,7 +241,7 @@ myIo.init = function (server) {
                         const result = schedule.cancelJob(jobId);
 
                         logger.info('after USER JOB CANCELLED scheduleJob: ', result);
-                        await gamePlayActions.disconnectTableHandle(socket);
+                        await gamePlayActionsSORAT.disconnectTableHandle(socket);
                     });
                 } catch (error) {
                     logger.error('socketServer.js error when user disconnect => ', error);

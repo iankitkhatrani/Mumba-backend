@@ -35,7 +35,7 @@ module.exports.gameTimerStart = async (tb) => {
         const tabInfo = await SoratTables.findOneAndUpdate(wh, update, { new: true });
         logger.info("gameTimerStart tabInfo :: ", tabInfo);
 
-        let roundTime = 10;
+        let roundTime = 3;
         commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.GAME_START_TIMER, { timer: roundTime });
 
         let tbId = tabInfo._id;
@@ -63,7 +63,7 @@ module.exports.startSORAT = async (tbId) => {
 
 
         //Genrate Rendom Number 
-        logger.info("startSORAT config.SORATLOGIC : ", config.SORATLOGIC);
+        //logger.info("startSORAT config.SORATLOGIC : ", config.SORATLOGIC);
         logger.info("startSORAT tb.totalbet : ", tb.totalbet);
 
         // NORMAL 
@@ -104,12 +104,11 @@ module.exports.startSORAT = async (tbId) => {
 
         setTimeout(async ()=> {
             // Clear destory 
-            // const tabInfonew = await SoratTables.findOneAndUpdate(wh, {
-            //     $set: {
-            //         gameState: "",
-            //         itemObject:""
-            //     }
-            // }, { new: true });
+            const tabInfonew = await SoratTables.findOneAndUpdate(wh, {
+                $set: {
+                    itemObject:""
+                }
+            }, { new: true });
 
             this.winnerSorat(tabInfonew,itemObject);
         },10000);
@@ -136,11 +135,11 @@ module.exports.winnerSorat = async (tabInfo, itemObject) =>{
         logger.info("winnerSorat tbid ::", tbid);
 
         const tb = await SoratTables.findOne({
-            _id: MongoID(tbId.toString()),
+            _id: MongoID(tbid.toString()),
         }, {})
 
         if (typeof itemObject == "undefined" || (typeof tb != "undefined" && tb.playerInfo.length == 0)) {
-            logger.info("winnerSorat winner ::", winner);
+            logger.info("winnerSorat winner ::", itemObject);
             return false;
         }
 
@@ -148,7 +147,7 @@ module.exports.winnerSorat = async (tabInfo, itemObject) =>{
         if (tabInfo.isFinalWinner) return false;
 
         const upWh = {
-            _id: tbid
+            _id: MongoID(tbid.toString()),
         }
         const updateData = {
             $set: {
@@ -158,7 +157,7 @@ module.exports.winnerSorat = async (tabInfo, itemObject) =>{
         };
         logger.info("winnerSorat upWh updateData :: ", upWh, updateData);
 
-        const tbInfo = await PlayingTables.findOneAndUpdate(upWh, updateData, { new: true });
+        const tbInfo = await SoratTables.findOneAndUpdate(upWh, updateData, { new: true });
         logger.info("winnerSorat tbInfo : ", tbInfo);
 
         let winnerData = [
