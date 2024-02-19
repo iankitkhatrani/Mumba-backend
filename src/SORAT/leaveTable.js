@@ -1,7 +1,6 @@
 const mongoose = require("mongoose")
 const MongoID = mongoose.Types.ObjectId;
 
-const PlayingTables = mongoose.model("playingTables");
 const GameUser = mongoose.model("users");
 
 const CONST = require("../../constant");
@@ -28,7 +27,7 @@ const SoratTables = mongoose.model('soratTables');
 //         _id: MongoID(client.tbid.toString()),
 //         "playerInfo._id": MongoID(client.uid.toString())
 //     };
-//     let tb = await PlayingTables.findOne(wh, {});
+//     let tb = await SoratTables.findOne(wh, {});
 //     logger.info("leaveTable tb : ", tb);
 
 //     if (tb == null) return false;
@@ -88,7 +87,7 @@ const SoratTables = mongoose.model('soratTables');
 //         seatIndex: client.seatIndex
 //     }
 
-//     let tbInfo = await PlayingTables.findOneAndUpdate(wh, updateData, { new: true });
+//     let tbInfo = await SoratTables.findOneAndUpdate(wh, updateData, { new: true });
 //     logger.info("leaveTable tbInfo : ", tbInfo);
 
 //     commandAcions.sendDirectEvent(client.sck.toString(), CONST.LEAVETABLESORAT, response);
@@ -136,37 +135,13 @@ module.exports.leaveTable = async (requestData, client) => {
             activePlayer: -1
         }
     }
-    if (tb.activePlayer == 2 && tb.gameState == "SpinnerGameStartTimer") {
+    if (tb.activePlayer == 2 && tb.gameState == "SoratGameStartTimer") {
         let jobId = CONST.GAME_START_TIMER + ":" + tb._id.toString();
         commandAcions.clearJob(jobId)
         updateData["$set"]["gameState"] = "";
     }
-    if (tb.activePlayer == 1) {
-        let jobId = "LEAVE_SINGLE_USER:" + tb._id;
-        commandAcions.clearJob(jobId)
-    }
+    
 
-    if (tb.gameState == "RoundStated") {
-        if (client.seatIndex == tb.turnSeatIndex) {
-            commandAcions.clearJob(tb.jobId)
-        }
-        if (playerInfo.cards.length == 3) {
-            if (["chal", "blind"].indexOf(playerInfo.playStatus) != -1) {
-
-                let userTrack = {
-                    _id: playerInfo._id,
-                    username: playerInfo.username,
-                    cards: playerInfo.cards,
-                    seatIndex: playerInfo.seatIndex,
-                    totalBet: playerInfo.totalBet,
-                    playStatus: "leaveTable"
-                }
-                updateData["$push"] = {
-                    "gameTracks": userTrack
-                }
-            }
-        }
-    }
 
     logger.info("leaveTable updateData : ", wh, updateData);
 
@@ -203,7 +178,7 @@ module.exports.manageOnUserLeave = async (tb, client) => {
             let wh = {
                 _id: MongoID(tb._id.toString())
             }
-            await PlayingTables.deleteOne(wh);
+            await SoratTables.deleteOne(wh);
         } else if (tb.activePlayer == 0) {
             this.leaveSingleUser(tb._id)
         }
@@ -222,7 +197,7 @@ module.exports.leaveSingleUser = async (tbid) => {
     const wh1 = {
         _id: MongoID(tbId.toString())
     }
-    const tabInfo = await PlayingTables.findOne(wh1, {}).lean();
+    const tabInfo = await SoratTables.findOne(wh1, {}).lean();
     console.log("leaveSingleUser tabInfo : ", tabInfo);
     if (tabInfo.activePlayer == 1) {
         let playerInfos = tabInfo.playerInfo

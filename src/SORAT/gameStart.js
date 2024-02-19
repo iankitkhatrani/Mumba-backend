@@ -35,8 +35,8 @@ module.exports.gameTimerStart = async (tb) => {
         const tabInfo = await SoratTables.findOneAndUpdate(wh, update, { new: true });
         logger.info("gameTimerStart tabInfo :: ", tabInfo);
 
-        let roundTime = 3;
-        commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.GAME_START_TIMER, { timer: roundTime });
+        let roundTime = 4;
+        commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.GAME_START_TIMER, { timer: roundTime,history:tabInfo.history });
 
         let tbId = tabInfo._id;
         let jobId = CONST.GAME_START_TIMER + ":" + tbId;
@@ -111,7 +111,7 @@ module.exports.startSORAT = async (tbId) => {
             }, { new: true });
 
             this.winnerSorat(tabInfonew,itemObject);
-        },10000);
+        },12000);
 
         //botLogic.PlayRobot(tabInfo,tabInfo.playerInfo,itemObject)
 
@@ -222,8 +222,12 @@ module.exports.winnerSorat = async (tabInfo, itemObject) =>{
             itemObject:itemObject
         });
 
-        await roundEndActions.gameTimerStart(tbInfo);
+        setTimeout(async ()=>{
 
+        
+
+        await this.gameTimerStart(tbInfo);
+        },10000)
     } catch (err) {
         logger.info("Exception  WinnerDeclareCall : 1 :: ", err)
     }

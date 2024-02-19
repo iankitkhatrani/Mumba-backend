@@ -67,13 +67,7 @@ module.exports.actionslot = async (requestData, client) => {
             delete client.action;
             return false
         }
-        if (tabInfo.turnDone) {
-            logger.info("action : client.su ::", client.seatIndex);
-            delete client.action;
-            commandAcions.sendDirectEvent(client.sck, CONST.ACTION, requestData, false, "Turn is already taken!");
-            return false;
-        }
-        
+       
         let playerInfo = tabInfo.playerInfo[client.seatIndex];
         let currentBet = Number(requestData.bet);
        
@@ -114,7 +108,6 @@ module.exports.actionslot = async (requestData, client) => {
 
 
         updateData.$inc["totalbet"] = chalvalue;
-        updateData.$set["turnDone"] = true;
         commandAcions.clearJob(tabInfo.job_id);
 
         const upWh = {
