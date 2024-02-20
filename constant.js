@@ -59,6 +59,8 @@ const CONST = {
   GAME_START_TIMER: 'GST',
   SORATWINNER: "SORATWINNER",
   LEAVETABLESORAT:"LEAVETABLESORAT",
+  ClearBetSORAT: "ClearBetSORAT",
+
   //===================================================
 
 
