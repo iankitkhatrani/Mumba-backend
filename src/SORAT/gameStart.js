@@ -26,7 +26,7 @@ module.exports.gameTimerStart = async (tb) => {
                 gameState: "SoratGameStartTimer",
                 "GameTimer.GST": new Date(),
                 "totalbet":0,
-                "playerInfo.$.selectObj":[0,0,0,0,0,0,0,0,0,0,0,0,0],
+                "playerInfo.$.selectObj":[0,0,0,0,0,0,0,0,0,0,0,0,0,0],
                 "isFinalWinner":false
             }
         }
@@ -166,41 +166,43 @@ module.exports.winnerSorat = async (tabInfo, itemObject) =>{
 
         let itemIndex = tbInfo.TableObject.indexOf(itemObject)
 
-        for (let i = 0; i < tbInfo.playerInfo[i].length; i++) {
-            var TotalWinAmount = 0 
-            if(tbInfo.playerInfo[i].selectObj[itemIndex] != 0){
-                winnerData.push({
-                    seatIndex:winner[i].seatIndex,
-                    winAmount:tbInfo.playerInfo[i].selectObj[itemIndex] * 10,
-                })
+        for (let i = 0; i < tbInfo.playerInfo.length; i++) {
+            if( tbInfo.playerInfo[i].seatIndex != undefined){
+                var TotalWinAmount = 0 
+                if(tbInfo.playerInfo[i].selectObj[itemIndex] != 0){
+                    winnerData.push({
+                        seatIndex:tbInfo.playerInfo[i].seatIndex,
+                        winAmount:tbInfo.playerInfo[i].selectObj[itemIndex] * 10,
+                        itemIndex:itemIndex
+                    })
 
-                TotalWinAmount = tbInfo.playerInfo[i].selectObj[itemIndex] * 10;
+                    TotalWinAmount = tbInfo.playerInfo[i].selectObj[itemIndex] * 10;
+                }
+                // Old  tem
+                if(tbInfo.playerInfo[i].selectObj[12] != 0 && [0,1,2,6,7,8].indexOf(itemIndex) != -1){
+                    winnerData.push({
+                        seatIndex:tbInfo.playerInfo[i].seatIndex,
+                        winAmount:tbInfo.playerInfo[i].selectObj[11] * 2,
+                        itemIndex:12
+                    })
+
+                    TotalWinAmount = TotalWinAmount + tbInfo.playerInfo[i].selectObj[11] * 2;
+                }
+
+                // Old  tem
+                if(tbInfo.playerInfo[i].selectObj[13] != 0 &&  [3,4,5,9,10,11].indexOf(itemIndex) != -1){
+                    winnerData.push({
+                        seatIndex:tbInfo.playerInfo[i].seatIndex,
+                        winAmount:tbInfo.playerInfo[i].selectObj[12] * 2,
+                        itemIndex:13
+                    })
+                    TotalWinAmount = TotalWinAmount + tbInfo.playerInfo[i].selectObj[12] * 2;
+                }
+
+                console.log("TotalWinAmount ",TotalWinAmount)
+
+                TotalWinAmount != 0 && await walletActions.addWallet(tbInfo.playerInfo[i]._id, Number(TotalWinAmount), 4, "Sorat Win","","","SORAT");
             }
-            // Old  tem
-            if(tbInfo.playerInfo[i].selectObj[11] != 0 && itemIndex%2 == 1){
-                winnerData.push({
-                    seatIndex:winner[i].seatIndex,
-                    winAmount:tbInfo.playerInfo[i].selectObj[11] * 2,
-                })
-
-                TotalWinAmount = TotalWinAmount + tbInfo.playerInfo[i].selectObj[11] * 2;
-            }
-
-            // Old  tem
-            if(tbInfo.playerInfo[i].selectObj[12] != 0 && itemIndex%2 == 0){
-                winnerData.push({
-                    seatIndex:winner[i].seatIndex,
-                    winAmount:tbInfo.playerInfo[i].selectObj[12] * 2,
-                })
-                TotalWinAmount = TotalWinAmount + tbInfo.playerInfo[i].selectObj[12] * 2;
-            }
-
-            console.log("TotalWinAmount ",TotalWinAmount)
-
-            TotalWinAmount != 0 && await walletActions.addWallet(tbInfo.playerInfo[i]._id, Number(TotalWinAmount), 4, "Sorat Win","","","SORAT");
-
-            
-
         }
         const playerInGame = await roundStartActions.getPlayingUserInRound(tbInfo.playerInfo);
         logger.info("getWinner playerInGame ::", playerInGame);

@@ -132,7 +132,7 @@ module.exports.findEmptySeatAndUserSeat = async (table, client) => {
             status: "",
             playerStatus: "",
             selectObj: [
-                0,0,0,0,0,0,0,0,0,0,0,0,0
+                0,0,0,0,0,0,0,0,0,0,0,0,0,0
             ], // Select object enter ,
             totalbet:0,
             turnMissCounter: 0,
