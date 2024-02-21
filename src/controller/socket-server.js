@@ -22,7 +22,7 @@ const { userReconnectSpinner } = require('../SpinerGame/reconnect');
 
 const { getBannerList } = require('./adminController');
 
-console.log("gamePlayActionsSpinner ",gamePlayActionsSpinner)
+console.log("gamePlayActionsANDARBAHAR ",gamePlayActionsANDARBAHAR)
 
 const myIo = {};
 

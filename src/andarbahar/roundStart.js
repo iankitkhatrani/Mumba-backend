@@ -7,7 +7,6 @@ const gamePlayActions = require("./gamePlay");
 const logger = require("../../logger");
 const botLogic = require("./botLogic");
 
-const AviatorTables = mongoose.model("aviatorTables");
 
 
 module.exports.roundStarted = async (tbid) => {
