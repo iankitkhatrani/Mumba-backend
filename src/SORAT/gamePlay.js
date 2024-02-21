@@ -202,7 +202,7 @@ module.exports.ClearBetSORAT = async (requestData, client) => {
         }
         logger.info("action upWh updateData :: ", upWh, updateData);
 
-        const tb = await SoratTables.findOneAndUpdate(upWh, updateData, { new: true });
+        const tb = await SoratTables    .findOneAndUpdate(upWh, updateData, { new: true });
         logger.info("action tb : ", tb);
 
         let response = {
