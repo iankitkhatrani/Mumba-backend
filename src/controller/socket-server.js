@@ -9,6 +9,8 @@ const CONST = require('../../constant');
 const signupActions = require('../helper/signups/index');
 const commonHelper = require('../helper/commonHelper');
 const gamePlayActionsSORAT = require('../SORAT');
+const gamePlayActionsANDARBAHAR = require('../andarbahar');
+
 const gamePlayActionsSpinner = require('../SpinerGame');
 const OnePlayActions = require('../OneToTwelve/');
 
@@ -172,6 +174,40 @@ myIo.init = function (server) {
                         await userReconnect(payload.data, socket);
                         break;
                     }
+                    //=============================
+                    // Andar Bahar GAME Event 
+                    case CONST.ANADAR_BAHAR_PLAYGAME: {
+                        socket.uid = payload.data.playerId;
+                        socket.sck = socket.id;
+
+                        await gamePlayActionsANDARBAHAR.joinTable(payload.data, socket);
+                        break;
+                    }
+
+                    case CONST.ACTION_ANADAR_BAHAR: {
+                        await gamePlayActionsANDARBAHAR.action(payload.data, socket);
+                        break;
+                    }
+
+                    // case CONST.ClearBetANADAR_BAHAR: {
+                    //     await gamePlayActionsANDARBAHAR.ClearBetSORAT(payload.data, socket);
+                    //     break;
+                    // }
+
+                    case CONST.LEAVETABLEANADAR_BAHAR: {
+                        await gamePlayActionsANDARBAHAR.leaveTable(payload.data, socket);
+                        break;
+                    }
+
+                    case CONST.CHECKOUT_ANADAR_BAHAR:{
+                        await gamePlayActionsANDARBAHAR.CHECKOUT_ANADAR_BAHAR(payload.data, socket);
+                        break;
+                    }
+
+                    // case CONST.RECONNECT: {
+                    //     await userReconnect(payload.data, socket);
+                    //     break;
+                    // }
                     //====================================
 
                     // SPinner GAME Event 

@@ -15,7 +15,7 @@ const botLogic = require("./botLogic");
 module.exports.joinTable = async (requestData, client) => {
     try {
         if (typeof client.uid == "undefined") {
-            sendEvent(client, CONST.BNW_JOIN_TABLE, requestData, false, "Please restart game!!");
+            sendEvent(client, CONST.ANADAR_BAHAR_JOIN_TABLE, requestData, false, "Please restart game!!");
             return false;
         }
         if (typeof client.JT != "undefined" && client.JT) return false;
@@ -42,7 +42,7 @@ module.exports.joinTable = async (requestData, client) => {
 
         let totalWallet = Number(UserInfo.chips) + Number(UserInfo.winningChips)
         if (Number(totalWallet) < 1) {
-            sendEvent(client, CONST.BNW_JOIN_TABLE, requestData, false, "Please add Wallet!!");
+            sendEvent(client, CONST.ANADAR_BAHAR_JOIN_TABLE, requestData, false, "Please add Wallet!!");
             delete client.JT
             return false;
         }
@@ -54,13 +54,13 @@ module.exports.joinTable = async (requestData, client) => {
         logger.info("JoinTable tableInfo : ", gwh, JSON.stringify(tableInfo));
 
         if (tableInfo != null) {
-            sendEvent(client, CONST.BNW_JOIN_TABLE, requestData, false, "Already In playing table!!");
+            sendEvent(client, CONST.ANADAR_BAHAR_JOIN_TABLE, requestData, false, "Already In playing table!!");
             delete client.JT
             return false;
         }
         await this.findTable(betInfo, client)
     } catch (error) {
-        console.info("BNW_JOIN_TABLE", error);
+        console.info("ANADAR_BAHAR_JOIN_TABLE", error);
     }
 }
 
@@ -185,7 +185,7 @@ module.exports.findEmptySeatAndUserSeat = async (table, betInfo, client) => {
         logger.info('\n Assign table id and seat index socket event ->', client.seatIndex, client.tbid);
         let diff = -1;
 
-        if (tableInfo.activePlayer >= 2 && tableInfo.gameState === CONST.ROUND_START_TIMER) {
+        if (tableInfo.activePlayer >= 2 && tableInfo.gameState === CONST.ANADAR_BAHAR_ROUND_START_TIMER) {
             let currentDateTime = new Date();
             let time = currentDateTime.getSeconds();
             let turnTime = new Date(tableInfo.gameTimer.GST);
@@ -195,10 +195,10 @@ module.exports.findEmptySeatAndUserSeat = async (table, betInfo, client) => {
             diff += CONST.gameStartTime;
         }
 
-        sendEvent(client, CONST.BNW_JOIN_SIGN_UP, {});
+        sendEvent(client, CONST.ANADAR_BAHAR_JOIN_TABLE, {});
 
         //GTI event
-        sendEvent(client, CONST.BNW_GAME_TABLE_INFO, {
+        sendEvent(client, CONST.ANADAR_BAHAR_GAME_TABLE_INFO, {
             ssi: tableInfo.playerInfo[seatIndex].seatIndex,
             gst: diff,
             pi: tableInfo.playerInfo,
@@ -213,7 +213,7 @@ module.exports.findEmptySeatAndUserSeat = async (table, betInfo, client) => {
         if (userInfo.Iscom == undefined || userInfo.Iscom == 0)
             client.join(tableInfo._id.toString());
 
-        sendDirectEvent(client.tbid.toString(), CONST.BNW_JOIN_TABLE, {
+        sendDirectEvent(client.tbid.toString(), CONST.ANADAR_BAHAR_JOIN_TABLE, {
             ap: tableInfo.activePlayer,
             playerDetail: tableInfo.playerInfo[seatIndex],
         });

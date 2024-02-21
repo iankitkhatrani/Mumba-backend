@@ -26,7 +26,7 @@ module.exports.action = async (requestData, client) => {
         logger.info("Bnw action requestData.bet ", requestData.bet);
 
         if (typeof client.tbid == "undefined" || typeof client.uid == "undefined" || typeof client.seatIndex == "undefined") {
-            commandAcions.sendDirectEvent(client.sck, CONST.BNW_ACTION, requestData, false, "User session not set, please restart game!");
+            commandAcions.sendDirectEvent(client.sck, CONST.ACTION_ANADAR_BAHAR, requestData, false, "User session not set, please restart game!");
             return false;
         }
 
@@ -52,7 +52,7 @@ module.exports.action = async (requestData, client) => {
         if (Number(requestData.betAmount) > Number(totalWallet)) {
             logger.info("action client.su ::", client.seatIndex);
             delete client.action;
-            commandAcions.sendDirectEvent(client.sck, CONST.BNW_ACTION, requestData, false, "Please add wallet!!");
+            commandAcions.sendDirectEvent(client.sck, CONST.ACTION_ANADAR_BAHAR, requestData, false, "Please add wallet!!");
             return false;
         }
         requestData.betAmount = Number(Number(requestData.betAmount).toFixed(2))
@@ -86,7 +86,7 @@ module.exports.action = async (requestData, client) => {
             });
 
             logger.info(" blackAmount table Info -->", tabInfo)
-            commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.BNW_BET_COUNTEING, { totalBlackChips: tabInfo.counters.totalBlackChips });
+            commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.ACTION_ANADAR_BAHAR, { totalBlackChips: tabInfo.counters.totalBlackChips });
 
         } else if (requestData.type === 'White') {
             let playerInfo = tabInfo.playerInfo[client.seatIndex];
@@ -105,7 +105,7 @@ module.exports.action = async (requestData, client) => {
             });
 
             logger.info("whiteAmount table Info -->", tabInfo)
-            commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.BNW_BET_COUNTEING, { totalWhiteChips: tabInfo.counters.totalWhiteChips });
+            commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.ACTION_ANADAR_BAHAR, { totalWhiteChips: tabInfo.counters.totalWhiteChips });
 
 
         } else if (requestData.type === 'LuckyHit') {
@@ -124,7 +124,7 @@ module.exports.action = async (requestData, client) => {
             });
 
             logger.info(" luckyHitAmount table Info -->", tabInfo)
-            commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.BNW_BET_COUNTEING, { totalHitChips: tabInfo.counters.totalHitChips });
+            commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.ACTION_ANADAR_BAHAR, { totalHitChips: tabInfo.counters.totalHitChips });
 
         }
 
@@ -139,11 +139,11 @@ module.exports.action = async (requestData, client) => {
     winamount : 10,
     actionplace:1 || 2
 */
-module.exports.CHECKOUT = async (requestData, client) => {
+module.exports.CHECKOUT_ANADAR_BAHAR = async (requestData, client) => {
     try {
         logger.info("check out requestData : ", requestData);
         if (typeof client.tbid == "undefined" || typeof client.uid == "undefined" || typeof client.seatIndex == "undefined" || typeof requestData.winamount == "undefined") {
-            commandAcions.sendDirectEvent(client.sck, CONST.CHECKOUT, requestData, false, "User session not set, please restart game!");
+            commandAcions.sendDirectEvent(client.sck, CONST.CHECKOUT_ANADAR_BAHAR, requestData, false, "User session not set, please restart game!");
             return false;
         }
         if (typeof client.action != "undefined" && client.action) return false;
@@ -167,7 +167,7 @@ module.exports.CHECKOUT = async (requestData, client) => {
         if (tabInfo.turnDone) {
             logger.info("check out : client.su ::", client.seatIndex);
             delete client.action;
-            commandAcions.sendDirectEvent(client.sck, CONST.CHECKOUT, requestData, false, "Turn is already taken!");
+            commandAcions.sendDirectEvent(client.sck, CONST.CHECKOUT_ANADAR_BAHAR, requestData, false, "Turn is already taken!");
             return false;
         }
 
@@ -211,7 +211,7 @@ module.exports.CHECKOUT = async (requestData, client) => {
             seatIndex: tb.turnSeatIndex,
             winamount: winAmount
         }
-        commandAcions.sendEventInTable(tb._id.toString(), CONST.CHECKOUT, response);
+        commandAcions.sendEventInTable(tb._id.toString(), CONST.CHECKOUT_ANADAR_BAHAR, response);
         delete client.action;
 
         // let activePlayerInRound = await roundStartActions.getPlayingUserInRound(tb.playerInfo);
@@ -299,7 +299,7 @@ module.exports.winnerDeclareCall = async (tblInfo) => {
             totalLostChips: tableInfo.tableAmount,
         };
 
-        commandAcions.sendEventInTable(tableInfo._id.toString(), CONST.WIN, response);
+        commandAcions.sendEventInTable(tableInfo._id.toString(), CONST.ANADAR_BAHAR_WINNER, response);
         const gsbResponse = { ...response, wildCard: tableInfo.wildCard, gamePlayType: tableInfo.gamePlayType };
 
         const addLastScoreBoard = tableInfo.lastGameScoreBoard.push(gsbResponse);
