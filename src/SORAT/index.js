@@ -2,7 +2,7 @@
 const { SORAT_JOIN_TABLE } = require("./joinTable");
 const { leaveTable } = require("./leaveTable");
 const { disconnectTableHandle, findDisconnectTable } = require("./disconnectHandle");
-const { actionslot } = require("./gamePlay");
+const { ClearBetSORAT,actionslot } = require("./gamePlay");
 
 
 module.exports = {
@@ -10,5 +10,6 @@ module.exports = {
   leaveTable: leaveTable,
   findDisconnectTable: findDisconnectTable,
   disconnectTableHandle: disconnectTableHandle,
-  actionslot:actionslot
+  actionslot:actionslot,
+  ClearBetSORAT:ClearBetSORAT
 };

@@ -102,7 +102,6 @@ module.exports.actionslot = async (requestData, client) => {
 
         await walletActions.deductWallet(client.uid, -chalvalue, 2, "Solat Bet", tabInfo, client.id, client.seatIndex,"SORAT");
 
-        LEAVETABLESORAT
         updateData.$inc["playerInfo.$.selectObj."+requestData.item] = chalvalue;
         updateData.$inc["playerInfo.$.totalbet"] = chalvalue;
 
@@ -203,7 +202,7 @@ module.exports.ClearBetSORAT = async (requestData, client) => {
         }
         logger.info("action upWh updateData :: ", upWh, updateData);
 
-        const tb = await SpinnerTables.findOneAndUpdate(upWh, updateData, { new: true });
+        const tb = await SoratTables.findOneAndUpdate(upWh, updateData, { new: true });
         logger.info("action tb : ", tb);
 
         let response = {
