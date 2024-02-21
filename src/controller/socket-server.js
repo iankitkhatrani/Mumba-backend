@@ -9,7 +9,7 @@ const CONST = require('../../constant');
 const signupActions = require('../helper/signups/index');
 const commonHelper = require('../helper/commonHelper');
 const gamePlayActionsSORAT = require('../SORAT');
-const gamePlayActionsSpinner = require('../SpinerGame/gamePlay');
+const gamePlayActionsSpinner = require('../SpinerGame');
 const OnePlayActions = require('../OneToTwelve/');
 
 const { registerUser } = require('../helper/signups/signupValidation');
@@ -20,7 +20,7 @@ const { userReconnectSpinner } = require('../SpinerGame/reconnect');
 
 const { getBannerList } = require('./adminController');
 
-console.log("gamePlayActionsSORAT ",gamePlayActionsSORAT)
+console.log("gamePlayActionsSpinner ",gamePlayActionsSpinner)
 
 const myIo = {};
 

@@ -100,7 +100,7 @@ module.exports.startSORAT = async (tbId) => {
         const tabInfo = await SoratTables.findOneAndUpdate(wh, update, { new: true });
         logger.info("startSORAT tabInfo :: ", tabInfo);
 
-        commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.STARTSORAT, { itemObject: itemObject,timelimit:10 });
+        commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.STARTSORAT, { itemObject: itemObject,timelimit:10});
 
         setTimeout(async ()=> {
             // Clear destory 
@@ -232,13 +232,12 @@ module.exports.winnerSorat = async (tabInfo, itemObject) =>{
         });
 
         
-
         setTimeout(async ()=>{
 
         
 
         await this.gameTimerStart(tbInfo);
-        },10000)
+        },7000)
     } catch (err) {
         logger.info("Exception  WinnerDeclareCall : 1 :: ", err)
     }
