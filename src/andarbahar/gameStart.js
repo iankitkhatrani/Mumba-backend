@@ -38,7 +38,7 @@ module.exports.gameTimerStart = async (tb) => {
         logger.info("gameTimerStart tabInfo :: ", tabInfo);
 
         let roundTime = 3;
-        commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.BNW_GAME_START_TIMER, { timer: roundTime });
+        commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.ANADAR_BAHAR_GAME_START_TIMER, { timer: roundTime });
 
         let tbId = tabInfo._id;
         let jobId = CONST.BNW_GAME_START_TIMER + ":" + tbId;
@@ -75,7 +75,7 @@ module.exports.startBatting = async (tbId) => {
 
 
         let roundTime = 10;
-        commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.BNW_START_BATTING_TIMER, { timer: roundTime });
+        commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.STARTANADAR_BAHAR_, { timer: roundTime });
 
         let tblId = tabInfo._id;
         let jobId = CONST.BNW_START_BATTING_TIMER + ":" + tblId;

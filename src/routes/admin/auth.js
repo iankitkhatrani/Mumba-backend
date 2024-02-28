@@ -5,9 +5,11 @@ const router = express.Router();
 const mainCtrl = require('../../controller/adminController');
 const { OK_STATUS, BAD_REQUEST } = require('../../../config');
 const logger = require('../../../logger');
+const andarbahar = require('../../andarbahar');
 const SpinnerTables = mongoose.model('SpinnerTables');
 const OnePlayingTable = mongoose.model('oneToTwelvePlayingTables');
 const SoratTabe = mongoose.model('soratTables');
+const AndarBaharTable = mongoose.model('blackNwhiteTables');
 
 /**
  * @api {post} /admin/signup-admin
@@ -91,6 +93,18 @@ router.get('/DeleteSoratPlaying', async (req, res) => {
   try {
 
     await SoratTabe.deleteMany({})
+
+    res.json({ status: "ok" });
+  } catch (error) {
+    logger.error('admin/dahboard.js post bet-list error => ', error);
+    res.status(config.INTERNAL_SERVER_ERROR).json(error);
+  }
+});
+
+router.get('/DeleteAndarBaharPlaying', async (req, res) => {
+  try {
+
+    await AndarBaharTable.deleteMany({})
 
     res.json({ status: "ok" });
   } catch (error) {

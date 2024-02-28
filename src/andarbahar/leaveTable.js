@@ -77,8 +77,8 @@ module.exports.leaveTable = async (requestData, client) => {
     let tbInfo = await PlayingTables.findOneAndUpdate(wh, updateData, { new: true });
     logger.info("leaveTable tbInfo : ", tbInfo);
 
-    commandAcions.sendDirectEvent(client.sck.toString(), CONST.BNW_LEAVE_TABLE, response);
-    commandAcions.sendEventInTable(tb._id.toString(), CONST.BNW_LEAVE_TABLE, response);
+    commandAcions.sendDirectEvent(client.sck.toString(), CONST.LEAVETABLEANADAR_BAHAR, response);
+    commandAcions.sendEventInTable(tb._id.toString(), CONST.LEAVETABLEANADAR_BAHAR, response);
 
     let userDetails = await GameUser.findOne({
         _id: MongoID(playerInfo._id.toString()),
