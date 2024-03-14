@@ -10,6 +10,8 @@ const signupActions = require('../helper/signups/index');
 const commonHelper = require('../helper/commonHelper');
 const gamePlayActionsSORAT = require('../SORAT');
 const gamePlayActionsANDARBAHAR = require('../andarbahar');
+const gamePlayActionsRoulette = require('../roulette');
+
 
 const gamePlayActionsSpinner = require('../SpinerGame');
 const OnePlayActions = require('../OneToTwelve/');
@@ -22,7 +24,7 @@ const { userReconnectSpinner } = require('../SpinerGame/reconnect');
 
 const { getBannerList } = require('./adminController');
 
-console.log("gamePlayActionsANDARBAHAR ",gamePlayActionsANDARBAHAR)
+console.log("gamePlayActionsRoulette ",gamePlayActionsRoulette)
 
 const myIo = {};
 
@@ -248,6 +250,50 @@ myIo.init = function (server) {
                         await userReconnectSpinner(payload.data, socket);
                         break;
                     }
+
+                    //============================================================
+
+
+                     // SPinner GAME Event 
+                     case CONST.ROULETTE_JOIN_TABLE: {
+                        socket.uid = payload.data.playerId;
+                        socket.sck = socket.id;
+
+                        await gamePlayActionsRoulette.ROULETTE_GAME_JOIN_TABLE(payload.data, socket);
+                        break;
+                    }
+
+                    case CONST.ACTIONSPINNNER: {
+                        await gamePlayActionsRoulette.actionSpin(payload.data, socket);
+                        break;
+                    }
+
+                    case CONST.ClearBet:{
+                        await gamePlayActionsRoulette.ClearBet(payload.data, socket);
+                        break;
+                    }
+
+                    case CONST.DoubleBet:{
+                        await gamePlayActionsRoulette.DoubleBet(payload.data, socket);
+                        break;
+                    }
+
+                    
+
+                    case CONST.LEAVETABLESPINNER: {
+                        await gamePlayActionsRoulette.leaveTable(payload.data, socket);
+                        break;
+                    }
+
+                    case CONST.RECONNECTSPINNER: {
+                        await userReconnectSpinner(payload.data, socket);
+                        break;
+                    }
+                    
+
+                    //====================================
+
+
 
 
                     //====================================
