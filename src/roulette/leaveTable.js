@@ -92,8 +92,8 @@ module.exports.leaveTable = async (requestData, client) => {
     let tbInfo = await RouletteTables.findOneAndUpdate(wh, updateData, { new: true });
     logger.info("leaveTable tbInfo : ", tbInfo);
 
-    commandAcions.sendDirectEvent(client.sck.toString(), CONST.LEAVE_TABLE, response);
-    commandAcions.sendEventInTable(tb._id.toString(), CONST.LEAVE_TABLE, response);
+    commandAcions.sendDirectEvent(client.sck.toString(), CONST.LEAVETABLEROULETTE, response);
+    commandAcions.sendEventInTable(tb._id.toString(), CONST.LEAVETABLEROULETTE, response);
 
 
     await this.manageOnUserLeave(tbInfo);

@@ -263,7 +263,7 @@ myIo.init = function (server) {
                         break;
                     }
 
-                    case CONST.ACTIONSPINNNER: {
+                    case CONST.ACTIONROULETTE: {
                         await gamePlayActionsRoulette.actionSpin(payload.data, socket);
                         break;
                     }
@@ -280,7 +280,7 @@ myIo.init = function (server) {
 
                     
 
-                    case CONST.LEAVETABLESPINNER: {
+                    case CONST.LEAVETABLEROULETTE: {
                         await gamePlayActionsRoulette.leaveTable(payload.data, socket);
                         break;
                     }

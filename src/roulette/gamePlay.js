@@ -22,7 +22,7 @@ module.exports.actionSpin = async (requestData, client) => {
     try {
         logger.info("action requestData : ", requestData);
         if (typeof client.tbid == "undefined" || typeof client.uid == "undefined" || typeof client.seatIndex == "undefined" || typeof requestData.bet == "undefined") {
-            commandAcions.sendDirectEvent(client.sck, CONST.ACTIONSPINNNER, requestData, false, "User session not set, please restart game!");
+            commandAcions.sendDirectEvent(client.sck, CONST.ACTIONROULETTE, requestData, false, "User session not set, please restart game!");
             return false;
         }
         if (typeof client.action != "undefined" && client.action) return false;
@@ -73,7 +73,7 @@ module.exports.actionSpin = async (requestData, client) => {
         if (Number(chalvalue) > Number(totalWallet)) {
             logger.info("action client.su ::", client.seatIndex);
             delete client.action;
-            commandAcions.sendDirectEvent(client.sck, CONST.ACTIONSPINNNER, requestData, false, "Please add wallet!!");
+            commandAcions.sendDirectEvent(client.sck, CONST.ACTIONROULETTE, requestData, false, "Please add wallet!!");
             return false;
         }
         chalvalue = Number(Number(chalvalue).toFixed(2))
@@ -102,7 +102,7 @@ module.exports.actionSpin = async (requestData, client) => {
             item:requestData.item
         }
 
-        commandAcions.sendEvent(client, CONST.ACTIONSPINNNER, response, false, "");
+        commandAcions.sendEvent(client, CONST.ACTIONROULETTE, response, false, "");
 
       
         delete client.action;

@@ -49,10 +49,10 @@ module.exports.gameTimerStart = async (tb) => {
         logger.info("gameTimerStart tabInfo :: ", tabInfo);
 
         let roundTime = 10;
-        commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.GAME_START_TIMER, { timer: roundTime,history:tabInfo.history });
+        commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.ROULETTE_GAME_START_TIMER, { timer: roundTime,history:tabInfo.history });
 
         let tbId = tabInfo._id;
-        let jobId = CONST.GAME_START_TIMER + ":" + tbId;
+        let jobId = CONST.ROULETTE_GAME_START_TIMER + ":" + tbId;
         let delay = commandAcions.AddTime(roundTime);
 
         const delayRes = await commandAcions.setDelay(jobId, new Date(delay));
@@ -119,7 +119,7 @@ module.exports.StartSpinnerGame = async (tbId) => {
         const tabInfo = await RouletteTables.findOneAndUpdate(wh, update, { new: true });
         logger.info("startSpinner tabInfo :: ", tabInfo);
 
-        commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.STARTSPINNER, { itemObject: itemObject,timelimit:10 });
+        commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.START_ROULETTE, { itemObject: itemObject,timelimit:10 });
 
         setTimeout(async ()=> {
             // Clear destory 
