@@ -119,7 +119,7 @@ module.exports.StartSpinnerGame = async (tbId) => {
         const tabInfo = await RouletteTables.findOneAndUpdate(wh, update, { new: true });
         logger.info("startSpinner tabInfo :: ", tabInfo);
 
-        commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.START_ROULETTE, { itemObject: itemObject,timelimit:10 });
+        commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.START_ROULETTE, { itemObject: itemObject,timelimit:6});
 
         setTimeout(async ()=> {
             // Clear destory 
@@ -131,7 +131,7 @@ module.exports.StartSpinnerGame = async (tbId) => {
             // }, { new: true });
 
             this.winnerSpinner(tabInfo,itemObject);
-        },10000);
+        },6000);
 
         //botLogic.PlayRobot(tabInfo,tabInfo.playerInfo,itemObject)
 
