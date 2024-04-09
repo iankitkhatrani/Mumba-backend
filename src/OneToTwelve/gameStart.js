@@ -65,17 +65,16 @@ module.exports.StartOneToTwelveGame = async (tbId) => {
         logger.info("bnw tabInfo :: ====>", tabInfo);
 
 
-
-        let roundTime = 300;
+        let roundTime = CONST.ONE_TO_TWELVE_GAME_TIMER;
         commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.ONE_START_BATTING_TIMER, { timer: roundTime });
 
 
         //2 second delay for Bet
-        let tblId = tabInfo._id;
-        let jobId = CONST.ONE_START_BATTING_TIMER_DELAY + ":" + tblId;
-        let delay = commandAcions.AddTime(2);
+        // let tblId = tabInfo._id;
+        // let jobId = CONST.ONE_START_BATTING_TIMER_DELAY + ":" + tblId;
+        // let delay = commandAcions.AddTime(2);
 
-        await commandAcions.setDelay(jobId, new Date(delay));
+        // await commandAcions.setDelay(jobId, new Date(delay));
 
         /*
         // Define an asynchronous function
@@ -101,14 +100,14 @@ module.exports.StartOneToTwelveGame = async (tbId) => {
             }, 1500);
         })();
 */
-        tblId = tabInfo._id;
-        jobId = CONST.ONE_START_BATTING_TIMER + ":" + tblId;
-        delay = commandAcions.AddTime(roundTime);
+        let tblId = tabInfo._id;
+        let jobId = CONST.ONE_START_BATTING_TIMER + ":" + tblId;
+        let delay = commandAcions.AddTime(roundTime);
 
         const delayRes = await commandAcions.setDelay(jobId, new Date(delay));
 
         // await cardDealActions.cardDealStart(tblId)
-        await this.StartOneGame(tbId)
+        await this.StartOneGame(tabInfo)
 
     } catch (error) {
         logger.error("PlayingTables.js error ->", error)
@@ -122,58 +121,61 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-module.exports.StartOneGame = async (tb, itemObject) => {
+module.exports.StartOneGame = async (tbl) => {
+    logger.info("Tablke get tb =>", tbl)
+    const tbId = tbl._id;
     try {
-        let tbId = tb._id()
         const tb = await PlayingTables.findOne({
             _id: MongoID(tbId.toString()),
         }, {})
 
-        logger.info("OneGame tbId : ", tbId);
-        if (tb == null || tb.gameState != "OneGameStartTimer") return false;
-
+        logger.info("OneGame tbId : ", tb);
+        if (tb == null) {
+            return false;
+        }
 
         //Genrate Rendom Number 
-        logger.info("OneGame tb.totalbet : ", tb.totalbet);
+        // logger.info("OneGame tb.totalbet : ", tb.totalbet);
 
         // NORMAL 
-        let itemObject = tb.tableObjects[getRandomInt(0, tb.tableObjects.length - 1)]
-        logger.info("itemObject ", itemObject)
+        // let itemObject = tb.tableObjects[getRandomInt(0, tb.tableObjects.length - 1)]
+        // logger.info("itemObject ", itemObject)
 
         let wh = {
-            _id: tbId
+            _id: tb._id
         }
         let update = {
             $set: {
-                gameState: "StartGame",
-                itemObject: itemObject,
-                turnStartTimer: new Date()
+                gameState: "StopBatting",
+                // itemObject: itemObject,
+                // turnStartTimer: new Date()
             },
-            $push: {
-                "history": {
-                    $each: [itemObject],
-                    $slice: -10
-                }
-            }
+            // $push: {
+            //     "history": {
+            // $each: [itemObject],
+            // $slice: -10
+            //     }
+            // }
         }
         logger.info("startSpinner UserInfo : ", wh, update);
 
         const tabInfo = await PlayingTables.findOneAndUpdate(wh, update, { new: true });
         logger.info("startSpinner tabInfo :: ", tabInfo);
 
-        commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.ONE_START_BATTING, { itemObject: itemObject, timelimit: 10 });
+        commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.ONE_STOP_BATTING_TIMER, {});
 
-        setTimeout(async () => {
-            // Clear destory 
-            // const tabInfonew = await PlayingTables.findOneAndUpdate(wh, {
-            //     $set: {
-            //         gameState: "",
-            //         itemObject:""
-            //     }
-            // }, { new: true });
+        this.winnerOneTotwelve(tabInfo);
+        // setTimeout(async () => {
+        //     // Clear destory 
+        //     // const tabInfonew = await PlayingTables.findOneAndUpdate(wh, {
+        //     //     $set: {
+        //     //         gameState: "",
+        //     //         itemObject:""
+        //     //     }
+        //     // }, { new: true });
 
-            this.winnerOneTotwelve(tabInfo, itemObject);
-        }, 10000);
+        //     this.winnerOneTotwelve(tabInfo, itemObject);
+        // }, 10000);
 
         //botLogic.PlayRobot(tabInfo,tabInfo.playerInfo,itemObject)
 
@@ -182,27 +184,36 @@ module.exports.StartOneGame = async (tb, itemObject) => {
     }
 }
 
-module.exports.winnerOneTotwelve = async (tabInfo, itemObject) => {
-
+module.exports.winnerOneTotwelve = async (tb, itemObject) => {
     try {
-        logger.info("winnerSorat winner ::  -->", itemObject, tabInfo);
-        let tbid = tabInfo._id.toString()
-        logger.info("winnerSorat tbid ::", tbid);
+        logger.info("One to winner ::  -->", tb);
+        let tbid = tb._id.toString()
+        logger.info("One to tbid ::", tbid);
 
-        const tb = await PlayingTables.findOne({
-            _id: MongoID(tbId.toString()),
+        const tabInfo = await PlayingTables.findOne({
+            _id: MongoID(tbid),
         }, {})
+        logger.info("tabInfo   -->::", tabInfo);
 
-        if (typeof itemObject == "undefined" || (typeof tb != "undefined" && tb.playerInfo.length == 0)) {
-            logger.info("winnerSorat winner ::", winner);
+        // if (/*typeof itemObject == "undefined" ||*/ (typeof tb != "undefined" && tb.playerInfo.length == 0)) {
+        //     logger.info("One to winner ::", winner);
+        //     return false;
+        // }
+
+        if (tabInfo == null) {
+            logger.info("table is null");
             return false;
         }
 
-        if (tabInfo.gameState != "StartSpinner") return false;
-        if (tabInfo.isFinalWinner) return false;
+        // if (tabInfo.gameState != "StartGame") {
+        //     logger.info("checkkkkk game -->")
+        //     return false;
+        // }
+
+        if (tabInfo.isFinalWinner) { return false; }
 
         const upWh = {
-            _id: tbid
+            _id: MongoID(tbid)
         }
         const updateData = {
             $set: {
@@ -210,17 +221,20 @@ module.exports.winnerOneTotwelve = async (tabInfo, itemObject) => {
                 gameState: "WinnerDecalre",
             }
         };
-        logger.info("winnerSorat upWh updateData :: ", upWh, updateData);
+        logger.info("One to upWh updateData :: ", upWh, updateData);
 
         const tbInfo = await PlayingTables.findOneAndUpdate(upWh, updateData, { new: true });
-        logger.info("winnerSorat tbInfo : ", tbInfo);
+        logger.info("One to tbInfo : ", tbInfo);
 
-        let winnerData = [
+        // let itemIndex = tbInfo.tableObjects.indexOf(itemObject)
+        // logger.info("One to tbInfo : ", tbInfo);
 
-        ]
+        // Generate a random number between 1 and 12
+        const randomNumber = Math.floor(Math.random() * 12) + 1;
+        logger.info("Winning Amount =>", randomNumber);
 
-        let itemIndex = tbInfo.tableObjects.indexOf(itemObject)
-
+        /*
+        let winnerData = [        ]
         for (let i = 0; i < tbInfo.playerInfo.length; i++) {
             var TotalWinAmount = 0
             if (tbInfo.playerInfo.selectObj[itemIndex] != 0) {
@@ -274,10 +288,9 @@ module.exports.winnerOneTotwelve = async (tabInfo, itemObject) => {
             TotalWinAmount != 0 && await walletActions.addWallet(tbInfo.playerInfo._id, Number(TotalWinAmount), 4, "Spinnner Win", tabInfo);
 
         }
+        */
         const playerInGame = await roundStartActions.getPlayingUserInRound(tbInfo.playerInfo);
         logger.info("getWinner playerInGame ::", playerInGame);
-
-
 
         //const winnerTrack = await gameTrackActions.gamePlayTracks(winnerIndexs, tbInfo.gameTracks, tbInfo);
         //logger.info("winnerDeclareCall winnerTrack:: ", winnerTrack);
@@ -288,16 +301,16 @@ module.exports.winnerOneTotwelve = async (tabInfo, itemObject) => {
         //     }
         // }
 
-
         commandAcions.sendEventInTable(tbInfo._id.toString(), CONST.ONE_WINNER, {
-            WinnerData: winnerData,
-            itemObject: itemObject
+            winnerNumber: randomNumber,
+            // WinnerData: winnerData,
         });
 
         await this.gameTimerStart(tbInfo);
 
     } catch (err) {
         logger.info("Exception  WinnerDeclareCall : 1 :: ", err)
+
     }
 
 }

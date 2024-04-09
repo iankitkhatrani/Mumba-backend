@@ -24,7 +24,7 @@ const { userReconnectSpinner } = require('../SpinerGame/reconnect');
 
 const { getBannerList } = require('./adminController');
 
-console.log("gamePlayActionsRoulette ",gamePlayActionsRoulette)
+// console.log("gamePlayActionsRoulette ",gamePlayActionsRoulette)
 
 const myIo = {};
 
@@ -44,8 +44,9 @@ myIo.init = function (server) {
             socket.on('req', async (data) => {
                 const decryptObj = commonHelper.decrypt(data.payload);
                 const payload = JSON.parse(decryptObj);
-                console.log("payload ::::::::::::::::", payload)
-                console.log("payload ::::::::::::::::", payload.eventName)
+
+                // logger.info("payload ::::::::::::::::", payload)
+                // logger.info("payload ::::::::::::::::", payload.eventName)
 
                 switch (payload.eventName) {
 
@@ -201,7 +202,7 @@ myIo.init = function (server) {
                         break;
                     }
 
-                    case CONST.CHECKOUT_ANADAR_BAHAR:{
+                    case CONST.CHECKOUT_ANADAR_BAHAR: {
                         await gamePlayActionsANDARBAHAR.CHECKOUT_ANADAR_BAHAR(payload.data, socket);
                         break;
                     }
@@ -236,7 +237,7 @@ myIo.init = function (server) {
                         break;
                     }
 
-                    case CONST.PSPINER:{
+                    case CONST.PSPINER: {
                         await gamePlayActionsSpinner.printMytranscation(payload.data, socket);
                         break;
                     }
@@ -254,8 +255,8 @@ myIo.init = function (server) {
                     //============================================================
 
 
-                     // SPinner GAME Event 
-                     case CONST.ROULETTE_JOIN_TABLE: {
+                    // SPinner GAME Event 
+                    case CONST.ROULETTE_JOIN_TABLE: {
                         socket.uid = payload.data.playerId;
                         socket.sck = socket.id;
 
@@ -268,17 +269,17 @@ myIo.init = function (server) {
                         break;
                     }
 
-                    case CONST.ClearBet:{
+                    case CONST.ClearBet: {
                         await gamePlayActionsRoulette.ClearBet(payload.data, socket);
                         break;
                     }
 
-                    case CONST.DoubleBet:{
+                    case CONST.DoubleBet: {
                         await gamePlayActionsRoulette.DoubleBet(payload.data, socket);
                         break;
                     }
 
-                    
+
 
                     case CONST.LEAVETABLEROULETTE: {
                         await gamePlayActionsRoulette.leaveTable(payload.data, socket);
@@ -289,7 +290,7 @@ myIo.init = function (server) {
                         await userReconnectSpinner(payload.data, socket);
                         break;
                     }
-                    
+
 
                     //====================================
 
