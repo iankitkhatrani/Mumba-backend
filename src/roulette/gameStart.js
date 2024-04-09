@@ -48,7 +48,7 @@ module.exports.gameTimerStart = async (tb) => {
         const tabInfo = await RouletteTables.findOneAndUpdate(wh, update, { new: true });
         logger.info("gameTimerStart tabInfo :: ", tabInfo);
 
-        let roundTime = 10;
+        let roundTime = 40;
         commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.ROULETTE_GAME_START_TIMER, { timer: roundTime,history:tabInfo.history });
 
         let tbId = tabInfo._id;
