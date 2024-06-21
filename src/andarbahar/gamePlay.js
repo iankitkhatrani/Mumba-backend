@@ -55,9 +55,10 @@ module.exports.action = async (requestData, client) => {
             commandAcions.sendDirectEvent(client.sck, CONST.ACTION_ANADAR_BAHAR, requestData, false, "Please add wallet!!");
             return false;
         }
-        requestData.betAmount = Number(Number(requestData.betAmount).toFixed(2))
+        logger.info("requestData.betAmount   => " ,requestData.bet)
+        requestData.bet = Number(Number(requestData.bet).toFixed(2))
 
-        await walletActions.deductWallet(client.uid, -requestData.betAmount, 2, "blackNwhite", tabInfo, client.id, client.seatIndex);
+        await walletActions.deductWallet(client.uid, -requestData.bet, 2, "blackNwhite", tabInfo, client.id, client.seatIndex);
 
         if (tabInfo == null) {
             logger.info("action user not turn ::", tabInfo);

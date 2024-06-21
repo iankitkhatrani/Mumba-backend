@@ -3,6 +3,7 @@ const MongoID = mongoose.Types.ObjectId;
 const GameUser = mongoose.model('users');
 const PlayingTables = mongoose.model("blackNwhiteTables");
 const BetLists = mongoose.model("betList")
+const leaveTableActions = require('./leaveTable');
 
 const { sendEvent, sendDirectEvent, AddTime, setDelay, clearJob } = require('../helper/socketFunctions');
 
@@ -54,8 +55,20 @@ module.exports.joinTable = async (requestData, client) => {
         logger.info("JoinTable tableInfo : ", gwh, JSON.stringify(tableInfo));
 
         if (tableInfo != null) {
-            sendEvent(client, CONST.ANADAR_BAHAR_JOIN_TABLE, requestData, false, "Already In playing table!!");
-            delete client.JT
+            //sendEvent(client, CONST.ANADAR_BAHAR_JOIN_TABLE, requestData, false, "Already In playing table!!");
+            //delete client.JT
+            await leaveTableActions.leaveTable(
+                {
+                    reason: 'autoLeave',
+                },
+                {
+                    uid: tableInfo.playerInfo[0]._id.toString(),
+                    tbid: tableInfo._id.toString(),
+                    seatIndex: tableInfo.playerInfo[0].seatIndex,
+                    sck: tableInfo.playerInfo[0].sck,
+                }
+            );
+            await this.findTable(betInfo, client)
             return false;
         }
         await this.findTable(betInfo, client)

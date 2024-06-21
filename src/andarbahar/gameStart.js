@@ -75,7 +75,7 @@ module.exports.startBatting = async (tbId) => {
 
 
         let roundTime = 10;
-        commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.STARTANADAR_BAHAR_, { timer: roundTime });
+        commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.STARTANADAR_BAHAR_, { timer: roundTime});
 
         let tblId = tabInfo._id;
         let jobId = CONST.BNW_START_BATTING_TIMER + ":" + tblId;
