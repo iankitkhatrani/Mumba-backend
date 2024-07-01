@@ -41,7 +41,7 @@ module.exports.gameTimerStart = async (tb) => {
         commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.ANADAR_BAHAR_GAME_START_TIMER, { timer: roundTime });
 
         let tbId = tabInfo._id;
-        let jobId = CONST.BNW_GAME_START_TIMER + ":" + tbId;
+        let jobId = CONST.ANADAR_BAHAR_GAME_START_TIMER + ":" + tbId;
         let delay = commandAcions.AddTime(roundTime);
 
         const delayRes = await commandAcions.setDelay(jobId, new Date(delay));
@@ -64,6 +64,7 @@ module.exports.startBatting = async (tbId) => {
         let wh = {
             _id: tbId
         }
+
         let update = {
             $set: {
                 gameState: "StartBatting",
@@ -75,15 +76,15 @@ module.exports.startBatting = async (tbId) => {
 
 
         let roundTime = 10;
-        commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.STARTANADAR_BAHAR_, { timer: roundTime});
+        commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.START_ANADAR_BAHAR, { timer: roundTime });
 
         let tblId = tabInfo._id;
-        let jobId = CONST.BNW_START_BATTING_TIMER + ":" + tblId;
+        let jobId = CONST.START_ANADAR_BAHAR + ":" + tblId;
         let delay = commandAcions.AddTime(roundTime);
 
         const delayRes = await commandAcions.setDelay(jobId, new Date(delay));
-
         // botLogic.PlayRobot(tabInfo, tabInfo.playerInfo, Number)
+
         await cardDealActions.cardDealStart(tblId)
 
     } catch (error) {

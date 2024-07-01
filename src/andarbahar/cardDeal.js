@@ -28,10 +28,10 @@ module.exports.cardDealStart = async (tbid) => {
             gameState: "StopBatting",
         }
     }
-    const cardDealIndexs = await this.setUserCards(cardDetails, tb);
-    logger.info("initRoundState cardDealIndexs : ", cardDealIndexs);
+    // const cardDealIndexs = await this.setUserCards(cardDetails, tb);
+    // logger.info("initRoundState cardDealIndexs : ", cardDealIndexs);
 
-    logger.info("initRoundState update : ", update);
+    // logger.info("initRoundState update : ", update);
 
     const tabInfo = await PlayingTables.findOneAndUpdate(wh, update, { new: true });
     logger.info("findTableAndJoin tabInfo : ", tabInfo);
@@ -249,20 +249,23 @@ module.exports.getCardsDeatil = () => {
         let deckCards = Object.assign([], CONST.deckOne);
         // deckCards = shuffle(deckCards);
 
-        let cards = [];
+        let card = [];
 
-        for (let i = 0; i < 2; i++) {
-            let card = [];
-            for (let i = 0; i < 3; i++) {
-                let ran = parseInt(fortuna.random() * deckCards.length);
-                card.push(deckCards[ran]);
-                deckCards.splice(ran, 1);
-            }
-            cards.push(card);
-        }
+        let ran = parseInt(fortuna.random() * deckCards.length);
+        card.push(deckCards[ran]);
+
+        // for (let i = 0; i < 2; i++) {
+        //     let card = [];
+        //     for (let i = 0; i < 3; i++) {
+        //         let ran = parseInt(fortuna.random() * deckCards.length);
+        //         card.push(deckCards[ran]);
+        //         deckCards.splice(ran, 1);
+        //     }
+        //     cards.push(card);
+        // }
 
         return {
-            cards,
+            card,
         };
     } catch (err) {
         logger.error('cardDeal.js getCards error => ', err);
