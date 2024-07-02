@@ -37,9 +37,9 @@ module.exports.cardDealStart = async (tbid) => {
     logger.info("findTableAndJoin tabInfo : ", tabInfo);
 
     const eventResponse = {
-        cards: cardDealIndexs
+        cards: cardDetails
     }
-    commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.BNW_STOP_BATTING_TIMER, {});
+    commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.ANADAR_BAHAR_BATTING_STOP, {});
 
     // let tbId = tabInfo._id;
     // let jobId = commandAcions.GetRandomString(10);

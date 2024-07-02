@@ -37,7 +37,7 @@ module.exports.gameTimerStart = async (tb) => {
         logger.info("gameTimerStart tabInfo :: ", tabInfo);
 
         let roundTime = 3;
-        let res = await cardDealActions.cardDealStart(tabInfo)
+        let res = await cardDealActions.getCardsDeatil()
 
         commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.ANADAR_BAHAR_SHOW_DECLARE_CARD, res);
         commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.ANADAR_BAHAR_GAME_START_TIMER, { timer: roundTime });
