@@ -71,7 +71,7 @@ module.exports.action = async (requestData, client) => {
             let playerInfo = tabInfo.playerInfo[client.seatIndex];
             playerInfo.betLists.push(requestData);
             updateData.$set['playerInfo.$.betLists'] = playerInfo.betLists;
-            updateData.$inc['counters.totalBlackChips'] = requestData.betAmount;
+            updateData.$inc['counters.totalAnderChips'] = requestData.betAmount;
 
             const upWh = {
                 _id: MongoID(client.tbid.toString()),
@@ -83,13 +83,13 @@ module.exports.action = async (requestData, client) => {
             });
 
             logger.info(" blackAmount table Info -->", tabInfo)
-            commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.ACTION_ANADAR_BAHAR, { totalBlackChips: tabInfo.counters.totalBlackChips });
+            commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.ACTION_ANADAR_BAHAR, { totalAnderChips: tabInfo.counters.totalAnderChips });
 
         } else if (requestData.item === 'Bahar') {
             let playerInfo = tabInfo.playerInfo[client.seatIndex];
             playerInfo.betLists.push(requestData);
             updateData.$set['playerInfo.$.betLists'] = playerInfo.betLists;
-            updateData.$inc['counters.totalWhiteChips'] = requestData.betAmount;
+            updateData.$inc['counters.totalBaharChips'] = requestData.betAmount;
 
 
             const upWh = {
@@ -102,7 +102,7 @@ module.exports.action = async (requestData, client) => {
             });
 
             logger.info("whiteAmount table Info -->", tabInfo)
-            commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.ACTION_ANADAR_BAHAR, { totalWhiteChips: tabInfo.counters.totalWhiteChips });
+            commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.ACTION_ANADAR_BAHAR, { totalBaharChips: tabInfo.counters.totalBaharChips });
 
 
         }

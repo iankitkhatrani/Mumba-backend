@@ -37,16 +37,24 @@ module.exports.gameTimerStart = async (tb) => {
         logger.info("gameTimerStart tabInfo :: ", tabInfo);
 
         let roundTime = 3;
-        let res = await cardDealActions.getCardsDeatil()
-
-        commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.ANADAR_BAHAR_SHOW_DECLARE_CARD, res);
         commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.ANADAR_BAHAR_GAME_START_TIMER, { timer: roundTime });
 
         let tbId = tabInfo._id;
         let jobId = CONST.ANADAR_BAHAR_GAME_START_TIMER + ":" + tbId;
         let delay = commandAcions.AddTime(roundTime);
 
-        const delayRes = await commandAcions.setDelay(jobId, new Date(delay));
+        await commandAcions.setDelay(jobId, new Date(delay));
+
+        //Delay 2 secdond
+
+        let res = cardDealActions.getCardsDeatil()
+        commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.ANADAR_BAHAR_SHOW_DECLARE_CARD, res);
+
+        tbId = tabInfo._id;
+        jobId = CONST.ANADAR_BAHAR_GAME_START_TIMER + ":" + tbId;
+        delay = commandAcions.AddTime(2);
+
+        await commandAcions.setDelay(jobId, new Date(delay));
 
         await this.startBatting(tbId)
     } catch (error) {
