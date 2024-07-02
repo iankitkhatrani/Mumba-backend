@@ -19,11 +19,7 @@ const walletActions = require("./updateWallet");
 
 module.exports.action = async (requestData, client) => {
     try {
-        logger.info("Bnw action requestData : ", requestData);
-        logger.info("Bnw action client.tbid: ", client.tbid);
-        logger.info("Bnw action client.uid ", client.uid);
-        logger.info("Bnw action client.seatIndex ", client.seatIndex);
-        logger.info("Bnw action requestData.bet ", requestData.bet);
+        logger.info("Ander Bahar action requestData : ", requestData);
 
         if (typeof client.tbid == "undefined" || typeof client.uid == "undefined" || typeof client.seatIndex == "undefined") {
             commandAcions.sendDirectEvent(client.sck, CONST.ACTION_ANADAR_BAHAR, requestData, false, "User session not set, please restart game!");
@@ -71,7 +67,7 @@ module.exports.action = async (requestData, client) => {
             $inc: {},
         };
 
-        if (requestData.type === 'Ander') {
+        if (requestData.item === 'Andar') {
             let playerInfo = tabInfo.playerInfo[client.seatIndex];
             playerInfo.betLists.push(requestData);
             updateData.$set['playerInfo.$.betLists'] = playerInfo.betLists;
@@ -89,7 +85,7 @@ module.exports.action = async (requestData, client) => {
             logger.info(" blackAmount table Info -->", tabInfo)
             commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.ACTION_ANADAR_BAHAR, { totalBlackChips: tabInfo.counters.totalBlackChips });
 
-        } else if (requestData.type === 'Bahar') {
+        } else if (requestData.item === 'Bahar') {
             let playerInfo = tabInfo.playerInfo[client.seatIndex];
             playerInfo.betLists.push(requestData);
             updateData.$set['playerInfo.$.betLists'] = playerInfo.betLists;
@@ -373,9 +369,9 @@ module.exports.lastGameScoreBoard = async (requestData, client) => {
         };
 
         if (tabInfo.lastGameResult) {
-            commandAcions.sendDirectEvent(client.sck, CONST.BNW_PREVIOUS_RESULT_HISTORY, { list: tabInfo.lastGameResult });
+            commandAcions.sendDirectEvent(client.sck, CONST.ANDER_BAHAR_PREVIOUS_RESULT_HISTORY, { list: tabInfo.lastGameResult });
         } else {
-            commandAcions.sendDirectEvent(client.sck, CONST.BNW_PREVIOUS_RESULT_HISTORY, msg);
+            commandAcions.sendDirectEvent(client.sck, CONST.ANDER_BAHAR_PREVIOUS_RESULT_HISTORY, msg);
         }
 
         return true;
