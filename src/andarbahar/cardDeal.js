@@ -8,7 +8,7 @@ const logger = require("../../logger");
 const commandAcions = require("../helper/socketFunctions");
 const roundStartActions = require("./roundStart");
 const checkWinnerActions = require('./checkWinner');
-const PlayingTables = mongoose.model("blackNwhiteTables");
+const PlayingTables = mongoose.model("andarBaharPlayingTables");
 const _ = require("underscore")
 const cardLogic = require("./cardLogic");
 

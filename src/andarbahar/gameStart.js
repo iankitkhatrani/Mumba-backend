@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 const MongoID = mongoose.Types.ObjectId;
 const GameUser = mongoose.model('users');
-const PlayingTables = mongoose.model("blackNwhiteTables");
+const PlayingTables = mongoose.model("andarBaharPlayingTables");
 const IdCounter = mongoose.model("idCounter")
 
 const commandAcions = require("../helper/socketFunctions");
@@ -11,8 +11,6 @@ const CONST = require("../../constant");
 const logger = require("../../logger");
 const roundStartActions = require("./roundStart");
 const walletActions = require("./updateWallet");
-const { config } = require("dotenv");
-const botLogic = require("./botLogic");
 
 // const leaveTableActions = require("./leaveTable");
 
@@ -32,12 +30,16 @@ module.exports.gameTimerStart = async (tb) => {
                 "totalbet": 0,
             }
         }
+
         logger.info("gameTimerStart UserInfo : ", wh, update);
 
         const tabInfo = await PlayingTables.findOneAndUpdate(wh, update, { new: true });
         logger.info("gameTimerStart tabInfo :: ", tabInfo);
 
         let roundTime = 3;
+        let res = await cardDealActions.cardDealStart(tabInfo)
+
+        commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.ANADAR_BAHAR_SHOW_DECLARE_CARD, res);
         commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.ANADAR_BAHAR_GAME_START_TIMER, { timer: roundTime });
 
         let tbId = tabInfo._id;
@@ -75,17 +77,19 @@ module.exports.startBatting = async (tbId) => {
         logger.info("bnw tabInfo :: ", tabInfo);
 
 
-        let roundTime = 10;
-        commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.START_ANADAR_BAHAR, { timer: roundTime });
+        let roundTime = 30;
+        commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.START_ANADAR_BAHAR_BATTING, { timer: roundTime });
 
         let tblId = tabInfo._id;
-        let jobId = CONST.START_ANADAR_BAHAR + ":" + tblId;
+        let jobId = CONST.START_ANADAR_BAHAR_BATTING + ":" + tblId;
         let delay = commandAcions.AddTime(roundTime);
 
         const delayRes = await commandAcions.setDelay(jobId, new Date(delay));
         // botLogic.PlayRobot(tabInfo, tabInfo.playerInfo, Number)
 
-        await cardDealActions.cardDealStart(tblId)
+        commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.ANADAR_BAHAR_BATTING_STOP, {});
+
+        // await cardDealActions.cardDealStart(tblId)
 
     } catch (error) {
         logger.error("startBatting  error ->", error)

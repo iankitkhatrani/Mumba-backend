@@ -1,6 +1,6 @@
 const mongoose = require("mongoose")
 const MongoID = mongoose.Types.ObjectId;
-const PlayingTables = mongoose.model("blackNwhiteTables");
+const PlayingTables = mongoose.model("andarBaharPlayingTables");
 const UserWalletTracks = mongoose.model("userWalletTracks");
 const GameUser = mongoose.model("users");
 const commandAcions = require("../helper/socketFunctions");

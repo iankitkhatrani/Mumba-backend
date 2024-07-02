@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 const MongoID = mongoose.Types.ObjectId;
 
-const PlayingTables = mongoose.model("blackNwhiteTables");
+const PlayingTables = mongoose.model("andarBaharPlayingTables");
 const GameUser = mongoose.model("users");
 
 const CONST = require("../../constant");
@@ -55,10 +55,10 @@ module.exports.action = async (requestData, client) => {
             commandAcions.sendDirectEvent(client.sck, CONST.ACTION_ANADAR_BAHAR, requestData, false, "Please add wallet!!");
             return false;
         }
-        logger.info("requestData.betAmount   => " ,requestData.bet)
+        logger.info("requestData.betAmount   => ", requestData.bet)
         requestData.bet = Number(Number(requestData.bet).toFixed(2))
 
-        await walletActions.deductWallet(client.uid, -requestData.bet, 2, "blackNwhite", tabInfo, client.id, client.seatIndex);
+        await walletActions.deductWallet(client.uid, -requestData.bet, 2, "AnderBahar", tabInfo, client.id, client.seatIndex);
 
         if (tabInfo == null) {
             logger.info("action user not turn ::", tabInfo);
@@ -71,7 +71,7 @@ module.exports.action = async (requestData, client) => {
             $inc: {},
         };
 
-        if (requestData.type === 'Black') {
+        if (requestData.type === 'Ander') {
             let playerInfo = tabInfo.playerInfo[client.seatIndex];
             playerInfo.betLists.push(requestData);
             updateData.$set['playerInfo.$.betLists'] = playerInfo.betLists;
@@ -89,7 +89,7 @@ module.exports.action = async (requestData, client) => {
             logger.info(" blackAmount table Info -->", tabInfo)
             commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.ACTION_ANADAR_BAHAR, { totalBlackChips: tabInfo.counters.totalBlackChips });
 
-        } else if (requestData.type === 'White') {
+        } else if (requestData.type === 'Bahar') {
             let playerInfo = tabInfo.playerInfo[client.seatIndex];
             playerInfo.betLists.push(requestData);
             updateData.$set['playerInfo.$.betLists'] = playerInfo.betLists;
@@ -108,24 +108,6 @@ module.exports.action = async (requestData, client) => {
             logger.info("whiteAmount table Info -->", tabInfo)
             commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.ACTION_ANADAR_BAHAR, { totalWhiteChips: tabInfo.counters.totalWhiteChips });
 
-
-        } else if (requestData.type === 'LuckyHit') {
-            let playerInfo = tabInfo.playerInfo[client.seatIndex];
-            playerInfo.betLists.push(requestData);
-            updateData.$set['playerInfo.$.betLists'] = playerInfo.betLists;
-            updateData.$inc['counters.totalHitChips'] = requestData.betAmount;
-
-            const upWh = {
-                _id: MongoID(client.tbid.toString()),
-                'playerInfo.seatIndex': Number(client.seatIndex),
-            };
-
-            tabInfo = await PlayingTables.findOneAndUpdate(upWh, updateData, {
-                new: true,
-            });
-
-            logger.info(" luckyHitAmount table Info -->", tabInfo)
-            commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.ACTION_ANADAR_BAHAR, { totalHitChips: tabInfo.counters.totalHitChips });
 
         }
 

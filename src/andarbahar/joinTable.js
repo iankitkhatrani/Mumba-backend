@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 const MongoID = mongoose.Types.ObjectId;
 const GameUser = mongoose.model('users');
-const PlayingTables = mongoose.model("blackNwhiteTables");
+const PlayingTables = mongoose.model("andarBaharPlayingTables");
 const BetLists = mongoose.model("betList")
 const leaveTableActions = require('./leaveTable');
 
@@ -24,10 +24,8 @@ module.exports.joinTable = async (requestData, client) => {
         client.JT = true;
         const betInfo = {
             "_id": "657c440d82167b4a3c4949ae",
-            "maxPlayer": 7,
+            "maxPlayer": 10,
             "entryFee": 1,
-            "chalLimit": 1,
-            "potLimit": 100,
         }
         // let bwh = {
         //     _id: requestData.betId
@@ -106,10 +104,10 @@ module.exports.createTable = async (betInfo) => {
         let insertobj = {
             gameId: "",
             activePlayer: 0,
-            playerInfo: this.makeObjects(7),
+            playerInfo: this.makeObjects(10),
             gameState: "",
             history: [],
-            BNWCards: { black: [], white: [] },
+            ANBCards: { ander: [], bahar: [] },
         };
         logger.info("createTable insertobj : ", insertobj);
 
@@ -161,7 +159,6 @@ module.exports.findEmptySeatAndUserSeat = async (table, betInfo, client) => {
             playerSocketId: client.id,
             playerLostChips: 0,
             Iscom: userInfo.Iscom != undefined ? userInfo.Iscom : 0,
-
         }
 
         logger.info("findEmptySeatAndUserSeat playerDetails : ", playerDetails);
@@ -239,6 +236,7 @@ module.exports.findEmptySeatAndUserSeat = async (table, betInfo, client) => {
             clearJob(jobId)
 
             await gameStartActions.gameTimerStart(tableInfo);
+
         } else {
 
             if (tableInfo.activePlayer <= 2) {
