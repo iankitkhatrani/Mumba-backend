@@ -252,6 +252,7 @@ module.exports.getCardsDeatil = () => {
         let card = [];
 
         let ran = parseInt(fortuna.random() * deckCards.length);
+        logger.info("getCards ran ::", ran);
         card.push(deckCards[ran]);
 
         // for (let i = 0; i < 2; i++) {

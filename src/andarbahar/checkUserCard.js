@@ -1,60 +1,132 @@
 
+const mongoose = require("mongoose")
+const MongoID = mongoose.Types.ObjectId;
+
+const PlayingTables = mongoose.model("andarBaharPlayingTables");
+const commandAcions = require("../helper/socketFunctions");
+
 const logger = require("../../logger");
-const _ = require("underscore")
+const CONST = require("../../constant");
+const _ = require("underscore");
 
-module.exports.getWinnerUser = (userInfo, hukum, isShow, showUserSeatIndex, BNWCards) => {
-    logger.info("BNWCards -->", BNWCards)
-    let cardArr = []
-    cardArr.push(BNWCards.black, BNWCards.white)
-    let cardsResult = [];
+module.exports.getWinnerUser = async (table, declareCard) => {
+    try {
+        logger.info("\n declareCard ->", declareCard)
+        logger.info("\n getWinnerUser table ->", table)
+        let deck = [
+            'H-1-0', 'H-2-0', 'H-3-0', 'H-4-0', 'H-5-0', 'H-6-0', 'H-7-0', 'H-8-0', 'H-9-0', 'H-10-0', 'H-11-0', 'H-12-0', 'H-13-0',
+            'S-1-0', 'S-2-0', 'S-3-0', 'S-4-0', 'S-5-0', 'S-6-0', 'S-7-0', 'S-8-0', 'S-9-0', 'S-10-0', 'S-11-0', 'S-12-0', 'S-13-0',
+            'D-1-0', 'D-2-0', 'D-3-0', 'D-4-0', 'D-5-0', 'D-6-0', 'D-7-0', 'D-8-0', 'D-9-0', 'D-10-0', 'D-11-0', 'D-12-0', 'D-13-0',
+            'C-1-0', 'C-2-0', 'C-3-0', 'C-4-0', 'C-5-0', 'C-6-0', 'C-7-0', 'C-8-0', 'C-9-0', 'C-10-0', 'C-11-0', 'C-12-0', 'C-13-0'
+        ];
 
-    for (let i = 0; i < cardArr.length; i++) {
-        let response = this.getWinState(cardArr[i], hukum);
-        logger.info("BNWCards response : ", response);
-        cardsResult.push(response);
+        // let declareCard = 'S-6-0';
+
+        let ANBCards = {
+            ander: [],
+            bahar: []
+        };
+
+        // Fisher-Yates (Knuth) Shuffle
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Remove the declare card from the deck
+        deck = deck.filter(card => card !== declareCard);
+
+        // Shuffle the deck
+        deck = shuffle(deck);
+
+        let res = declareCard.split('-')[1];
+        logger.info("getWinnerUser res =>", res);
+
+        let isDeclareCardFound = false;
+        let turn = 'Ander'; // To keep track of whose turn it is
+
+        for (let i = 0; i < deck.length; i++) {
+            let splitDeckCard = deck[i].split('-'); // Split card from deck
+            if (splitDeckCard[1] === res) { // Compare values
+                logger.info("getWinnerUser check-->");
+                isDeclareCardFound = true;
+                if (turn === 'Ander') {
+                    ANBCards.ander.push(deck[i]);
+                } else {
+                    ANBCards.bahar.push(deck[i]);
+                }
+                break;
+            }
+
+            if (turn === 'Ander') {
+                ANBCards.ander.push(deck[i]);
+                turn = 'Bahar';
+            } else {
+                ANBCards.bahar.push(deck[i]);
+                turn = 'Ander';
+            }
+        }
+
+        logger.info("getWinnerUser turn", turn)
+        logger.info('getWinnerUser ANBCards:', ANBCards);
+
+        //updateAnbCards(ANBCards);
+
+        let tb = await PlayingTables.findOneAndUpdate({ _id: MongoID(table._id) }, { $set: { ANBCards: ANBCards } }, { new: true });
+        logger.info("getWinnerUser tb : ", tb);
+
+        await this.sendCards(tb);
+
+        return turn;
+
+    } catch (error) {
+        logger.error('getWinnerUser error => ', error);
     }
+}
 
-    cardsResult = cardsResult.sort((a, b) => {
-        return b.cardCount - a.cardCount
-    }).sort((a, b) => {
-        return a.index - b.index
-    })
-    logger.info("getWinnerUser cardsResult : ", cardsResult);
+module.exports.sendCards = async (tb) => {
+    let index = 0; // Start index
+    let turn = 'ander'; // To alternate between ander and bahar
+    const totalCards = tb.ANBCards.ander.length + tb.ANBCards.bahar.length;
 
-    return cardsResult;
-    ////Old COde
-    // for (let i = 0; i < userInfo.length; i++) {
-    //     let response = this.getWinState(userInfo[i].cards, hukum);
-    //     logger.info("getWinnerUser response : ", response);
+    const intervalId = setInterval(() => {
+        // Determine which deck to send from
+        let card = null;
+        if (turn === 'ander' && index < tb.ANBCards.ander.length) {
+            card = tb.ANBCards.ander[index];
+        } else if (turn === 'bahar' && index < tb.ANBCards.bahar.length) {
+            card = tb.ANBCards.bahar[index];
+        }
 
-    //     response.seatIndex = userInfo[i].seatIndex;
-    //     players.push(response);
-    // }
+        // Send card if available
+        if (card) {
+            const response = {
+                turn,
+                card
+            };
+            commandAcions.sendEventInTable(tb._id.toString(), CONST.ANDER_BAHAR_SHOW_CARDS, response);
+            logger.info(`Sent card: ${card} from ${turn}`);
+        }
 
-    // players = players.sort((a, b) => {
-    //     return b.cardCount - a.cardCount
-    // }).sort((a, b) => {
-    //     return a.index - b.index
-    // })
-    // logger.info("getWinnerUser players : ", players);
+        // Switch turns
+        turn = turn === 'ander' ? 'bahar' : 'ander';
 
-    // if (typeof isShow != "undefined" && isShow) {
-    //     let winners = [players[0]];
-    //     if (winners[0].cardCount == players[1].cardCount && winners[0].index == players[1].index) {
-    //         if (winners[0].seatIndex == showUserSeatIndex) {
-    //             winners = [players[1]];
-    //         }
-    //     }
-    //     return winners;
-    // } else {
-    //     let winners = [players[0]];
-    //     for (let i = 1; i < players.length; i++) {
-    //         if (winners[0].cardCount == players[1].cardCount && winners[0].index == players[1].index) {
-    //             winners.push(players[i]);
-    //         }
-    //     }
-    //     return winners;
-    // }
+        // Increment index every two turns
+        if (turn === 'ander') {
+            index++;
+        }
+
+        // Stop the interval if all cards have been sent
+        if (index >= tb.ANBCards.ander.length && index >= tb.ANBCards.bahar.length) {
+            clearInterval(intervalId);
+            console.log('All cards have been sent.');
+        }
+    }, 500);
+
+    return
 }
 
 module.exports.getWinState = (userCards, hukum) => {

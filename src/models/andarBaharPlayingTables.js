@@ -16,6 +16,7 @@ const PlayingTablesSchema = new Schema({
     turnDone: { type: Boolean, default: false },
     playerInfo: [],
     gameState: { type: String, default: "" },
+    winCardState: { type: String, default: "" },
     dealerSeatIndex: { type: Number, default: -1 },
     turnSeatIndex: { type: Number, default: -1 },
     gameTimer: {},

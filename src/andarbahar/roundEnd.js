@@ -15,11 +15,10 @@ module.exports.roundFinish = async (tb) => {
         }
         let update = {
             $set: {
-                BNWCards: { black: [], white: [] },
+                ANBCards: { ander: [], bahar: [] },
                 counters: {
-                    totalBlackChips: 0,
-                    totalWhiteChips: 0,
-                    totalHitChips: 0,
+                    totalAnderChips: 0,
+                    totalBaharChips: 0,
                 },
                 gameTracks: [],
                 gameId: "",
@@ -27,9 +26,6 @@ module.exports.roundFinish = async (tb) => {
                 isLastUserFinish: false,
                 isFinalWinner: false,
                 callFinalWinner: false,
-                hukum: "",
-                chalValue: 0,
-                potValue: 0,
                 turnDone: false,
                 jobId: "",
             },

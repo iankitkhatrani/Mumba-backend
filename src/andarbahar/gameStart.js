@@ -35,7 +35,7 @@ module.exports.gameTimerStart = async (tb) => {
 
         logger.info("gameTimerStart UserInfo : ", wh, update);
 
-        const tabInfo = await PlayingTables.findOneAndUpdate(wh, update, { new: true });
+        let tabInfo = await PlayingTables.findOneAndUpdate(wh, update, { new: true });
         logger.info("gameTimerStart tabInfo :: ", tabInfo);
 
         let roundTime = 3;
@@ -43,13 +43,30 @@ module.exports.gameTimerStart = async (tb) => {
 
         let tbId = tabInfo._id;
         let jobId = CONST.ANADAR_BAHAR_GAME_START_TIMER + ":" + tbId;
-        let delay = commandAcions.AddTime(roundTime+1);
+        let delay = commandAcions.AddTime(roundTime + 1);
 
         await commandAcions.setDelay(jobId, new Date(delay));
 
         //Delay 2 secdond
 
         let res = cardDealActions.getCardsDeatil()
+        logger.info("gameTimerStart res : ", res);
+
+        let whr = {
+            _id: tabInfo._id,
+        }
+        let upd = {
+            $set: {
+                decalreCard: res.card[0],
+            }
+        }
+
+        logger.info("gameTimerStart delarecard UserInfo : ", wh, update);
+
+        tabInfo = await PlayingTables.findOneAndUpdate(whr, upd, { new: true });
+        logger.info("gameTimerStart declare tabInfo :: ", tabInfo);
+
+
         commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.ANADAR_BAHAR_SHOW_DECLARE_CARD, res);
 
         tbId = tabInfo._id;

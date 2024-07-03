@@ -71,21 +71,21 @@ module.exports.winnercall = async (tb, isShow, showUserSeatIndex) => {
     const tbInfo = await PlayingTables.findOneAndUpdate(upWh, updateData, { new: true });
     logger.info("winnercall tbInfo : ", tbInfo);
 
-    let winners = await this.getWinner(tbInfo, isShow, showUserSeatIndex, tbInfo.BNWCards);
+    let winners = await this.getWinner(tbInfo, tbInfo.decalreCard);
     logger.info("winners ==> : ", winners);
 
     await gameFinishActions.winnerDeclareCall(winners, tbInfo);
 
 }
 
-module.exports.getWinner = async (tb, isShow, showUserSeatIndex, BNWCards) => {
+module.exports.getWinner = async (tb, decalreCard) => {
 
     logger.info("getWinner tb : ", tb);
 
     const playerInGame = await roundStartActions.getPlayingUserInRound(tb.playerInfo);
     logger.info("getWinner playerInGame ::", playerInGame);
 
-    let winners = checkUserCardActions.getWinnerUser(playerInGame, tb.hukum, isShow, showUserSeatIndex, BNWCards);
+    let winners = await checkUserCardActions.getWinnerUser(tb, decalreCard);
     logger.info("getWinner winners ::", winners);
 
     return winners;
