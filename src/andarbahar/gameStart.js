@@ -43,7 +43,7 @@ module.exports.gameTimerStart = async (tb) => {
 
         let tbId = tabInfo._id;
         let jobId = CONST.ANADAR_BAHAR_GAME_START_TIMER + ":" + tbId;
-        let delay = commandAcions.AddTime(roundTime);
+        let delay = commandAcions.AddTime(roundTime+1);
 
         await commandAcions.setDelay(jobId, new Date(delay));
 
