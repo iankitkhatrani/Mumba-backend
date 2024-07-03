@@ -145,7 +145,7 @@ module.exports.deductWallet = async (id, deductChips, tType, t, tbInfo, client, 
         logger.info(" upReps userInfo.sckId => ", upReps.sckId)
         logger.info(" client userInfo.sckId => ", client)
 
-        commandAcions.sendEventInTable(tbInfo._id.toString(), CONST.BNW_WALLET_UPDATE, {
+        commandAcions.sendEventInTable(tbInfo._id.toString(), CONST.WALLET_UPDATE, {
             winningChips: upReps.winningChips,
             chips: upReps.chips,
             totalWallet: totalRemaningAmount,

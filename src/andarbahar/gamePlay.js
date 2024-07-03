@@ -85,7 +85,11 @@ module.exports.action = async (requestData, client) => {
             });
 
             logger.info(" blackAmount table Info -->", tabInfo)
-            commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.ACTION_ANADAR_BAHAR, { totalAnderChips: tabInfo.counters.totalAnderChips });
+            commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.ACTION_ANADAR_BAHAR, { 
+                bet:requestData.bet,
+                item:requestData.item,
+                totalAnderChips: tabInfo.counters.totalAnderChips
+             });
 
         } else if (requestData.item === 'Bahar') {
             let playerInfo = tabInfo.playerInfo[client.seatIndex];
@@ -104,7 +108,11 @@ module.exports.action = async (requestData, client) => {
             });
 
             logger.info("whiteAmount table Info -->", tabInfo)
-            commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.ACTION_ANADAR_BAHAR, { totalBaharChips: tabInfo.counters.totalBaharChips });
+            commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.ACTION_ANADAR_BAHAR, { 
+                bet:requestData.bet,
+                item:requestData.item,
+                totalBaharChips: tabInfo.counters.totalBaharChips
+            });
         }
 
         delete client.action;
