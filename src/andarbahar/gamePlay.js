@@ -45,13 +45,13 @@ module.exports.action = async (requestData, client) => {
 
         let totalWallet = Number(UserInfo.chips) + Number(UserInfo.winningChips)
 
-        if (Number(requestData.betAmount) > Number(totalWallet)) {
+        if (Number(requestData.bet) > Number(totalWallet)) {
             logger.info("action client.su ::", client.seatIndex);
             delete client.action;
             commandAcions.sendDirectEvent(client.sck, CONST.ACTION_ANADAR_BAHAR, requestData, false, "Please add wallet!!");
             return false;
         }
-        logger.info("requestData.betAmount   => ", requestData.bet)
+        logger.info("requestData.bet   => ", requestData.bet)
         requestData.bet = Number(Number(requestData.bet).toFixed(2))
 
         await walletActions.deductWallet(client.uid, -requestData.bet, 2, "AnderBahar", tabInfo, client.id, client.seatIndex);
@@ -68,10 +68,12 @@ module.exports.action = async (requestData, client) => {
         };
 
         if (requestData.item === 'Andar') {
+            logger.info("action user not turn Andar ::", tabInfo);
+
             let playerInfo = tabInfo.playerInfo[client.seatIndex];
             playerInfo.betLists.push(requestData);
             updateData.$set['playerInfo.$.betLists'] = playerInfo.betLists;
-            updateData.$inc['counters.totalAnderChips'] = requestData.betAmount;
+            updateData.$inc['counters.totalAnderChips'] = requestData.bet;
 
             const upWh = {
                 _id: MongoID(client.tbid.toString()),
@@ -89,7 +91,7 @@ module.exports.action = async (requestData, client) => {
             let playerInfo = tabInfo.playerInfo[client.seatIndex];
             playerInfo.betLists.push(requestData);
             updateData.$set['playerInfo.$.betLists'] = playerInfo.betLists;
-            updateData.$inc['counters.totalBaharChips'] = requestData.betAmount;
+            updateData.$inc['counters.totalBaharChips'] = requestData.bet;
 
 
             const upWh = {
@@ -103,8 +105,6 @@ module.exports.action = async (requestData, client) => {
 
             logger.info("whiteAmount table Info -->", tabInfo)
             commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.ACTION_ANADAR_BAHAR, { totalBaharChips: tabInfo.counters.totalBaharChips });
-
-
         }
 
         delete client.action;
@@ -158,9 +158,7 @@ module.exports.CHECKOUT_ANADAR_BAHAR = async (requestData, client) => {
         logger.info("check out UserInfo : ", gwh, JSON.stringify(UserInfo));
 
         let updateData = {
-            $set: {
-
-            }
+            $set: {}
         }
         updateData.$set["playerInfo.$.playStatus"] = "check out"
 
@@ -348,7 +346,6 @@ module.exports.playerLastScoreBoard = async (requestData, client) => {
         logger.error('gamePlay.js playerDrop error => ', e);
     }
 };
-
 
 module.exports.lastGameScoreBoard = async (requestData, client) => {
     try {

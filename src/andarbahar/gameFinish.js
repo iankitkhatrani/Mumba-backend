@@ -160,8 +160,8 @@ module.exports.winnerViewResponseFilter = (playerInfos, winnerTrack, winnerIndex
 module.exports.filterWinnerResponse = (winnerList) => {
   let winner = winnerList
 
-  winner[0].index = 'Black';
-  winner[1].index = 'White';
+  winner[0].index = 'Ander';
+  winner[1].index = 'Bahar';
 
   // Find the maximum cardCount object
   const maxCardCountObject = winner.reduce((maxObj, currentObj) => {
@@ -173,9 +173,7 @@ module.exports.filterWinnerResponse = (winnerList) => {
 
   // Set the winResult accordingly
   winner.forEach(obj => {
-    if (isTie) {
-      obj.winResult = 'Tie';
-    } else if (obj === maxCardCountObject) {
+    if (obj === maxCardCountObject) {
       obj.winResult = 'Win';
     } else {
       obj.winResult = 'Loss';

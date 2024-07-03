@@ -108,6 +108,7 @@ module.exports.createTable = async (betInfo) => {
             gameState: "",
             history: [],
             ANBCards: { ander: [], bahar: [] },
+
         };
         logger.info("createTable insertobj : ", insertobj);
 

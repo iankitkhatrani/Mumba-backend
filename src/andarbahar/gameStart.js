@@ -11,6 +11,8 @@ const CONST = require("../../constant");
 const logger = require("../../logger");
 const roundStartActions = require("./roundStart");
 const walletActions = require("./updateWallet");
+const checkWinnerActions = require('./checkWinner');
+
 
 // const leaveTableActions = require("./leaveTable");
 
@@ -97,7 +99,7 @@ module.exports.startBatting = async (tbId) => {
 
         commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.ANADAR_BAHAR_BATTING_STOP, {});
 
-        // await cardDealActions.cardDealStart(tblId)
+        await checkWinnerActions.winnercall(tabInfo);
 
     } catch (error) {
         logger.error("startBatting  error ->", error)
