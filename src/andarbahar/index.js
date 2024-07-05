@@ -2,7 +2,7 @@
 const { joinTable } = require("./joinTable");
 const { leaveTable } = require("./leaveTable");
 const { disconnectTableHandle, findDisconnectTable } = require("./disconnectHandle");
-const { action, CHECKOUT_ANADAR_BAHAR, lastGameScoreBoard } = require("./gamePlay");
+const { action, CHECKOUT_ANADAR_BAHAR, lastGameScoreBoard, clearAllBet, doubleUP } = require("./gamePlay");
 const { userReconnect } = require("./reConnectFunction");
 
 module.exports = {
@@ -14,5 +14,7 @@ module.exports = {
   findDisconnectTable: findDisconnectTable,
   disconnectTableHandle: disconnectTableHandle,
   lastGameScoreBoard: lastGameScoreBoard,
-  reconnect: userReconnect
+  reconnect: userReconnect,
+  doubleUP: doubleUP,
+  clearAllBet: clearAllBet
 };

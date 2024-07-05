@@ -193,20 +193,25 @@ myIo.init = function (server) {
                         break;
                     }
 
-                    // case CONST.ClearBetANADAR_BAHAR: {
-                    //     await gamePlayActionsAnderBahar.ClearBetSORAT(payload.data, socket);
-                    //     break;
-                    // }
-
                     case CONST.LEAVETABLEANADAR_BAHAR: {
                         await gamePlayActionsAnderBahar.leaveTable(payload.data, socket);
                         break;
                     }
 
-                    case CONST.CHECKOUT_ANADAR_BAHAR: {
-                        await gamePlayActionsAnderBahar.CHECKOUT_ANADAR_BAHAR(payload.data, socket);
+                    case CONST.ANADAR_BAHAR_RECONNECT: {
+                        await gamePlayActionsAnderBahar.reconnect(payload.data, socket);
                         break;
                     }
+                    case CONST.ANADAR_BAHAR_CLEAR_BET: {
+                        await gamePlayActionsAnderBahar.clearAllBet(payload.data, socket);
+                        break;
+                    }
+
+                    case CONST.ANADAR_BAHAR_DOUBLE_BET: {
+                        await gamePlayActionsAnderBahar.doubleUP(payload.data, socket);
+                        break;
+                    }
+
 
                     // case CONST.RECONNECT: {
                     //     await userReconnect(payload.data, socket);

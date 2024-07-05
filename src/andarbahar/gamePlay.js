@@ -85,11 +85,11 @@ module.exports.action = async (requestData, client) => {
             });
 
             logger.info(" blackAmount table Info -->", tabInfo)
-            commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.ACTION_ANADAR_BAHAR, { 
-                bet:requestData.bet,
-                item:requestData.item,
+            commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.ACTION_ANADAR_BAHAR, {
+                bet: requestData.bet,
+                item: requestData.item,
                 totalAnderChips: tabInfo.counters.totalAnderChips
-             });
+            });
 
         } else if (requestData.item === 'Bahar') {
             let playerInfo = tabInfo.playerInfo[client.seatIndex];
@@ -108,9 +108,9 @@ module.exports.action = async (requestData, client) => {
             });
 
             logger.info("whiteAmount table Info -->", tabInfo)
-            commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.ACTION_ANADAR_BAHAR, { 
-                bet:requestData.bet,
-                item:requestData.item,
+            commandAcions.sendEventInTable(tabInfo._id.toString(), CONST.ACTION_ANADAR_BAHAR, {
+                bet: requestData.bet,
+                item: requestData.item,
                 totalBaharChips: tabInfo.counters.totalBaharChips
             });
         }
@@ -384,3 +384,146 @@ module.exports.lastGameScoreBoard = async (requestData, client) => {
         logger.error('lastGameScoreBoard playerDrop error => ', e);
     }
 };
+
+module.exports.clearAllBet = async (requestData, client) => {
+    try {
+        let gwh = {
+            _id: MongoID(client.uid)
+        }
+        let UserInfo = await GameUser.findOne(gwh, {}).lean();
+        logger.info("action clearAllBet : ", gwh, JSON.stringify(UserInfo));
+
+
+        const wh = {
+            _id: MongoID(client.tbid.toString()),
+            // status: "StartBatting"
+        }
+        const project = {}
+        let tabInfo = await PlayingTables.findOne(wh, project).lean();
+        logger.info("clearAllBet tabInfo : ", tabInfo);
+
+
+        if (tabInfo == null) {
+            logger.info("action user not turn ::", tabInfo);
+            delete client.action;
+            return false
+        }
+
+        let updateData = {
+            $set: {},
+            $inc: {},
+        };
+
+        let playerInfo = tabInfo.playerInfo[client.seatIndex];
+        logger.info("clearAllBet playerInfo : ", playerInfo);
+
+        updateData.$set['playerInfo.$.betLists'] = [];
+
+        const upWh = {
+            _id: MongoID(client.tbid.toString()),
+            'playerInfo.seatIndex': Number(client.seatIndex),
+        };
+
+        tabInfo = await PlayingTables.findOneAndUpdate(upWh, updateData, {
+            new: true,
+        });
+
+        if (tabInfo == null) {
+            logger.info("Table Not Found ::", tabInfo);
+            return false
+        }
+
+
+        if (tabInfo) {
+            commandAcions.sendDirectEvent(client.sck, CONST.ANADAR_BAHAR_CLEAR_BET, { status: true, msg: "Bet cleared successfully" });
+        } else {
+            commandAcions.sendDirectEvent(client.sck, CONST.ANADAR_BAHAR_CLEAR_BET, { status: false, msg: "Bet Not cleared" });
+        }
+
+        return true;
+    } catch (e) {
+        logger.error('lastGameScoreBoard playerDrop error => ', e);
+    }
+};
+
+module.exports.doubleUP = async (requestData, client) => {
+    try {
+        const gwh = {
+            _id: ObjectID(client.uid)
+        }
+        const UserInfo = await GameUser.findOne(gwh, {}).lean();
+        logger.info("action clearAllBet : ", gwh, JSON.stringify(UserInfo));
+
+        const wh = {
+            _id: ObjectID(client.tbid.toString()),
+            // status: "StartBatting"
+        }
+        const project = {}
+        let tabInfo = await PlayingTables.findOne(wh, project).lean();
+        logger.info("clearAllBet tabInfo : ", tabInfo);
+
+        if (tabInfo == null) {
+            logger.info("action user not turn ::", tabInfo);
+            delete client.action;
+            return false;
+        }
+
+        const playerInfo = tabInfo.playerInfo[client.seatIndex];
+        logger.info("clearAllBet playerInfo : ", playerInfo);
+
+        if (!playerInfo || !playerInfo.betLists) {
+            logger.info("No betLists found for the player.");
+            return false;
+        }
+
+        // Initialize variables to store doubled amounts for "Andar" and "Bahar"
+        let totalDoubledAndar = 0;
+        let totalDoubledBahar = 0;
+
+        // Double the bet amounts and accumulate the totals
+        playerInfo.betLists.forEach(bet => {
+            // Double the bet amount
+            bet.bet *= 2;
+            if (bet.item === "Andar") {
+                totalDoubledAndar += bet.bet;
+            } else if (bet.item === "Bahar") {
+                totalDoubledBahar += bet.bet;
+            }
+        });
+
+        // Prepare the update data
+        const updateData = {
+            $set: {
+                'playerInfo.$.betLists': playerInfo.betLists
+            }
+        };
+
+        const upWh = {
+            _id: ObjectID(client.tbid.toString()),
+            'playerInfo.seatIndex': Number(client.seatIndex),
+        };
+
+        const updatedTableInfo = await PlayingTables.findOneAndUpdate(upWh, updateData, {
+            new: true,
+        });
+
+        if (!updatedTableInfo) {
+            logger.info("Table Not Found ::", updatedTableInfo);
+            return false;
+        }
+
+        // Send event to client with separated doubled amounts
+        commandAcions.sendDirectEvent(client.sck, CONST.ANADAR_BAHAR_DOUBLE_BET, {
+            status: true,
+            msg: "Bet doubled successfully",
+            totalDoubledAndar,
+            totalDoubledBahar
+        });
+
+        return true;
+    } catch (e) {
+        logger.error('doubleUP error => ', e);
+        return false;
+    }
+};
+
