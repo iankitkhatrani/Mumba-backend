@@ -8,7 +8,7 @@ const { sendDirectEvent, getPlayingUserInRound } = require('../helper/socketFunc
 const { filterBeforeSendSPEvent } = require('../helper/signups/appStart');
 
 const Users = mongoose.model('users');
-const PlayingTables = mongoose.model('blackNwhiteTables');
+const PlayingTables = mongoose.model('andarBaharPlayingTables');
 const MongoID = mongoose.Types.ObjectId;
 
 module.exports.reconnect = async (requestData, client) => {
@@ -40,7 +40,7 @@ module.exports.reconnect = async (requestData, client) => {
 
                 };
 
-                sendDirectEvent(client.id.toString(), CONST.BNW_RECONNECT, response);
+                sendDirectEvent(client.id.toString(), CONST.ANADAR_BAHAR_RECONNECT, response);
                 return false;
             }
 
@@ -60,7 +60,7 @@ module.exports.reconnect = async (requestData, client) => {
                     sceneName: CONST.DASHBOARD,
                 };
 
-                sendDirectEvent(client.id.toString(), CONST.BNW_RECONNECT, response);
+                sendDirectEvent(client.id.toString(), CONST.ANADAR_BAHAR_RECONNECT, response);
                 return false;
             }
 
@@ -73,7 +73,7 @@ module.exports.reconnect = async (requestData, client) => {
                 ap: playerInGame.length,
                 tableid: tabInfo._id,
                 gamePlayType: tabInfo.gamePlayType,
-                sceneName: CONST.BNW_GAMEPLAY,
+                sceneName: 'PLAYING',
             };
 
             if (tabInfo.gameState === "GameStartTimer") {
@@ -88,9 +88,9 @@ module.exports.reconnect = async (requestData, client) => {
                     timer: diff,
                 };
 
-                sendDirectEvent(client.id.toString(), CONST.BNW_RECONNECT, responseRST);
+                sendDirectEvent(client.id.toString(), CONST.ANADAR_BAHAR_RECONNECT, responseRST);
             } else {
-                sendDirectEvent(client.id.toString(), CONST.BNW_RECONNECT, response);
+                sendDirectEvent(client.id.toString(), CONST.ANADAR_BAHAR_RECONNECT, response);
             }
             return;
         } else {
@@ -98,7 +98,7 @@ module.exports.reconnect = async (requestData, client) => {
                 login: false,
                 sceneName: CONST.DASHBOARD,
             };
-            sendDirectEvent(client.id, CONST.BNW_RECONNECT, response, {
+            sendDirectEvent(client.id, CONST.ANADAR_BAHAR_RECONNECT, response, {
                 flag: false,
                 msg: 'Player Id not found!',
             });

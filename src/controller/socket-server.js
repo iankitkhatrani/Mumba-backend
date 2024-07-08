@@ -213,10 +213,10 @@ myIo.init = function (server) {
                     }
 
 
-                    // case CONST.RECONNECT: {
-                    //     await userReconnect(payload.data, socket);
-                    //     break;
-                    // }
+                    case CONST.ANADAR_BAHAR_RECONNECT: {
+                        await gamePlayActionsAnderBahar.reconnect(payload.data, socket);
+                        break;
+                    }
                     //====================================
 
                     // SPinner GAME Event 
