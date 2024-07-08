@@ -449,13 +449,13 @@ module.exports.clearAllBet = async (requestData, client) => {
 module.exports.doubleUP = async (requestData, client) => {
     try {
         const gwh = {
-            _id: ObjectID(client.uid)
+            _id: MongoID(client.uid)
         }
         const UserInfo = await GameUser.findOne(gwh, {}).lean();
         logger.info("action clearAllBet : ", gwh, JSON.stringify(UserInfo));
 
         const wh = {
-            _id: ObjectID(client.tbid.toString()),
+            _id: MongoID(client.tbid.toString()),
             // status: "StartBatting"
         }
         const project = {}
@@ -499,7 +499,7 @@ module.exports.doubleUP = async (requestData, client) => {
         };
 
         const upWh = {
-            _id: ObjectID(client.tbid.toString()),
+            _id: MongoID(client.tbid.toString()),
             'playerInfo.seatIndex': Number(client.seatIndex),
         };
 
