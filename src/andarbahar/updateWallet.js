@@ -185,7 +185,7 @@ module.exports.deductWallet = async (id, deductChips, tType, t, tbInfo, client, 
 
 module.exports.addWallet = async (id, added_chips, tType, t, tbInfo, client, seatIndex) => {
     try {
-        logger.info('\ndedudctWallet : call.-->>>', id, added_chips, t);
+        logger.info('\n Add Wallet : call.-->>>', id, added_chips, t);
         const wh = (typeof id == 'string') ? { _id: MongoID(id) } : { _id: id };
         if (typeof wh == 'undefined' || typeof wh._id == 'undefined' || wh._id == null || typeof tType == 'undefined') {
             return false;
@@ -287,7 +287,7 @@ module.exports.addWallet = async (id, added_chips, tType, t, tbInfo, client, sea
                 logger.info("\ndedudctWallet upRepss  :: ", upRepss);
             }
         }
-        commandAcions.sendDirectEvent(client, CONST.BNW_WALLET_UPDATE, {
+        commandAcions.sendDirectEvent(client, CONST.WALLET_UPDATE, {
             winningChips: upReps.winningChips,
             chips: upReps.chips,
             totalWallet: totalRemaningAmount,

@@ -44,6 +44,7 @@ module.exports.winnerDeclareCall = async (winner, tabInfo) => {
 
     tbInfo.playerInfo.forEach(player => {
       if (player && player.betLists) {
+        logger.info("player detail -->",player)
         let finalAmount = 0; // Initialize finalAmount to zero for each player
         let winStatus = false; // Initialize winStatus to false
 
@@ -167,7 +168,9 @@ module.exports.manageUserScore = async (playerInfo, tabInfo) => {
   let tableInfo;
   for (let i = 0; i < playerInfo.length; i++) {
     logger.info('\n Manage User Score Player Info ==>', playerInfo[i]);
-    await walletActions.addWallet(playerInfo[i]._id, playerInfo[i].totalBet, 'Credit', tabInfo, playerInfo[i].sck, playerInfo[i].seatIndex)
+    await walletActions.addWallet(playerInfo[i]._id, playerInfo[i].totalBet, 'Credit','Ander Bahar', tabInfo, playerInfo[i].sck, playerInfo[i].seatIndex)
+    // await walletActions.addWallet(playerInfo._id, Number(sumOfBets), 'Credit', 'ClearBet', tabInfo,client,client.seatIndex);
+
   }
   return tableInfo;
 };

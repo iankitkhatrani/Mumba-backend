@@ -435,6 +435,13 @@ module.exports.clearAllBet = async (requestData, client) => {
 
 
         if (tabInfo) {
+            
+            const sumOfBets = playerInfo.betLists.reduce((accumulator, currentBet) => {
+                return accumulator + currentBet.bet;
+              }, 0); // Initial value is 0
+            
+              await walletActions.addWallet(playerInfo._id, Number(sumOfBets), 'Credit', 'ClearBet', tabInfo,client,client.seatIndex);
+
             commandAcions.sendDirectEvent(client.sck, CONST.ANADAR_BAHAR_CLEAR_BET, { status: true, msg: "Bet cleared successfully" });
         } else {
             commandAcions.sendDirectEvent(client.sck, CONST.ANADAR_BAHAR_CLEAR_BET, { status: false, msg: "Bet Not cleared" });
@@ -511,6 +518,11 @@ module.exports.doubleUP = async (requestData, client) => {
             logger.info("Table Not Found ::", updatedTableInfo);
             return false;
         }
+
+        let totalAmount = ((totalDoubledBahar/2)+(totalDoubledAndar/2))
+        logger.info("totalAmount  : ",totalAmount)
+
+        await walletActions.deductWallet(client.uid, -totalAmount, 2, "AnderBahar", tabInfo, client.id, client.seatIndex);
 
         // Send event to client with separated doubled amounts
         commandAcions.sendDirectEvent(client.sck, CONST.ANADAR_BAHAR_DOUBLE_BET, {
